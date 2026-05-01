@@ -1,7 +1,6 @@
 # Git Workflow Guide
 
-## Daily workflow (once repo is set up)
-
+## Daily workflow 
 ```bash
 git pull                          # get latest changes before starting
 git status                        # see what's changed
