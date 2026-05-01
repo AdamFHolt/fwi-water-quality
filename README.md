@@ -1,6 +1,6 @@
 # fwi-water-quality
 
-Analysis of Fire Weather Index (FWI) and water quality data.
+Data analysis for the Fish Welfare Initiative (FWI) Outcome Evaluation: A controlled effectiveness study assessing whether providing farmers with water quality readings and corrective actions improves pond water quality at farms in Eluru, Andhra Pradesh, India.
 
 ## Project Structure
 
