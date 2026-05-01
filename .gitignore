@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.env
+.venv/
+venv/
+*.egg-info/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data (keep raw data out of version control if large)
+# Uncomment below to ignore raw data:
+# data/raw/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Outputs (optional: ignore generated files)
+# outputs/
