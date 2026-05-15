@@ -88,6 +88,12 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
         if col in df.columns:
             df[col] = df[col].map(bool_map)
 
+    before = len(df)
+    subset = [c for c in df.columns if c != "record_id"]
+    df = df.drop_duplicates(subset=subset)
+    if len(df) < before:
+        print(f"Dropped {before - len(df)} duplicate row(s) ({before} → {len(df)})")
+
     return df
 
 
