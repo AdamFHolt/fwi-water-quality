@@ -1,4 +1,3 @@
-import sys
 from pathlib import Path
 from src.functions import load_data, clean_data, describe_data, describe_water_quality
 
