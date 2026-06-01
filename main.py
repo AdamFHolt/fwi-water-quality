@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-from src.functions import load_data, load_events, describe_data, reorder_by_pond
+from src.functions import (
+    load_data,
+    load_events,
+    describe_data,
+    analyze_oor_events,
+    reorder_by_pond,
+)
 
 DATA_PATH = "data/Outcome Evaluation Phase 2 Data_Cleaned And Anonymized.xlsx"
 DATA_PATH_REORD = "data/Outcome Evaluation Phase 2 Data_Cleaned And Anonymized.reordered.xlsx"
@@ -14,6 +20,7 @@ def main():
     events = load_events(DATA_PATH_REORD)
 
     describe_data(data, events)
+    analyze_oor_events(data, events)
 
 
 if __name__ == "__main__":
