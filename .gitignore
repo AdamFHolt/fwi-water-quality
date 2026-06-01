@@ -18,5 +18,8 @@ venv/
 .DS_Store
 Thumbs.db
 
+# LibreOffice/Excel lock files
+.~lock.*#
+
 # Outputs (optional: ignore generated files)
 # outputs/
