@@ -127,3 +127,51 @@ def describe_water_quality(df: pd.DataFrame) -> None:
     print(df.groupby("treatment_group")[present].mean().round(3).to_string())
     print()
 
+
+def describe_oor_return_rate(df: pd.DataFrame) -> None:
+    followups = df[df["is_followup"] == True].copy().sort_values(["pond_id", "date"])
+
+    # --- Visit-level ---
+    total_v = followups.groupby("treatment_group")["wq_in_range"].count()
+    returned_v = followups.groupby("treatment_group")["wq_in_range"].sum()
+    pct_v = (returned_v / total_v * 100).round(1)
+
+    visit_result = pd.DataFrame({
+        "followup_visits": total_v,
+        "returned_to_range": returned_v,
+        "pct_returned": pct_v,
+    })
+
+    print("=" * 60)
+    print("OOR RETURN RATE — VISIT LEVEL")
+    print("=" * 60)
+    print(visit_result.to_string())
+    print()
+
+    # --- Event-level ---
+    # Group follow-up visits into events: consecutive visits within the same pond
+    # with a date gap <= 2 days are considered the same OOR event.
+    followups["date_gap"] = followups.groupby("pond_id")["date"].diff().dt.days
+    followups["new_event"] = (followups["date_gap"] > 2) | (followups["date_gap"].isna())
+    followups["event_id"] = followups.groupby("pond_id")["new_event"].cumsum()
+
+    events = followups.groupby(["treatment_group", "pond_id", "event_id"]).agg(
+        returned=("wq_in_range", "any")
+    ).reset_index()
+
+    total_e = events.groupby("treatment_group")["returned"].count()
+    returned_e = events.groupby("treatment_group")["returned"].sum()
+    pct_e = (returned_e / total_e * 100).round(1)
+
+    event_result = pd.DataFrame({
+        "oor_events": total_e,
+        "returned_to_range": returned_e,
+        "pct_returned": pct_e,
+    })
+
+    print("=" * 60)
+    print("OOR RETURN RATE — EVENT LEVEL (visits within 2 days = same event)")
+    print("=" * 60)
+    print(event_result.to_string())
+    print()
+

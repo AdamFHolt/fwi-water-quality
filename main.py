@@ -1,5 +1,5 @@
 from pathlib import Path
-from src.functions import load_data, clean_data, describe_data, describe_water_quality
+from src.functions import load_data, clean_data, describe_data, describe_water_quality, describe_oor_return_rate
 
 DATA_PATH = "data/raw/OE Data Periods 1-4.xlsx"
 
@@ -11,6 +11,7 @@ def main():
 
     describe_data(df)
     describe_water_quality(df)
+    describe_oor_return_rate(df)
 
 if __name__ == "__main__":
     main()
