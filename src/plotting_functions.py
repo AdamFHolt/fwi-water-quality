@@ -5,14 +5,25 @@ import matplotlib
 matplotlib.use("Agg")  # non-interactive: render straight to file
 import matplotlib.pyplot as plt
 
+# Clean, consistent typography across the figure.
+plt.rcParams.update({
+    "font.family": "DejaVu Sans",
+    "font.size": 11,
+    "axes.titlesize": 13,
+    "axes.titleweight": "bold",
+    "figure.titlesize": 15,
+    "axes.spines.top": False,
+    "axes.spines.right": False,
+})
+
 from src.functions import WQ_PARAMS, wq_pond_means, oor_event_drivers
 
 PLOTS_DIR = Path("plots")
 
-# Resolved = green, not resolved = grey. Group labels stay blind (D/E).
-COLORS = {"Resolved": "#2ca02c", "Not resolved": "#bdbdbd"}
-# Per-group colours for the water-quality bars.
+# One consistent palette across the whole figure: each group has a single
+# identity colour used everywhere, and grey always means "not resolved".
 GROUP_COLORS = {"Group D": "#4c72b0", "Group E": "#dd8452"}
+NOT_RESOLVED = "#cccccc"
 
 
 def plot_summary(derived, data, events, filename="group_summary.png"):
@@ -36,7 +47,10 @@ def plot_summary(derived, data, events, filename="group_summary.png"):
         ["p0", "p0", "p1", "p1", "p2", "p2"],
         ["drv", "drv", "drv", "drv", "drv", "drv"],
     ]
-    fig, axd = plt.subplot_mosaic(mosaic, figsize=(12, 13))
+    # Taller top row so the pies render larger than the bar panels.
+    fig, axd = plt.subplot_mosaic(
+        mosaic, figsize=(12, 15), gridspec_kw={"height_ratios": [1.6, 1, 1]}
+    )
 
     # --- Pies: resolved vs not resolved ---
     for group in groups:
@@ -46,17 +60,24 @@ def plot_summary(derived, data, events, filename="group_summary.png"):
         not_resolved = int((sub["resolved"] == False).sum())  # noqa: E712
         counts = [resolved, not_resolved]
         labels = ["Resolved", "Not resolved"]
+        # Resolved slice = this group's colour; remainder grey.
+        colors = [GROUP_COLORS[group], NOT_RESOLVED]
 
-        ax.pie(
+        wedges, texts, autotexts = ax.pie(
             counts,
             labels=labels,
-            colors=[COLORS[l] for l in labels],
-            autopct=lambda pct: f"{pct:.1f}%\n({round(pct / 100 * sum(counts))})",
+            colors=colors,
+            autopct=lambda pct: f"{pct:.0f}%\n({round(pct / 100 * sum(counts))})",
             startangle=90,
             counterclock=False,
-            wedgeprops={"edgecolor": "white"},
+            wedgeprops={"edgecolor": "white", "linewidth": 1.5},
+            textprops={"fontsize": 12},
+            pctdistance=0.6,
         )
-        ax.set_title(f"{group}\n(n = {resolved + not_resolved} OOR events)")
+        for t in autotexts:  # percentage labels: bold for readability on the wedges
+            t.set_fontsize(12)
+            t.set_fontweight("bold")
+        ax.set_title(f"{group}\n(n = {resolved + not_resolved} OOR events)", pad=12)
 
     # --- Bars: WQ mean (+/- SD) by group ---
     for i, param in enumerate(WQ_PARAMS):
@@ -90,11 +111,6 @@ def plot_summary(derived, data, events, filename="group_summary.png"):
     ax.set_title("OOR event drivers (events flagging each parameter; an event may flag several)")
     ax.legend()
 
-    fig.suptitle(
-        "OOR resolution (Day-3 primary) and baseline water quality, by group\n"
-        "water quality: routine visits, mean ± SD across pond means",
-        fontsize=13,
-    )
     fig.tight_layout()
 
     PLOTS_DIR.mkdir(exist_ok=True)
