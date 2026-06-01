@@ -1,9 +1,12 @@
 import pandas as pd
 
 def reorder_by_pond(src: str, dst: str) -> None:
-    """Sort the Data sheet by Pond ID, copying the other sheets verbatim."""
-    # Data: stable sort, so order within a pond is preserved.
-    data = pd.read_excel(src, sheet_name="Data").sort_values("Pond ID", kind="stable")
+    """Sort the Data sheet by Pond ID then chronologically, copying other sheets verbatim."""
+    # Within a pond, sort by date then time so visits read oldest->newest,
+    # Morning before Evening. Time is an "HH:MM" 24h string, so it sorts as text.
+    data = pd.read_excel(src, sheet_name="Data").sort_values(
+        ["Pond ID", "Date of data collection", "Time of data collection"], kind="stable"
+    )
 
     # Other sheets: header=None keeps every cell exactly as-is.
     overview = pd.read_excel(src, sheet_name="Overview", header=None)
@@ -45,20 +48,22 @@ def describe_data(data: pd.DataFrame, events: pd.DataFrame) -> None:
 def derive_oor_events(data: pd.DataFrame) -> pd.DataFrame:
     """Reconstruct OOR events and their resolution from the per-visit Data sheet.
 
-    An OOR *event* is a Day-0 detection: a non-follow-up visit found out of range.
-    Morning + Evening rows on the same pond-day are one event, so we collapse on
-    (Pond ID, date). Resolution uses the V7 TRIAD primary measure (Day 3): the
-    latest follow-up visit for that pond within 5 days of Day 0, counted resolved
-    iff `Is WQ in range?` is Yes for every visit on that day. This reproduces the
-    `OOR Events` sheet's `2nd FU WQ improvement` exactly, so the 2-day-gap
-    heuristic from the old code is not needed.
+    - An OOR *event* is a Day-0 detection: a first visit, found out of range.
+    - Morning + Evening rows on the same pond-day are one event, so collapsed on
+      (Pond ID, date). 
+    - Whether resolved uses the V7 TRIAD primary measure (Day 3): the
+      latest follow-up visit for that pond within 5 days of Day 0, counted resolved
+      if `Is WQ in range?` is Yes for every visit on that day. 
+    - This reproduces the `OOR Events` sheet's `2nd FU WQ improvement` exactly
 
     Returns one row per event with columns: Pond ID, date, group, resolved (bool).
     """
     data = data.copy()
-    data["date"] = pd.to_datetime(data["Date of data collection"])
+    data["date"] = pd.to_datetime(data["Date of data collection"])              # convert dates to pd timestamps
+    day0 = (data["Is WQ in range?"] == "No") & (data["Is follow up"] == "No")   # identify Day-0 OOR detections (boolean mask)
 
-    day0 = (data["Is WQ in range?"] == "No") & (data["Is follow up"] == "No")
+    # Build the event list from the Day-0 OOR detections: one row per event,
+    # collapsing each pond-day's Morning+Evening rows into (Pond ID, date, group).
     events = (
         data[day0]
         .groupby(["Pond ID", "date"])
@@ -66,7 +71,8 @@ def derive_oor_events(data: pd.DataFrame) -> pd.DataFrame:
         .reset_index()
     )
 
-    # Collapse follow-up visits to one in-range verdict per pond-day.
+    # Per-day resolution lookup from follow-up visits: for each (pond, date),
+    # inrange is True only if EVERY reading that day is in range (strict .all()).
     fu = data[data["Is follow up"] == "Yes"]
     fu_day = (
         fu.groupby(["Pond ID", "date"])
@@ -74,6 +80,8 @@ def derive_oor_events(data: pd.DataFrame) -> pd.DataFrame:
         .reset_index()
     )
 
+    # Resolve one event: among this pond's follow-ups in the window (Day0, Day0+5],
+    # take the latest (the Day-3 primary measure) and return whether it was in range.
     def resolve(row):
         cand = fu_day[
             (fu_day["Pond ID"] == row["Pond ID"])
@@ -82,8 +90,11 @@ def derive_oor_events(data: pd.DataFrame) -> pd.DataFrame:
         ]
         if cand.empty:
             return None
+        
+        # most recent follow-up = Day-3 measure (not Day-2)
         return bool(cand.sort_values("date").iloc[-1]["inrange"])
 
+    # run resolve() on each event row. Gives True/False/None per event
     events["resolved"] = events.apply(resolve, axis=1)
     return events
 
@@ -103,6 +114,7 @@ def analyze_oor_events(data: pd.DataFrame, events: pd.DataFrame) -> pd.DataFrame
 
     # (i) + (iii) counts and resolution per group from Data.
     g = derived.groupby("group")["resolved"]
+
     summary = pd.DataFrame(
         {
             "oor_events": g.size(),
@@ -112,6 +124,7 @@ def analyze_oor_events(data: pd.DataFrame, events: pd.DataFrame) -> pd.DataFrame
     )
     print(summary.to_string())
     print()
+
 
     # Reference figures from the OOR Events sheet.
     sheet_events = events["Group"].value_counts()
