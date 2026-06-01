@@ -20,7 +20,7 @@ def main():
     data = load_data(DATA_PATH_REORD)
     events = load_events(DATA_PATH_REORD)
 
-    print(f"Doing basic, descriptive data analysis:")
+    print(f"Doing basic descriptive data analysis:")
     describe_data(data, events)
     describe_water_quality(data)
     derived = analyze_oor_events(data, events)

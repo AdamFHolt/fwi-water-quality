@@ -55,9 +55,10 @@ def plot_summary(derived, data, events, filename="group_summary.png"):
     # --- Pies: resolved vs not resolved ---
     for group in groups:
         ax = axd[group.split()[-1]]  # "Group D" -> "D"
-        sub = derived[derived["group"] == group]
+        # Exclude no-follow-up events (resolved is None), as in analyze_oor_events.
+        sub = derived[derived["group"] == group].dropna(subset=["resolved"])
         resolved = int(sub["resolved"].sum())
-        not_resolved = int((sub["resolved"] == False).sum())  # noqa: E712
+        not_resolved = len(sub) - resolved
         counts = [resolved, not_resolved]
         labels = ["Resolved", "Not resolved"]
         # Resolved slice = this group's colour; remainder grey.

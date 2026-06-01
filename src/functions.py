@@ -114,6 +114,9 @@ def derive_oor_events(data: pd.DataFrame) -> pd.DataFrame:
 
     # Resolve one event: among this pond's follow-ups in the window (Day0, Day0+5],
     # take the latest (the Day-3 primary measure) and return whether it was in range.
+    # Assumes a pond's OOR events are >5 days apart, so every follow-up in the window
+    # belongs to this event (verified: min same-pond gap is 12 days). If two events
+    # fell within 5 days, the earlier one could absorb the later's follow-ups.
     def resolve(row):
         cand = fu_day[
             (fu_day["Pond ID"] == row["Pond ID"])
@@ -155,6 +158,9 @@ def analyze_oor_events(data: pd.DataFrame, events: pd.DataFrame) -> pd.DataFrame
     Prints (i) event counts per group derived from Data, (ii) a check against the
     OOR Events sheet, (iii) resolved # and % per group, and (iv) a check of those
     against the sheet's Day-3 primary measure (`2nd FU WQ improvement`).
+
+    Events with no follow-up in the window (resolved is None) are excluded from
+    the resolution rate; the denominator is events that had a follow-up.
     """
     derived = derive_oor_events(data)
 
@@ -162,40 +168,45 @@ def analyze_oor_events(data: pd.DataFrame, events: pd.DataFrame) -> pd.DataFrame
     print("OOR EVENTS — DERIVED FROM DATA SHEET")
     print("=" * 50)
 
-    # (i) + (iii) counts and resolution per group from Data.
-    g = derived.groupby("group")["resolved"]
+    # Resolution rate excludes no-follow-up events (resolved is None); a clean
+    # bool subset also keeps mean()/sum() well-defined.
+    followed = derived.dropna(subset=["resolved"]).copy()
+    followed["resolved"] = followed["resolved"].astype(bool)
+    g = followed.groupby("group")["resolved"]
 
+    # (i) + (iii) counts and resolution per group from Data.
     summary = pd.DataFrame(
         {
-            "oor_events": g.size(),
+            "oor_events": derived.groupby("group").size(),  # all detected events
+            "with_followup": g.size(),                      # events with a follow-up
             "resolved": g.sum().astype(int),
-            "pct_resolved": (g.mean() * 100).round(1),
+            "pct_resolved": (g.mean() * 100).round(1),      # resolved / with_followup
         }
     )
     print(summary.to_string())
     print()
 
-    
-    # # Reference figures from the OOR Events sheet.
-    # sheet_events = events["Group"].value_counts()
-    # sheet_resolved = (
-    #     events.assign(res=events["2nd FU WQ improvement"] == "Yes")
-    #     .groupby("Group")["res"]
-    #     .sum()
-    # )
+    # Reference figures from the OOR Events sheet.
+    sheet_events = events["Group"].value_counts()
+    sheet_resolved = (
+        events.assign(res=events["2nd FU WQ improvement"] == "Yes")
+        .groupby("Group")["res"]
+        .sum()
+    )
 
-    # # (ii) event counts agree?
-    # print("CHECK — event counts vs OOR Events sheet:")
-    # for grp in summary.index:
-    #     a, b = int(summary.loc[grp, "oor_events"]), int(sheet_events.get(grp, 0))
-    #     print(f"  {grp}: Data={a}  Sheet={b}  {'OK' if a == b else 'MISMATCH'}")
+    # (ii)+(iv) cross-check derived counts against the OOR Events sheet.
+    def _check(label, col, sheet):
+        diffs = [
+            f"{grp} (Data={a} Sheet={b})"
+            for grp in summary.index
+            for a, b in [(int(summary.loc[grp, col]), int(sheet.get(grp, 0)))]
+            if a != b
+        ]
+        print(f"CHECK — {label}: {'OK' if not diffs else 'MISMATCH ' + ', '.join(diffs)}")
 
-    # # (iv) resolved counts agree?
-    # print("CHECK — resolved counts vs OOR Events sheet (Day-3 primary):")
-    # for grp in summary.index:
-    #     a, b = int(summary.loc[grp, "resolved"]), int(sheet_resolved.get(grp, 0))
-    #     print(f"  {grp}: Data={a}  Sheet={b}  {'OK' if a == b else 'MISMATCH'}")
-    # print()
+    _check("event counts vs sheet", "oor_events", sheet_events)
+    _check("resolved counts vs sheet", "resolved", sheet_resolved)
+    print()
 
     return derived
 
