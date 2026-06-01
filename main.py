@@ -10,7 +10,6 @@ from src.functions import (
 DATA_PATH = "data/Outcome Evaluation Phase 2 Data_Cleaned And Anonymized.xlsx"
 DATA_PATH_REORD = "data/Outcome Evaluation Phase 2 Data_Cleaned And Anonymized.reordered.xlsx"
 
-
 def main():
     print(f"Reordering {DATA_PATH} by Pond ID")
     reorder_by_pond(DATA_PATH, DATA_PATH_REORD)
@@ -19,6 +18,7 @@ def main():
     data = load_data(DATA_PATH_REORD)
     events = load_events(DATA_PATH_REORD)
 
+    print(f"Doing basic, descriptive data analysis")
     describe_data(data, events)
     analyze_oor_events(data, events)
 
