@@ -11,14 +11,14 @@ DATA_PATH = "data/Outcome Evaluation Phase 2 Data_Cleaned And Anonymized.xlsx"
 DATA_PATH_REORD = "data/Outcome Evaluation Phase 2 Data_Cleaned And Anonymized.reordered.xlsx"
 
 def main():
-    print(f"Reordering {DATA_PATH} by Pond ID")
+    print(f"Reordering {DATA_PATH} by Pond ID\n")
     reorder_by_pond(DATA_PATH, DATA_PATH_REORD)
 
     print(f"Loading data from: {DATA_PATH_REORD}\n")
     data = load_data(DATA_PATH_REORD)
     events = load_events(DATA_PATH_REORD)
 
-    print(f"Doing basic, descriptive data analysis")
+    print(f"Doing basic, descriptive data analysis:")
     describe_data(data, events)
     analyze_oor_events(data, events)
 
