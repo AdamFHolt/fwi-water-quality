@@ -45,6 +45,38 @@ def describe_data(data: pd.DataFrame, events: pd.DataFrame) -> None:
     print()
 
 
+# Water-quality reading columns present in this dataset.
+WQ_PARAMS = ["DO (mg/L)", "pH", "Ammonia—NH3 (mg/L)"]
+
+
+def wq_pond_means(data: pd.DataFrame) -> pd.DataFrame:
+    """Baseline WQ as one row per pond: routine visits, averaged within pond.
+
+    Drops follow-up visits (they are conditional on an OOR event, so a biased
+    subsample) and collapses each pond to its mean so repeated visits within a
+    pond aren't counted as independent observations (avoids pseudoreplication).
+    Returns columns: Pond status, Pond ID, <WQ_PARAMS>.
+    """
+    routine = data[data["Is follow up"] == "No"]
+    return routine.groupby(["Pond status", "Pond ID"])[WQ_PARAMS].mean().reset_index()
+
+
+def describe_water_quality(data: pd.DataFrame) -> None:
+    """Print baseline WQ mean/SD by group (routine visits, one value per pond)."""
+    pond = wq_pond_means(data)
+    stats = pond.groupby("Pond status")[WQ_PARAMS].agg(["mean", "std"]).round(3)
+    n = pond.groupby("Pond status").size()
+
+    print("=" * 50)
+    print("WATER QUALITY — MEAN (SD) BY GROUP")
+    print("(routine visits, averaged per pond)")
+    print("=" * 50)
+    print(stats.to_string())
+    print()
+    print(f"ponds per group: {n.to_dict()}")
+    print()
+
+
 def derive_oor_events(data: pd.DataFrame) -> pd.DataFrame:
     """Reconstruct OOR events and their resolution from the per-visit Data sheet.
 
@@ -99,6 +131,24 @@ def derive_oor_events(data: pd.DataFrame) -> pd.DataFrame:
     return events
 
 
+# Parameters that can trigger an OOR event.
+OOR_DRIVERS = ["DO", "pH", "Ammonia"]
+
+
+def oor_event_drivers(events: pd.DataFrame) -> pd.DataFrame:
+    """Count how many OOR events flag each parameter, by group.
+
+    The `OOR Parameter` cell lists one or more parameters (e.g. "DO, pH"), so a
+    single event can count toward several drivers. Returns a DataFrame with one
+    row per parameter and one column per group (values = event counts).
+    """
+    rows = {}
+    for p in OOR_DRIVERS:
+        flagged = events["OOR Parameter"].str.contains(p, case=False, na=False)
+        rows[p] = events[flagged]["Group"].value_counts()
+    return pd.DataFrame(rows).T.fillna(0).astype(int)  # rows = params, cols = groups
+
+
 def analyze_oor_events(data: pd.DataFrame, events: pd.DataFrame) -> pd.DataFrame:
     """Count and resolve OOR events from Data, cross-checking the OOR Events sheet.
 
@@ -125,27 +175,27 @@ def analyze_oor_events(data: pd.DataFrame, events: pd.DataFrame) -> pd.DataFrame
     print(summary.to_string())
     print()
 
+    
+    # # Reference figures from the OOR Events sheet.
+    # sheet_events = events["Group"].value_counts()
+    # sheet_resolved = (
+    #     events.assign(res=events["2nd FU WQ improvement"] == "Yes")
+    #     .groupby("Group")["res"]
+    #     .sum()
+    # )
 
-    # Reference figures from the OOR Events sheet.
-    sheet_events = events["Group"].value_counts()
-    sheet_resolved = (
-        events.assign(res=events["2nd FU WQ improvement"] == "Yes")
-        .groupby("Group")["res"]
-        .sum()
-    )
+    # # (ii) event counts agree?
+    # print("CHECK — event counts vs OOR Events sheet:")
+    # for grp in summary.index:
+    #     a, b = int(summary.loc[grp, "oor_events"]), int(sheet_events.get(grp, 0))
+    #     print(f"  {grp}: Data={a}  Sheet={b}  {'OK' if a == b else 'MISMATCH'}")
 
-    # (ii) event counts agree?
-    print("CHECK — event counts vs OOR Events sheet:")
-    for grp in summary.index:
-        a, b = int(summary.loc[grp, "oor_events"]), int(sheet_events.get(grp, 0))
-        print(f"  {grp}: Data={a}  Sheet={b}  {'OK' if a == b else 'MISMATCH'}")
-
-    # (iv) resolved counts agree?
-    print("CHECK — resolved counts vs OOR Events sheet (Day-3 primary):")
-    for grp in summary.index:
-        a, b = int(summary.loc[grp, "resolved"]), int(sheet_resolved.get(grp, 0))
-        print(f"  {grp}: Data={a}  Sheet={b}  {'OK' if a == b else 'MISMATCH'}")
-    print()
+    # # (iv) resolved counts agree?
+    # print("CHECK — resolved counts vs OOR Events sheet (Day-3 primary):")
+    # for grp in summary.index:
+    #     a, b = int(summary.loc[grp, "resolved"]), int(sheet_resolved.get(grp, 0))
+    #     print(f"  {grp}: Data={a}  Sheet={b}  {'OK' if a == b else 'MISMATCH'}")
+    # print()
 
     return derived
 

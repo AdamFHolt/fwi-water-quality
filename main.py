@@ -3,10 +3,11 @@ from src.functions import (
     load_data,
     load_events,
     describe_data,
+    describe_water_quality,
     analyze_oor_events,
     reorder_by_pond,
 )
-from src.plotting_functions import plot_resolution_pies
+from src.plotting_functions import plot_summary
 
 DATA_PATH = "data/Outcome Evaluation Phase 2 Data_Cleaned And Anonymized.xlsx"
 DATA_PATH_REORD = "data/Outcome Evaluation Phase 2 Data_Cleaned And Anonymized.reordered.xlsx"
@@ -21,9 +22,10 @@ def main():
 
     print(f"Doing basic, descriptive data analysis:")
     describe_data(data, events)
+    describe_water_quality(data)
     derived = analyze_oor_events(data, events)
 
-    path = plot_resolution_pies(derived)
+    path = plot_summary(derived, data, events)
     print(f"Saved plot: {path}")
 
 
