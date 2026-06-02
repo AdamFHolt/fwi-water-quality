@@ -138,20 +138,6 @@ def derive_oor_events(data: pd.DataFrame) -> pd.DataFrame:
 OOR_DRIVERS = ["DO", "pH", "Ammonia"]
 
 
-def oor_event_drivers(events: pd.DataFrame) -> pd.DataFrame:
-    """Count how many OOR events flag each parameter, by group.
-
-    The `OOR Parameter` cell lists one or more parameters (e.g. "DO, pH"), so a
-    single event can count toward several drivers. Returns a DataFrame with one
-    row per parameter and one column per group (values = event counts).
-    """
-    rows = {}
-    for p in OOR_DRIVERS:
-        flagged = events["OOR Parameter"].str.contains(p, case=False, na=False)
-        rows[p] = events[flagged]["Group"].value_counts()
-    return pd.DataFrame(rows).T.fillna(0).astype(int)  # rows = params, cols = groups
-
-
 def oor_resolution_by_parameter(events: pd.DataFrame) -> pd.DataFrame:
     """Resolution rate (Day-3 primary) by OOR parameter and group.
 
@@ -165,7 +151,6 @@ def oor_resolution_by_parameter(events: pd.DataFrame) -> pd.DataFrame:
 
     def summarize(sub, parameter):
         out = sub.groupby("Group")["_resolved"].agg(events="size", resolved="sum")
-        out["resolved"] = out["resolved"].astype(int)
         out["pct_resolved"] = (out["resolved"] / out["events"] * 100).round(1)
         return out.reset_index().rename(columns={"Group": "group"}).assign(parameter=parameter)
 

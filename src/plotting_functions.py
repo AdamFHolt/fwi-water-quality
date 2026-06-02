@@ -20,7 +20,6 @@ from src.functions import (
     WQ_PARAMS,
     OOR_DRIVERS,
     wq_pond_means,
-    oor_event_drivers,
     oor_resolution_by_parameter,
 )
 
@@ -64,14 +63,6 @@ def _resolution_pie(ax, resolved, not_resolved, color, title):
     ax.set_title(title, pad=10)
 
 
-def _group_bars(ax, x, values_by_group, groups, width=0.38):
-    """Side-by-side bars per group at integer x positions; returns centre offsets."""
-    for i, g in enumerate(groups):
-        ax.bar([xi + i * width for xi in x], values_by_group[g], width,
-               label=g, color=GROUP_COLORS[g], edgecolor="white")
-    ax.set_xticks([xi + width * (len(groups) - 1) / 2 for xi in x])
-
-
 def plot_oor_events(events, filename="oor_events.png"):
     """OOR-events figure: overall resolution pies, event-driver bars, and a
     per-parameter resolution pie for each group (Day-3 primary measure).
@@ -80,7 +71,8 @@ def plot_oor_events(events, filename="oor_events.png"):
     row per OOR parameter. Built entirely from the OOR Events sheet.
     """
     res = oor_resolution_by_parameter(events).set_index(["parameter", "group"])
-    drivers = oor_event_drivers(events)  # rows = params, cols = groups
+    # Driver counts are just the per-parameter event totals from `res`.
+    drivers = res["events"].unstack("group").reindex(OOR_DRIVERS)  # rows=params, cols=groups
     groups = sorted(drivers.columns)
 
     # 6-col grid: overall pies (3 cols each), full-width driver bars, then the
@@ -112,7 +104,11 @@ def plot_oor_events(events, filename="oor_events.png"):
 
     # --- Grouped bars: how many OOR events flagged each parameter, per group ---
     ax = axd["drv"]
-    _group_bars(ax, range(len(drivers.index)), drivers, groups)
+    x, width = range(len(drivers.index)), 0.38
+    for i, g in enumerate(groups):
+        ax.bar([xi + i * width for xi in x], drivers[g], width,
+               label=g, color=GROUP_COLORS[g], edgecolor="white")
+    ax.set_xticks([xi + width * (len(groups) - 1) / 2 for xi in x])
     ax.set_xticklabels(drivers.index)
     ax.set_ylabel("number of OOR events")
     ax.set_title("OOR event drivers (events flagging each parameter; an event may flag several)")
