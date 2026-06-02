@@ -53,8 +53,11 @@ def describe_data(data: pd.DataFrame, events: pd.DataFrame) -> None:
     print()
 
 
-# Water-quality reading columns present in this dataset.
+# Raw WQ reading columns in the Data sheet.
 WQ_PARAMS = ["DO (mg/L)", "pH", "Ammonia—NH3 (mg/L)"]
+
+# Pond-level parameter names after splitting DO by time of day.
+POND_PARAMS = ["DO Morning (mg/L)", "DO Evening (mg/L)", "pH", "Ammonia—NH3 (mg/L)"]
 
 
 def wq_pond_means(data: pd.DataFrame) -> pd.DataFrame:
@@ -63,19 +66,29 @@ def wq_pond_means(data: pd.DataFrame) -> pd.DataFrame:
     Drops follow-up visits (they are conditional on an OOR event, so a biased
     subsample) and collapses each pond to its mean so repeated visits within a
     pond aren't counted as independent observations (avoids pseudoreplication).
-    Returns columns: Pond status, Pond ID, <WQ_PARAMS>.
+    DO is split by time of day (morning and evening differ by ~8 mg/L) and
+    returned as two columns. pH and ammonia are averaged over all routine visits.
+    Returns columns: Pond status, Pond ID, <POND_PARAMS>.
     """
     routine = data[data["Is follow up"] == "No"]
-    return routine.groupby(["Pond status", "Pond ID"])[WQ_PARAMS].mean().reset_index()
+    do_am = (routine[routine["Type"] == "Morning"]
+             .groupby(["Pond status", "Pond ID"])["DO (mg/L)"].mean()
+             .rename("DO Morning (mg/L)"))
+    do_pm = (routine[routine["Type"] == "Evening"]
+             .groupby(["Pond status", "Pond ID"])["DO (mg/L)"].mean()
+             .rename("DO Evening (mg/L)"))
+    other = routine.groupby(["Pond status", "Pond ID"])[["pH", "Ammonia—NH3 (mg/L)"]].mean()
+    return pd.concat([do_am, do_pm, other], axis=1).reset_index()
 
 
 def describe_water_quality(data: pd.DataFrame) -> None:
     """Print baseline WQ mean/SD by group (routine visits, one value per pond)."""
     pond = wq_pond_means(data)
-    stats = pond.groupby("Pond status")[WQ_PARAMS].agg(["mean", "std"]).round(3)
+    stats = pond.groupby("Pond status")[POND_PARAMS].agg(["mean", "std"]).round(3)
     n = pond.groupby("Pond status").size()
 
-    _section("WATER QUALITY — MEAN (SD) BY GROUP", "(routine visits, averaged per pond)")
+    _section("WATER QUALITY — MEAN (SD) BY GROUP",
+             "(routine visits, averaged per pond; DO split by time of day)")
     print(stats.to_string())
     print()
     print(f"ponds per group: {n.to_dict()}")
@@ -92,7 +105,7 @@ def levene_by_param(data: pd.DataFrame) -> pd.DataFrame:
     pond = wq_pond_means(data)
     groups = sorted(pond["Pond status"].unique())
     rows = {}
-    for param in WQ_PARAMS:
+    for param in POND_PARAMS:
         samples = [pond.loc[pond["Pond status"] == g, param].dropna() for g in groups]
         w, p = levene(*samples)
         rows[param] = {"W": round(w, 3), "p": round(p, 3)}
@@ -119,7 +132,7 @@ def wq_outliers(data: pd.DataFrame, resid_thresh: float = 2.0) -> pd.DataFrame:
     """
     pond = wq_pond_means(data)
     out = []
-    for param in WQ_PARAMS:
+    for param in POND_PARAMS:
         df = pond[["Pond status", "Pond ID", param]].dropna().rename(columns={param: "value"})
         n, p = len(df), df["Pond status"].nunique()
         gmean = df.groupby("Pond status")["value"].transform("mean")
@@ -215,7 +228,9 @@ def oor_resolution_by_parameter(events: pd.DataFrame) -> pd.DataFrame:
     parameters (e.g. "DO, pH") count toward each. The "Overall" row uses all
     events. Returns tidy rows: parameter, group, events, resolved, pct_resolved.
     """
-    df = events.assign(_resolved=events["2nd FU WQ improvement"].eq("Yes"))
+    df = events.dropna(subset=["2nd FU WQ improvement"]).assign(
+        _resolved=lambda x: x["2nd FU WQ improvement"].eq("Yes")
+    )
 
     def summarize(sub, parameter):
         out = sub.groupby("Group")["_resolved"].agg(events="size", resolved="sum")
@@ -249,12 +264,12 @@ def describe_resolution_by_parameter(events: pd.DataFrame) -> None:
     print()
 
 
-def analyze_oor_events(data: pd.DataFrame) -> pd.DataFrame:
+def analyze_oor_events(data: pd.DataFrame, events: pd.DataFrame) -> None:
     """Count and resolve OOR events reconstructed from the per-visit Data sheet.
 
-    Prints event counts and Day-3 resolution rate per group. Events with no
-    follow-up in the window (resolved is None) are excluded from the rate; the
-    denominator is events that had a follow-up.
+    Prints event counts and Day-3 resolution rate per group, then cross-checks
+    the derived counts against the OOR Events sheet (the authoritative source).
+    Raises AssertionError if they disagree.
     """
     derived = derive_oor_events(data)
 
@@ -277,7 +292,16 @@ def analyze_oor_events(data: pd.DataFrame) -> pd.DataFrame:
     print(summary.to_string())
     print()
 
-    return derived
+    # Cross-check: derived counts must match OOR Events sheet exactly.
+    sheet = events.dropna(subset=["2nd FU WQ improvement"]).groupby("Group")["2nd FU WQ improvement"]
+    sheet_n = sheet.size()
+    sheet_res = sheet.apply(lambda s: s.eq("Yes").sum())
+    for grp in sheet_n.index:
+        dg = followed[followed["group"] == grp]
+        assert len(dg) == sheet_n[grp] and dg["resolved"].sum() == sheet_res[grp], (
+            f"Mismatch for {grp}: derived ({len(dg)}, {int(dg['resolved'].sum())}) "
+            f"vs sheet ({sheet_n[grp]}, {sheet_res[grp]})"
+        )
 
 
 

@@ -20,7 +20,7 @@ plt.rcParams.update({
 from matplotlib.lines import Line2D
 
 from src.functions import (
-    WQ_PARAMS,
+    POND_PARAMS,
     OOR_DRIVERS,
     wq_pond_means,
     levene_by_param,
@@ -132,16 +132,16 @@ def plot_water_quality(data, filename="water_qualities.png", highlight_anoms=Fal
     (red = outlier, black = influential) and Pond-ID labels, plus a legend.
     """
     pond = wq_pond_means(data)
-    wq = pond.groupby("Pond status")[WQ_PARAMS].agg(["mean", "std"])
+    wq = pond.groupby("Pond status")[POND_PARAMS].agg(["mean", "std"])
     n_ponds = pond.groupby("Pond status").size()
     lev = levene_by_param(data)
     flagged = wq_outliers(data) if highlight_anoms else None
     groups = sorted(pond["Pond status"].unique())
     rng = np.random.default_rng(0)  # reproducible strip jitter
 
-    fig, axes = plt.subplots(2, len(WQ_PARAMS), figsize=(5 * len(WQ_PARAMS), 9))
-    for col, param in enumerate(WQ_PARAMS):
-        # Top: mean +/- SD bars ("D\n(n=28)" — n is ponds, not visits).
+    fig, axes = plt.subplots(2, len(POND_PARAMS), figsize=(5 * len(POND_PARAMS), 9))
+    for col, param in enumerate(POND_PARAMS):
+        # Top: mean +/- SD bars (n = ponds).
         ax = axes[0, col]
         ax.bar(
             range(len(groups)),
@@ -197,6 +197,65 @@ def plot_water_quality(data, filename="water_qualities.png", highlight_anoms=Fal
             ],
             loc="upper right", fontsize=8,
         )
+
+    fig.tight_layout()
+    return _save(fig, filename)
+
+
+def plot_water_quality_visits(data, filename="water_qualities.visits.png"):
+    """Visit-level WQ figure: routine visits only, one point per visit.
+
+    Columns: DO (Morning), DO (Evening), pH, Ammonia — DO is split by time of
+    day because morning and evening values differ substantially (~3 vs ~11 mg/L).
+    Top row: mean +/- SD bars. Bottom row: box + dense jittered strip.
+    """
+    routine = data[data["Is follow up"] == "No"].copy()
+    groups = sorted(routine["Pond status"].unique())
+    rng = np.random.default_rng(0)
+
+    # Each column is (param, time_filter, title).
+    cols = [
+        ("DO (mg/L)", "Morning", "DO — Morning (mg/L)"),
+        ("DO (mg/L)", "Evening", "DO — Evening (mg/L)"),
+        ("pH",        None,      "pH"),
+        ("Ammonia—NH3 (mg/L)", None, "Ammonia—NH3 (mg/L)"),
+    ]
+
+    fig, axes = plt.subplots(2, len(cols), figsize=(5 * len(cols), 9))
+    for col, (param, time, title) in enumerate(cols):
+        df = routine[routine["Type"] == time] if time else routine
+
+        # Top: mean +/- SD bars.
+        ax = axes[0, col]
+        grp = df.groupby("Pond status")[param].agg(["mean", "std"])
+        n_visits = df.groupby("Pond status")[param].count()
+        ax.bar(
+            range(len(groups)),
+            [grp.loc[g, "mean"] for g in groups],
+            yerr=[grp.loc[g, "std"] for g in groups],
+            color=[GROUP_COLORS[g] for g in groups],
+            capsize=6,
+            edgecolor="white",
+        )
+        ax.set_xticks(range(len(groups)))
+        ax.set_xticklabels([f"{g.split()[-1]}\n(n={n_visits[g]})" for g in groups])
+        ax.set_title(title)
+        ax.margins(y=0.15)
+
+        # Bottom: box + dense strip.
+        ax = axes[1, col]
+        subs = [df[df["Pond status"] == g][param].dropna() for g in groups]
+        bp = ax.boxplot([s.values for s in subs], widths=0.5, showfliers=False, patch_artist=True)
+        for patch, g in zip(bp["boxes"], groups):
+            patch.set_facecolor(GROUP_COLORS[g])
+            patch.set_alpha(0.55)
+        for i, (g, s) in enumerate(zip(groups, subs)):
+            xj = rng.normal(i + 1, 0.08, len(s))
+            ax.scatter(xj, s.values, color=GROUP_COLORS[g], s=8, alpha=0.35,
+                       edgecolor="none", zorder=3)
+        ax.set_xticks(range(1, len(groups) + 1))
+        ax.set_xticklabels([g.split()[-1] for g in groups])
+        ax.set_title(title)
 
     fig.tight_layout()
     return _save(fig, filename)

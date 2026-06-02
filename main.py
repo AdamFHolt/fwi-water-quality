@@ -11,7 +11,7 @@ from src.functions import (
     describe_resolution_by_parameter,
     reorder_by_pond,
 )
-from src.plotting_functions import plot_oor_events, plot_water_quality
+from src.plotting_functions import plot_oor_events, plot_water_quality, plot_water_quality_visits
 
 DATA_PATH = "data/Outcome Evaluation Phase 2 Data_Cleaned And Anonymized.xlsx"
 DATA_PATH_REORD = "data/Outcome Evaluation Phase 2 Data_Cleaned And Anonymized.reordered.xlsx"
@@ -32,7 +32,7 @@ def main():
     describe_water_quality(data)                # baseline WQ mean/SD per pond
     describe_variance_homogeneity(data)         # Levene's test, D vs E
     describe_wq_outliers(data)                  # outlier / influence diagnostics
-    analyze_oor_events(data)                    # OOR resolution rate (derived from Data)
+    analyze_oor_events(data, events)            # OOR resolution rate + cross-check vs OOR Events sheet
     describe_resolution_by_parameter(events)    # resolution rate by parameter
 
     # Sensitivity variant: OOR figure with the WQ-anomalous ponds removed.
@@ -45,6 +45,7 @@ def main():
     print(f"  {plot_oor_events(events_clean, 'oor_events.anoms_removed.png')}")  # same, anomalous ponds removed
     print(f"  {plot_water_quality(data)}")                                       # WQ bars + distributions
     print(f"  {plot_water_quality(data, 'water_qualities.anoms_highlighted.png', highlight_anoms=True)}")  # WQ with outliers ringed
+    print(f"  {plot_water_quality_visits(data)}")                                  # WQ visit-level distributions
 
 
 if __name__ == "__main__":
