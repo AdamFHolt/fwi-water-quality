@@ -1,4 +1,5 @@
 import pandas as pd
+from scipy.stats import levene
 
 def reorder_by_pond(src: str, dst: str) -> None:
     """Sort the Data sheet by Pond ID then chronologically, copying other sheets verbatim."""
@@ -74,6 +75,33 @@ def describe_water_quality(data: pd.DataFrame) -> None:
     print(stats.to_string())
     print()
     print(f"ponds per group: {n.to_dict()}")
+    print()
+
+
+def levene_by_param(data: pd.DataFrame) -> pd.DataFrame:
+    """Levene's variance-homogeneity test (Group D vs E) per WQ parameter.
+
+    Uses the per-pond baseline values (see wq_pond_means) so ponds aren't
+    pseudo-replicated. Median-centred (Brown-Forsythe), robust to non-normality.
+    Returns a DataFrame indexed by parameter with columns W (statistic) and p.
+    """
+    pond = wq_pond_means(data)
+    groups = sorted(pond["Pond status"].unique())
+    rows = {}
+    for param in WQ_PARAMS:
+        samples = [pond.loc[pond["Pond status"] == g, param].dropna() for g in groups]
+        w, p = levene(*samples)
+        rows[param] = {"W": round(w, 3), "p": round(p, 3)}
+    return pd.DataFrame(rows).T
+
+
+def describe_variance_homogeneity(data: pd.DataFrame) -> None:
+    """Print Levene's variance-homogeneity test (Group D vs E) per WQ parameter."""
+    print("=" * 50)
+    print("VARIANCE HOMOGENEITY — LEVENE (Group D vs E)")
+    print("(per-pond baseline values; p > 0.05 = equal variance)")
+    print("=" * 50)
+    print(levene_by_param(data).to_string())
     print()
 
 

@@ -4,6 +4,7 @@ from src.functions import (
     load_events,
     describe_data,
     describe_water_quality,
+    describe_variance_homogeneity,
     analyze_oor_events,
     describe_resolution_by_parameter,
     reorder_by_pond,
@@ -24,6 +25,7 @@ def main():
     print(f"Doing basic descriptive data analysis:")
     describe_data(data, events)
     describe_water_quality(data)
+    describe_variance_homogeneity(data)
     analyze_oor_events(data, events)
     describe_resolution_by_parameter(events)
 

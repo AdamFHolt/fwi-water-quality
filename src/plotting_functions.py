@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import numpy as np
 import matplotlib
 
 matplotlib.use("Agg")  # non-interactive: render straight to file
@@ -20,6 +21,7 @@ from src.functions import (
     WQ_PARAMS,
     OOR_DRIVERS,
     wq_pond_means,
+    levene_by_param,
     oor_resolution_by_parameter,
 )
 
@@ -119,32 +121,46 @@ def plot_oor_events(events, filename="oor_events.png"):
 
 
 def plot_water_quality(data, filename="water_quality.png"):
-    """Pond-properties figure: baseline WQ mean +/- SD by group, one panel per
-    parameter (routine visits, averaged per pond). Room to grow (e.g. add
-    distribution-plot rows later).
+    """Pond-properties figure: per group, baseline WQ as mean +/- SD bars (top
+    row) and per-pond distributions as box + jittered-strip plots (bottom row),
+    one column per parameter (routine visits, averaged per pond).
     """
     pond = wq_pond_means(data)
     wq = pond.groupby("Pond status")[WQ_PARAMS].agg(["mean", "std"])
     n_ponds = pond.groupby("Pond status").size()
-    groups = sorted(wq.index)
+    lev = levene_by_param(data)
+    groups = sorted(pond["Pond status"].unique())
+    rng = np.random.default_rng(0)  # reproducible strip jitter
 
-    fig, axes = plt.subplots(1, len(WQ_PARAMS), figsize=(5 * len(WQ_PARAMS), 5))
-    for ax, param in zip(axes, WQ_PARAMS):
-        means = [wq.loc[g, (param, "mean")] for g in groups]
-        stds = [wq.loc[g, (param, "std")] for g in groups]
+    fig, axes = plt.subplots(2, len(WQ_PARAMS), figsize=(5 * len(WQ_PARAMS), 9))
+    for col, param in enumerate(WQ_PARAMS):
+        # Top: mean +/- SD bars ("D\n(n=28)" — n is ponds, not visits).
+        ax = axes[0, col]
         ax.bar(
             range(len(groups)),
-            means,
-            yerr=stds,
+            [wq.loc[g, (param, "mean")] for g in groups],
+            yerr=[wq.loc[g, (param, "std")] for g in groups],
             color=[GROUP_COLORS[g] for g in groups],
             capsize=6,
             edgecolor="white",
         )
         ax.set_xticks(range(len(groups)))
-        # "D\n(n=28)" — n is ponds, not visits.
         ax.set_xticklabels([f"{g.split()[-1]}\n(n={n_ponds[g]})" for g in groups])
         ax.set_title(param)
         ax.margins(y=0.15)
+
+        # Bottom: per-pond distribution (box + strip); Levene p in the title.
+        ax = axes[1, col]
+        samples = [pond.loc[pond["Pond status"] == g, param].dropna().values for g in groups]
+        bp = ax.boxplot(samples, widths=0.5, showfliers=False, patch_artist=True)
+        for patch, g in zip(bp["boxes"], groups):
+            patch.set_facecolor(GROUP_COLORS[g])
+            patch.set_alpha(0.55)
+        for i, vals in enumerate(samples):
+            ax.scatter(rng.normal(i + 1, 0.06, len(vals)), vals,
+                       color=GROUP_COLORS[groups[i]], s=15, edgecolor="white", zorder=3)
+        ax.set_xticklabels([g.split()[-1] for g in groups])
+        ax.set_title(f"{param}\nLevene p = {lev.loc[param, 'p']}")
 
     fig.tight_layout()
     return _save(fig, filename)
