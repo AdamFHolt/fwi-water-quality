@@ -5,7 +5,7 @@ import matplotlib
 matplotlib.use("Agg")  # non-interactive: render straight to file
 import matplotlib.pyplot as plt
 
-# Clean, consistent typography across the figure.
+# Clean, consistent typography across the figures.
 plt.rcParams.update({
     "font.family": "DejaVu Sans",
     "font.size": 11,
@@ -16,73 +16,124 @@ plt.rcParams.update({
     "axes.spines.right": False,
 })
 
-from src.functions import WQ_PARAMS, wq_pond_means, oor_event_drivers
+from src.functions import (
+    WQ_PARAMS,
+    OOR_DRIVERS,
+    wq_pond_means,
+    oor_event_drivers,
+    oor_resolution_by_parameter,
+)
 
 PLOTS_DIR = Path("plots")
 
-# One consistent palette across the whole figure: each group has a single
-# identity colour used everywhere, and grey always means "not resolved".
+# One consistent palette: each group has a single identity colour used
+# everywhere, and grey always means "not resolved".
 GROUP_COLORS = {"Group D": "#4c72b0", "Group E": "#dd8452"}
 NOT_RESOLVED = "#cccccc"
 
 
-def plot_summary(derived, data, events, filename="group_summary.png"):
-    """Combined figure: OOR resolution pies (top), WQ mean/SD bars (middle),
-    and OOR event drivers (bottom).
+def _save(fig, filename):
+    PLOTS_DIR.mkdir(exist_ok=True)
+    path = PLOTS_DIR / filename
+    fig.savefig(path, dpi=150, bbox_inches="tight")
+    plt.close(fig)
+    return path
 
-    `derived` is the output of derive_oor_events (one row per event with a
-    boolean `resolved`); `data` is the per-visit Data sheet; `events` is the
-    OOR Events sheet. Saves to plots/<filename> and returns the path.
+
+def _resolution_pie(ax, resolved, not_resolved, color, title):
+    """Draw one resolved-vs-not pie; resolved slice = group colour, rest grey."""
+    total = resolved + not_resolved
+    if total == 0:
+        ax.text(0.5, 0.5, "no events", ha="center", va="center")
+        ax.set_title(title, pad=10)
+        ax.axis("off")
+        return
+    _, _, autotexts = ax.pie(
+        [resolved, not_resolved],
+        labels=["Resolved", "Not resolved"],
+        colors=[color, NOT_RESOLVED],
+        autopct=lambda pct: f"{pct:.0f}%\n({round(pct / 100 * total)})",
+        startangle=90,
+        counterclock=False,
+        wedgeprops={"edgecolor": "white", "linewidth": 1.5},
+        textprops={"fontsize": 11},
+        pctdistance=0.6,
+    )
+    for t in autotexts:  # percentage labels: bold for readability on the wedges
+        t.set_fontweight("bold")
+    ax.set_title(title, pad=10)
+
+
+def _group_bars(ax, x, values_by_group, groups, width=0.38):
+    """Side-by-side bars per group at integer x positions; returns centre offsets."""
+    for i, g in enumerate(groups):
+        ax.bar([xi + i * width for xi in x], values_by_group[g], width,
+               label=g, color=GROUP_COLORS[g], edgecolor="white")
+    ax.set_xticks([xi + width * (len(groups) - 1) / 2 for xi in x])
+
+
+def plot_oor_events(events, filename="oor_events.png"):
+    """OOR-events figure: overall resolution pies, event-driver bars, and a
+    per-parameter resolution pie for each group (Day-3 primary measure).
+
+    One column per group; rows are Overall (pies), drivers (bars), then one pie
+    row per OOR parameter. Built entirely from the OOR Events sheet.
     """
-    groups = sorted(derived["group"].dropna().unique())
-    # Baseline WQ: routine visits, one mean per pond (see wq_pond_means).
+    res = oor_resolution_by_parameter(events).set_index(["parameter", "group"])
+    drivers = oor_event_drivers(events)  # rows = params, cols = groups
+    groups = sorted(drivers.columns)
+
+    # 6-col grid: overall pies (3 cols each), full-width driver bars, then the
+    # per-parameter pies as a compact 3x2 block (params across, one group per row).
+    def key(level, g):
+        return f"{level}_{g.split()[-1]}"
+
+    ncol = 2 * len(OOR_DRIVERS)  # 6
+    overall_row = [k for g in groups for k in [key("Overall", g)] * len(OOR_DRIVERS)]
+    driver_row = ["drv"] * ncol
+    param_rows = [[k for p in OOR_DRIVERS for k in [key(p, g)] * 2] for g in groups]
+    mosaic = [overall_row, driver_row] + param_rows
+    heights = [1.4, 0.9] + [1.0] * len(groups)
+
+    fig, axd = plt.subplot_mosaic(
+        mosaic, figsize=(12, 14), gridspec_kw={"height_ratios": heights}
+    )
+
+    # --- Pies: overall + one row per parameter ---
+    for level in ["Overall"] + OOR_DRIVERS:
+        for g in groups:
+            ax = axd[f"{level}_{g.split()[-1]}"]
+            if (level, g) in res.index:
+                ev = int(res.loc[(level, g), "events"])
+                rv = int(res.loc[(level, g), "resolved"])
+            else:
+                ev = rv = 0
+            _resolution_pie(ax, rv, ev - rv, GROUP_COLORS[g], f"{g} — {level} (n={ev})")
+
+    # --- Grouped bars: how many OOR events flagged each parameter, per group ---
+    ax = axd["drv"]
+    _group_bars(ax, range(len(drivers.index)), drivers, groups)
+    ax.set_xticklabels(drivers.index)
+    ax.set_ylabel("number of OOR events")
+    ax.set_title("OOR event drivers (events flagging each parameter; an event may flag several)")
+    ax.legend()
+
+    fig.tight_layout()
+    return _save(fig, filename)
+
+
+def plot_water_quality(data, filename="water_quality.png"):
+    """Pond-properties figure: baseline WQ mean +/- SD by group, one panel per
+    parameter (routine visits, averaged per pond). Room to grow (e.g. add
+    distribution-plot rows later).
+    """
     pond = wq_pond_means(data)
     wq = pond.groupby("Pond status")[WQ_PARAMS].agg(["mean", "std"])
     n_ponds = pond.groupby("Pond status").size()
-    drivers = oor_event_drivers(events)  # rows = params, cols = groups
+    groups = sorted(wq.index)
 
-    # Rows: pies (per group), WQ bars (per param), OOR drivers (full width).
-    mosaic = [
-        ["D", "D", "D", "E", "E", "E"],
-        ["p0", "p0", "p1", "p1", "p2", "p2"],
-        ["drv", "drv", "drv", "drv", "drv", "drv"],
-    ]
-    # Taller top row so the pies render larger than the bar panels.
-    fig, axd = plt.subplot_mosaic(
-        mosaic, figsize=(12, 15), gridspec_kw={"height_ratios": [1.6, 1, 1]}
-    )
-
-    # --- Pies: resolved vs not resolved ---
-    for group in groups:
-        ax = axd[group.split()[-1]]  # "Group D" -> "D"
-        # Exclude no-follow-up events (resolved is None), as in analyze_oor_events.
-        sub = derived[derived["group"] == group].dropna(subset=["resolved"])
-        resolved = int(sub["resolved"].sum())
-        not_resolved = len(sub) - resolved
-        counts = [resolved, not_resolved]
-        labels = ["Resolved", "Not resolved"]
-        # Resolved slice = this group's colour; remainder grey.
-        colors = [GROUP_COLORS[group], NOT_RESOLVED]
-
-        wedges, texts, autotexts = ax.pie(
-            counts,
-            labels=labels,
-            colors=colors,
-            autopct=lambda pct: f"{pct:.0f}%\n({round(pct / 100 * sum(counts))})",
-            startangle=90,
-            counterclock=False,
-            wedgeprops={"edgecolor": "white", "linewidth": 1.5},
-            textprops={"fontsize": 12},
-            pctdistance=0.6,
-        )
-        for t in autotexts:  # percentage labels: bold for readability on the wedges
-            t.set_fontsize(12)
-            t.set_fontweight("bold")
-        ax.set_title(f"{group}\n(n = {resolved + not_resolved} OOR events)", pad=12)
-
-    # --- Bars: WQ mean (+/- SD) by group ---
-    for i, param in enumerate(WQ_PARAMS):
-        ax = axd[f"p{i}"]
+    fig, axes = plt.subplots(1, len(WQ_PARAMS), figsize=(5 * len(WQ_PARAMS), 5))
+    for ax, param in zip(axes, WQ_PARAMS):
         means = [wq.loc[g, (param, "mean")] for g in groups]
         stds = [wq.loc[g, (param, "std")] for g in groups]
         ax.bar(
@@ -99,23 +150,5 @@ def plot_summary(derived, data, events, filename="group_summary.png"):
         ax.set_title(param)
         ax.margins(y=0.15)
 
-    # --- Grouped bars: how many OOR events flagged each parameter, per group ---
-    ax = axd["drv"]
-    x = range(len(drivers.index))  # one cluster per parameter
-    width = 0.38
-    for i, g in enumerate(groups):
-        ax.bar([xi + i * width for xi in x], drivers[g], width,
-               label=g, color=GROUP_COLORS[g], edgecolor="white")
-    ax.set_xticks([xi + width / 2 for xi in x])
-    ax.set_xticklabels(drivers.index)
-    ax.set_ylabel("number of OOR events")
-    ax.set_title("OOR event drivers (events flagging each parameter; an event may flag several)")
-    ax.legend()
-
     fig.tight_layout()
-
-    PLOTS_DIR.mkdir(exist_ok=True)
-    path = PLOTS_DIR / filename
-    fig.savefig(path, dpi=150, bbox_inches="tight")
-    plt.close(fig)
-    return path
+    return _save(fig, filename)
