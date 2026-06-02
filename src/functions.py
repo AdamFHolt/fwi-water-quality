@@ -12,15 +12,15 @@ def _section(*lines: str) -> None:
 
 def reorder_by_pond(src: str, dst: str) -> None:
     """Sort the Data sheet by Pond ID then chronologically, copying other sheets verbatim."""
+    # Other sheets in one read; header=None keeps every cell exactly as-is.
+    others = pd.read_excel(src, sheet_name=["Overview", "OOR Events"], header=None)
+    overview, oor = others["Overview"], others["OOR Events"]
+
     # Within a pond, sort by date then time so visits read oldest->newest,
     # Morning before Evening. Time is an "HH:MM" 24h string, so it sorts as text.
     data = pd.read_excel(src, sheet_name="Data").sort_values(
         ["Pond ID", "Date of data collection", "Time of data collection"], kind="stable"
     )
-
-    # Other sheets: header=None keeps every cell exactly as-is.
-    overview = pd.read_excel(src, sheet_name="Overview", header=None)
-    oor = pd.read_excel(src, sheet_name="OOR Events", header=None)
 
     with pd.ExcelWriter(dst) as writer:
         overview.to_excel(writer, sheet_name="Overview", index=False, header=False)
@@ -52,9 +52,6 @@ def describe_data(data: pd.DataFrame, events: pd.DataFrame) -> None:
     print(events["Group"].value_counts().to_string())
     print()
 
-
-# Raw WQ reading columns in the Data sheet.
-WQ_PARAMS = ["DO (mg/L)", "pH", "Ammonia—NH3 (mg/L)"]
 
 # Pond-level parameter names after splitting DO by time of day.
 POND_PARAMS = ["DO Morning (mg/L)", "DO Evening (mg/L)", "pH", "Ammonia—NH3 (mg/L)"]
@@ -239,7 +236,7 @@ def oor_resolution_by_parameter(events: pd.DataFrame) -> pd.DataFrame:
 
     rows = [summarize(df, "Overall")]
     rows += [
-        summarize(df[df["OOR Parameter"].str.contains(p, case=False, na=False)], p)
+        summarize(df[df["OOR Parameter"].str.contains(p, na=False)], p)
         for p in OOR_DRIVERS
     ]
     return pd.concat(rows, ignore_index=True)[

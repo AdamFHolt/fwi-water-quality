@@ -52,11 +52,14 @@ def _resolution_pie(ax, resolved, not_resolved, color, title):
         ax.set_title(title, pad=10)
         ax.axis("off")
         return
+    # Show the exact count alongside the percentage (iterate the slice values so
+    # the displayed count is the true integer, not one back-computed from pct).
+    counts = iter([resolved, not_resolved])
     _, _, autotexts = ax.pie(
         [resolved, not_resolved],
         labels=["Resolved", "Not resolved"],
         colors=[color, NOT_RESOLVED],
-        autopct=lambda pct: f"{pct:.0f}%\n({round(pct / 100 * total)})",
+        autopct=lambda pct: f"{pct:.0f}%\n({next(counts)})",
         startangle=90,
         counterclock=False,
         wedgeprops={"edgecolor": "white", "linewidth": 1.5},
@@ -184,6 +187,7 @@ def plot_water_quality(data, filename="water_qualities.png", highlight_anoms=Fal
             for xk, yk, pid in zip(xj[ring_mask], y[ring_mask], sub["Pond ID"].values[ring_mask]):
                 ax.annotate(pid, (xk, yk), xytext=(dx, 0), textcoords="offset points",
                             fontsize=6, va="center", ha=ha, zorder=6)
+        ax.set_xticks(range(1, len(groups) + 1))
         ax.set_xticklabels([g.split()[-1] for g in groups])
         ax.set_title(f"{param}\nLevene p = {lev.loc[param, 'p']}")
 
