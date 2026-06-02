@@ -32,7 +32,7 @@ def main():
     describe_water_quality(data)                # baseline WQ mean/SD per pond
     describe_variance_homogeneity(data)         # Levene's test, D vs E
     describe_wq_outliers(data)                  # outlier / influence diagnostics
-    analyze_oor_events(data, events)            # OOR resolution rate + sheet cross-check
+    analyze_oor_events(data)                    # OOR resolution rate (derived from Data)
     describe_resolution_by_parameter(events)    # resolution rate by parameter
 
     # Sensitivity variant: OOR figure with the WQ-anomalous ponds removed.

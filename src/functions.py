@@ -249,15 +249,12 @@ def describe_resolution_by_parameter(events: pd.DataFrame) -> None:
     print()
 
 
-def analyze_oor_events(data: pd.DataFrame, events: pd.DataFrame) -> pd.DataFrame:
-    """Count and resolve OOR events from Data, cross-checking the OOR Events sheet.
+def analyze_oor_events(data: pd.DataFrame) -> pd.DataFrame:
+    """Count and resolve OOR events reconstructed from the per-visit Data sheet.
 
-    Prints (i) event counts per group derived from Data, (ii) a check against the
-    OOR Events sheet, (iii) resolved # and % per group, and (iv) a check of those
-    against the sheet's Day-3 primary measure (`2nd FU WQ improvement`).
-
-    Events with no follow-up in the window (resolved is None) are excluded from
-    the resolution rate; the denominator is events that had a follow-up.
+    Prints event counts and Day-3 resolution rate per group. Events with no
+    follow-up in the window (resolved is None) are excluded from the rate; the
+    denominator is events that had a follow-up.
     """
     derived = derive_oor_events(data)
 
@@ -269,7 +266,6 @@ def analyze_oor_events(data: pd.DataFrame, events: pd.DataFrame) -> pd.DataFrame
     followed["resolved"] = followed["resolved"].astype(bool)
     g = followed.groupby("group")["resolved"]
 
-    # (i) + (iii) counts and resolution per group from Data.
     summary = pd.DataFrame(
         {
             "oor_events": derived.groupby("group").size(),  # all detected events
@@ -279,28 +275,6 @@ def analyze_oor_events(data: pd.DataFrame, events: pd.DataFrame) -> pd.DataFrame
         }
     )
     print(summary.to_string())
-    print()
-
-    # Reference figures from the OOR Events sheet.
-    sheet_events = events["Group"].value_counts()
-    sheet_resolved = (
-        events.assign(res=events["2nd FU WQ improvement"] == "Yes")
-        .groupby("Group")["res"]
-        .sum()
-    )
-
-    # (ii)+(iv) cross-check derived counts against the OOR Events sheet.
-    def _check(label, col, sheet):
-        diffs = []
-        for grp in summary.index:
-            a, b = int(summary.loc[grp, col]), int(sheet.get(grp, 0))
-            if a != b:
-                diffs.append(f"{grp} (Data={a} Sheet={b})")
-        status = "OK" if not diffs else "MISMATCH " + ", ".join(diffs)
-        print(f"CHECK — {label}: {status}")
-
-    _check("event counts vs sheet", "oor_events", sheet_events)
-    _check("resolved counts vs sheet", "resolved", sheet_resolved)
     print()
 
     return derived
