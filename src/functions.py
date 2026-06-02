@@ -1,3 +1,28 @@
+"""
+Analysis functions for the FWI water-quality study. main.py calls these in order.
+
+Rough reading order if you're going through this file:
+
+  reorder_by_pond     write a Pond-ID-sorted copy of the workbook
+  load_data/load_events   read the Data and OOR Events sheets
+
+  describe_data       counts: visits, ponds, events, split by group
+  wq_pond_means       one baseline row per pond (DO split AM/PM); most WQ
+                      functions below build on this
+  describe_water_quality   mean/SD per group
+  levene_by_param     do the two groups have equal variance?
+  wq_outliers         flag odd ponds (studentized residual + Cook's D)
+
+  derive_oor_events   rebuild the OOR events from the raw visit rows
+  oor_resolution_by_parameter   resolution rate by parameter, from the sheet
+  analyze_oor_events  resolution rate from the derived events, plus a sanity
+                      check that they match the sheet
+
+Two things to keep straight: the group column is "Pond status" in the Data
+sheet but "Group" in the OOR Events sheet, and the resolution number always
+means the Day-3 (primary) measure.
+"""
+
 import pandas as pd
 from scipy.stats import levene
 
