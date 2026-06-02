@@ -1,6 +1,15 @@
 import pandas as pd
 from scipy.stats import levene
 
+
+def _section(*lines: str) -> None:
+    """Print a titled section header between === banners."""
+    print("=" * 50)
+    for line in lines:
+        print(line)
+    print("=" * 50)
+
+
 def reorder_by_pond(src: str, dst: str) -> None:
     """Sort the Data sheet by Pond ID then chronologically, copying other sheets verbatim."""
     # Within a pond, sort by date then time so visits read oldest->newest,
@@ -31,9 +40,7 @@ def load_events(path: str) -> pd.DataFrame:
 
 def describe_data(data: pd.DataFrame, events: pd.DataFrame) -> None:
     """Print a basic overview of the loaded dataset."""
-    print("=" * 50)
-    print("DATASET OVERVIEW")
-    print("=" * 50)
+    _section("DATASET OVERVIEW")
     print(f"Visits: {len(data)} rows x {data.shape[1]} cols")
     print(f"Unique ponds: {data['Pond ID'].nunique()}")
     print(f"OOR events: {len(events)}")
@@ -68,10 +75,7 @@ def describe_water_quality(data: pd.DataFrame) -> None:
     stats = pond.groupby("Pond status")[WQ_PARAMS].agg(["mean", "std"]).round(3)
     n = pond.groupby("Pond status").size()
 
-    print("=" * 50)
-    print("WATER QUALITY — MEAN (SD) BY GROUP")
-    print("(routine visits, averaged per pond)")
-    print("=" * 50)
+    _section("WATER QUALITY — MEAN (SD) BY GROUP", "(routine visits, averaged per pond)")
     print(stats.to_string())
     print()
     print(f"ponds per group: {n.to_dict()}")
@@ -97,10 +101,8 @@ def levene_by_param(data: pd.DataFrame) -> pd.DataFrame:
 
 def describe_variance_homogeneity(data: pd.DataFrame) -> None:
     """Print Levene's variance-homogeneity test (Group D vs E) per WQ parameter."""
-    print("=" * 50)
-    print("VARIANCE HOMOGENEITY — LEVENE (Group D vs E)")
-    print("(per-pond baseline values; p > 0.05 = equal variance)")
-    print("=" * 50)
+    _section("VARIANCE HOMOGENEITY — LEVENE (Group D vs E)",
+             "(per-pond baseline values; p > 0.05 = equal variance)")
     print(levene_by_param(data).to_string())
     print()
 
@@ -138,10 +140,8 @@ def wq_outliers(data: pd.DataFrame, resid_thresh: float = 2.0) -> pd.DataFrame:
 def describe_wq_outliers(data: pd.DataFrame) -> None:
     """Print baseline-WQ outliers and influential ponds (group-means model)."""
     flagged = wq_outliers(data)
-    print("=" * 50)
-    print("WATER QUALITY OUTLIERS / INFLUENCE (per-pond, param ~ group)")
-    print("(|studentized residual| > 2; Cook's D > 4/n)")
-    print("=" * 50)
+    _section("WATER QUALITY OUTLIERS / INFLUENCE (per-pond, param ~ group)",
+             "(|studentized residual| > 2; Cook's D > 4/n)")
     print("None flagged." if flagged.empty else flagged.to_string(index=False))
     print()
 
@@ -194,7 +194,6 @@ def derive_oor_events(data: pd.DataFrame) -> pd.DataFrame:
         ]
         if cand.empty:
             return None
-        
         # most recent follow-up = Day-3 measure (not Day-2)
         return bool(cand.sort_values("date").iloc[-1]["inrange"])
 
@@ -236,22 +235,16 @@ def oor_resolution_by_parameter(events: pd.DataFrame) -> pd.DataFrame:
 def describe_resolution_by_parameter(events: pd.DataFrame) -> None:
     """Print resolution rate (Day-3 primary) overall and by OOR parameter, per group."""
     tidy = oor_resolution_by_parameter(events)
-    groups = sorted(tidy["group"].unique())
-    metrics = ["events", "resolved", "pct_resolved"]
-
-    table = (
-        tidy.pivot(index="parameter", columns="group", values=metrics)
-        .reorder_levels([1, 0], axis=1)  # (group, metric)
-        .reindex(columns=pd.MultiIndex.from_product([groups, metrics]))
-        .reindex(["Overall"] + OOR_DRIVERS)
+    order = ["Overall"] + OOR_DRIVERS
+    # Lay the tidy rows out group-major: each group's metrics side by side.
+    table = pd.concat(
+        {g: sub.set_index("parameter").reindex(order)[["events", "resolved", "pct_resolved"]]
+         for g, sub in tidy.groupby("group")},
+        axis=1,
     )
-    int_cols = [(g, m) for g in groups for m in ("events", "resolved")]
-    table[int_cols] = table[int_cols].astype(int)
 
-    print("=" * 50)
-    print("OOR RESOLUTION BY PARAMETER (Day-3 primary)")
-    print("(events flagging the parameter; multi-parameter events count in each)")
-    print("=" * 50)
+    _section("OOR RESOLUTION BY PARAMETER (Day-3 primary)",
+             "(events flagging the parameter; multi-parameter events count in each)")
     print(table.to_string())
     print()
 
@@ -268,9 +261,7 @@ def analyze_oor_events(data: pd.DataFrame, events: pd.DataFrame) -> pd.DataFrame
     """
     derived = derive_oor_events(data)
 
-    print("=" * 50)
-    print("OOR EVENTS — DERIVED FROM DATA SHEET")
-    print("=" * 50)
+    _section("OOR EVENTS — DERIVED FROM DATA SHEET")
 
     # Resolution rate excludes no-follow-up events (resolved is None); a clean
     # bool subset also keeps mean()/sum() well-defined.
@@ -300,13 +291,13 @@ def analyze_oor_events(data: pd.DataFrame, events: pd.DataFrame) -> pd.DataFrame
 
     # (ii)+(iv) cross-check derived counts against the OOR Events sheet.
     def _check(label, col, sheet):
-        diffs = [
-            f"{grp} (Data={a} Sheet={b})"
-            for grp in summary.index
-            for a, b in [(int(summary.loc[grp, col]), int(sheet.get(grp, 0)))]
-            if a != b
-        ]
-        print(f"CHECK — {label}: {'OK' if not diffs else 'MISMATCH ' + ', '.join(diffs)}")
+        diffs = []
+        for grp in summary.index:
+            a, b = int(summary.loc[grp, col]), int(sheet.get(grp, 0))
+            if a != b:
+                diffs.append(f"{grp} (Data={a} Sheet={b})")
+        status = "OK" if not diffs else "MISMATCH " + ", ".join(diffs)
+        print(f"CHECK — {label}: {status}")
 
     _check("event counts vs sheet", "oor_events", sheet_events)
     _check("resolved counts vs sheet", "resolved", sheet_resolved)
