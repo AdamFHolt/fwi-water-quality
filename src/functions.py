@@ -152,6 +152,56 @@ def oor_event_drivers(events: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(rows).T.fillna(0).astype(int)  # rows = params, cols = groups
 
 
+def oor_resolution_by_parameter(events: pd.DataFrame) -> pd.DataFrame:
+    """Resolution rate (Day-3 primary) by OOR parameter and group.
+
+    "Resolved" is the event's overall Day-3 outcome (`2nd FU WQ improvement` ==
+    "Yes"); the sheet has no per-parameter outcome, so this is the share of
+    events *involving* each parameter that resolved. Events listing several
+    parameters (e.g. "DO, pH") count toward each. The "Overall" row uses all
+    events. Returns tidy rows: parameter, group, events, resolved, pct_resolved.
+    """
+    df = events.assign(_resolved=events["2nd FU WQ improvement"].eq("Yes"))
+
+    def summarize(sub, parameter):
+        out = sub.groupby("Group")["_resolved"].agg(events="size", resolved="sum")
+        out["resolved"] = out["resolved"].astype(int)
+        out["pct_resolved"] = (out["resolved"] / out["events"] * 100).round(1)
+        return out.reset_index().rename(columns={"Group": "group"}).assign(parameter=parameter)
+
+    rows = [summarize(df, "Overall")]
+    rows += [
+        summarize(df[df["OOR Parameter"].str.contains(p, case=False, na=False)], p)
+        for p in OOR_DRIVERS
+    ]
+    return pd.concat(rows, ignore_index=True)[
+        ["parameter", "group", "events", "resolved", "pct_resolved"]
+    ]
+
+
+def describe_resolution_by_parameter(events: pd.DataFrame) -> None:
+    """Print resolution rate (Day-3 primary) overall and by OOR parameter, per group."""
+    tidy = oor_resolution_by_parameter(events)
+    groups = sorted(tidy["group"].unique())
+    metrics = ["events", "resolved", "pct_resolved"]
+
+    table = (
+        tidy.pivot(index="parameter", columns="group", values=metrics)
+        .reorder_levels([1, 0], axis=1)  # (group, metric)
+        .reindex(columns=pd.MultiIndex.from_product([groups, metrics]))
+        .reindex(["Overall"] + OOR_DRIVERS)
+    )
+    int_cols = [(g, m) for g in groups for m in ("events", "resolved")]
+    table[int_cols] = table[int_cols].astype(int)
+
+    print("=" * 50)
+    print("OOR RESOLUTION BY PARAMETER (Day-3 primary)")
+    print("(events flagging the parameter; multi-parameter events count in each)")
+    print("=" * 50)
+    print(table.to_string())
+    print()
+
+
 def analyze_oor_events(data: pd.DataFrame, events: pd.DataFrame) -> pd.DataFrame:
     """Count and resolve OOR events from Data, cross-checking the OOR Events sheet.
 

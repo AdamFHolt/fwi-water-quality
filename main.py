@@ -5,6 +5,7 @@ from src.functions import (
     describe_data,
     describe_water_quality,
     analyze_oor_events,
+    describe_resolution_by_parameter,
     reorder_by_pond,
 )
 from src.plotting_functions import plot_summary
@@ -24,6 +25,7 @@ def main():
     describe_data(data, events)
     describe_water_quality(data)
     derived = analyze_oor_events(data, events)
+    describe_resolution_by_parameter(events)
 
     path = plot_summary(derived, data, events)
     print(f"Saved plot: {path}")
