@@ -105,6 +105,47 @@ def describe_variance_homogeneity(data: pd.DataFrame) -> None:
     print()
 
 
+def wq_outliers(data: pd.DataFrame, resid_thresh: float = 2.0) -> pd.DataFrame:
+    """Flag baseline-WQ outliers/influential ponds from the group-means model.
+
+    For each parameter, fits param ~ group on per-pond values and computes each
+    pond's internally studentized residual and Cook's distance. A pond is an
+    *outlier* if |studentized resid| > resid_thresh, *influential* if Cook's D >
+    4/n. NB: with a two-group factor, leverage is constant within a group
+    (= 1/n_group), so Cook's D is essentially a function of the residual here.
+    Returns only the flagged ponds (tidy).
+    """
+    pond = wq_pond_means(data)
+    out = []
+    for param in WQ_PARAMS:
+        df = pond[["Pond status", "Pond ID", param]].dropna().rename(columns={param: "value"})
+        n, p = len(df), df["Pond status"].nunique()
+        gmean = df.groupby("Pond status")["value"].transform("mean")
+        h = 1 / df.groupby("Pond status")["value"].transform("size")  # leverage = 1/n_group
+        resid = df["value"] - gmean
+        s2 = (resid ** 2).sum() / (n - p)  # residual variance (model MSE)
+        std = resid / (s2 * (1 - h)) ** 0.5  # internally studentized residual
+        df["std_resid"] = std.round(2)
+        df["cooks_d"] = ((std ** 2 / p) * (h / (1 - h))).round(3)
+        df["outlier"] = df["std_resid"].abs() > resid_thresh
+        df["influential"] = df["cooks_d"] > 4 / n
+        out.append(df.assign(parameter=param))
+    res = pd.concat(out, ignore_index=True)
+    cols = ["parameter", "Pond status", "Pond ID", "value", "std_resid", "cooks_d", "outlier", "influential"]
+    return res[res["outlier"] | res["influential"]][cols]
+
+
+def describe_wq_outliers(data: pd.DataFrame) -> None:
+    """Print baseline-WQ outliers and influential ponds (group-means model)."""
+    flagged = wq_outliers(data)
+    print("=" * 50)
+    print("WATER QUALITY OUTLIERS / INFLUENCE (per-pond, param ~ group)")
+    print("(|studentized residual| > 2; Cook's D > 4/n)")
+    print("=" * 50)
+    print("None flagged." if flagged.empty else flagged.to_string(index=False))
+    print()
+
+
 def derive_oor_events(data: pd.DataFrame) -> pd.DataFrame:
     """Reconstruct OOR events and their resolution from the per-visit Data sheet.
 

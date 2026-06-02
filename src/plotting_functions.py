@@ -17,11 +17,14 @@ plt.rcParams.update({
     "axes.spines.right": False,
 })
 
+from matplotlib.lines import Line2D
+
 from src.functions import (
     WQ_PARAMS,
     OOR_DRIVERS,
     wq_pond_means,
     levene_by_param,
+    wq_outliers,
     oor_resolution_by_parameter,
 )
 
@@ -120,15 +123,19 @@ def plot_oor_events(events, filename="oor_events.png"):
     return _save(fig, filename)
 
 
-def plot_water_quality(data, filename="water_quality.png"):
+def plot_water_quality(data, filename="water_qualities.png", highlight_anoms=False):
     """Pond-properties figure: per group, baseline WQ as mean +/- SD bars (top
     row) and per-pond distributions as box + jittered-strip plots (bottom row),
     one column per parameter (routine visits, averaged per pond).
+
+    With highlight_anoms=True, flagged ponds (wq_outliers) get concentric rings
+    (red = outlier, black = influential) and Pond-ID labels, plus a legend.
     """
     pond = wq_pond_means(data)
     wq = pond.groupby("Pond status")[WQ_PARAMS].agg(["mean", "std"])
     n_ponds = pond.groupby("Pond status").size()
     lev = levene_by_param(data)
+    flagged = wq_outliers(data) if highlight_anoms else None
     groups = sorted(pond["Pond status"].unique())
     rng = np.random.default_rng(0)  # reproducible strip jitter
 
@@ -151,16 +158,45 @@ def plot_water_quality(data, filename="water_quality.png"):
 
         # Bottom: per-pond distribution (box + strip); Levene p in the title.
         ax = axes[1, col]
-        samples = [pond.loc[pond["Pond status"] == g, param].dropna().values for g in groups]
-        bp = ax.boxplot(samples, widths=0.5, showfliers=False, patch_artist=True)
+        subs = [pond[pond["Pond status"] == g][["Pond ID", param]].dropna() for g in groups]
+        bp = ax.boxplot([s[param].values for s in subs], widths=0.5, showfliers=False, patch_artist=True)
         for patch, g in zip(bp["boxes"], groups):
             patch.set_facecolor(GROUP_COLORS[g])
             patch.set_alpha(0.55)
-        for i, vals in enumerate(samples):
-            ax.scatter(rng.normal(i + 1, 0.06, len(vals)), vals,
-                       color=GROUP_COLORS[groups[i]], s=15, edgecolor="white", zorder=3)
+        if highlight_anoms:
+            # Concentric rings: red inner = outlier, black outer = influential.
+            fp = flagged[flagged["parameter"] == param]
+            outlier_ids = set(fp.loc[fp["outlier"], "Pond ID"])
+            infl_ids = set(fp.loc[fp["influential"], "Pond ID"])
+        for i, (g, sub) in enumerate(zip(groups, subs)):
+            xj = rng.normal(i + 1, 0.06, len(sub))
+            y = sub[param].values
+            ax.scatter(xj, y, color=GROUP_COLORS[g], s=15, edgecolor="white", zorder=3)
+            if not highlight_anoms:
+                continue
+            infl = sub["Pond ID"].isin(infl_ids).values
+            out = sub["Pond ID"].isin(outlier_ids).values
+            ax.scatter(xj[infl], y[infl], facecolors="none", edgecolors="black", s=250, linewidths=1.6, zorder=4)
+            ax.scatter(xj[out], y[out], facecolors="none", edgecolors="#d62728", s=110, linewidths=1.8, zorder=5)
+            # Label each ringed pond; flip side for the right-hand group.
+            ring_mask = infl | out
+            ha, dx = ("left", 7) if i < len(groups) - 1 else ("right", -7)
+            for xk, yk, pid in zip(xj[ring_mask], y[ring_mask], sub["Pond ID"].values[ring_mask]):
+                ax.annotate(pid, (xk, yk), xytext=(dx, 0), textcoords="offset points",
+                            fontsize=6, va="center", ha=ha, zorder=6)
         ax.set_xticklabels([g.split()[-1] for g in groups])
         ax.set_title(f"{param}\nLevene p = {lev.loc[param, 'p']}")
+
+    if highlight_anoms:
+        axes[1, -1].legend(
+            handles=[
+                Line2D([], [], marker="o", markerfacecolor="none", markeredgecolor="#d62728",
+                       linestyle="none", markersize=9, label="outlier (|resid| > 2)"),
+                Line2D([], [], marker="o", markerfacecolor="none", markeredgecolor="black",
+                       linestyle="none", markersize=13, label="influential (Cook's D > 4/n)"),
+            ],
+            loc="upper right", fontsize=8,
+        )
 
     fig.tight_layout()
     return _save(fig, filename)

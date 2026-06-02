@@ -5,6 +5,7 @@ from src.functions import (
     describe_data,
     describe_water_quality,
     describe_variance_homogeneity,
+    describe_wq_outliers,
     analyze_oor_events,
     describe_resolution_by_parameter,
     reorder_by_pond,
@@ -26,12 +27,14 @@ def main():
     describe_data(data, events)
     describe_water_quality(data)
     describe_variance_homogeneity(data)
+    describe_wq_outliers(data)
     analyze_oor_events(data, events)
     describe_resolution_by_parameter(events)
 
     print(f"Saved plots:")
     print(f"  {plot_oor_events(events)}")
     print(f"  {plot_water_quality(data)}")
+    print(f"  {plot_water_quality(data, 'water_qualities.anoms-highlighted.png', highlight_anoms=True)}")
 
 
 if __name__ == "__main__":
