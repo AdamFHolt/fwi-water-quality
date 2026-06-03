@@ -281,7 +281,7 @@ def plot_water_quality(data, filename="water_qualities.png", highlight_anoms=Fal
             handles=[
                 Line2D([], [], marker="o", markerfacecolor="none", markeredgecolor="#d62728",
                        linestyle="none", markersize=9,
-                       label="outlier (excluded): > 2 SD from mean"),
+                       label="outlier (> 2 SD)"),
             ],
             loc="upper right", fontsize=8,
         )
