@@ -117,14 +117,18 @@ def describe_water_quality(data: pd.DataFrame) -> None:
     print()
 
 
-def levene_by_param(data: pd.DataFrame) -> pd.DataFrame:
+def levene_by_param(data: pd.DataFrame, exclude: set | None = None) -> pd.DataFrame:
     """Levene's variance-homogeneity test (Group D vs E) per WQ parameter.
 
     Uses the per-pond baseline values (see wq_pond_means) so ponds aren't
     pseudo-replicated. Median-centred (Brown-Forsythe), robust to non-normality.
-    Returns a DataFrame indexed by parameter with columns W (statistic) and p.
+    Pass `exclude` (a set of Pond IDs, e.g. the WQ outliers) to run on the
+    outlier-removed set. Returns a DataFrame indexed by parameter with columns
+    W (statistic) and p.
     """
     pond = wq_pond_means(data)
+    if exclude:
+        pond = pond[~pond["Pond ID"].isin(exclude)]
     groups = sorted(pond["Pond status"].unique())
     rows = {}
     for param in POND_PARAMS:

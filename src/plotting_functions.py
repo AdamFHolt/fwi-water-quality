@@ -18,12 +18,12 @@ plt.rcParams.update({
 })
 
 from matplotlib.lines import Line2D
-from scipy.stats import levene
 
 from src.functions import (
     POND_PARAMS,
     OOR_DRIVERS,
     wq_pond_means,
+    levene_by_param,
     wq_outliers,
     derive_oor_events,
     oor_resolution_by_parameter,
@@ -147,6 +147,7 @@ def plot_water_quality(data, filename="water_qualities.png", highlight_anoms=Fal
     stat_pond = pond[~pond["Pond ID"].isin(excluded)]
     wq = stat_pond.groupby("Pond status")[POND_PARAMS].agg(["mean", "std"])
     n_ponds = stat_pond.groupby("Pond status").size()
+    lev = levene_by_param(data, exclude=excluded)  # same exclusion as the stats above
     # OOR-event count per pond, so each ringed point can show how many events it drives.
     event_counts = derive_oor_events(data).groupby("Pond ID").size() if highlight_anoms else None
     groups = sorted(pond["Pond status"].unique())
@@ -177,7 +178,6 @@ def plot_water_quality(data, filename="water_qualities.png", highlight_anoms=Fal
         for patch, g in zip(bp["boxes"], groups):
             patch.set_facecolor(GROUP_COLORS[g])
             patch.set_alpha(0.55)
-        lev_p = round(levene(*[s[param].values for s in subs])[1], 3)
         if highlight_anoms:
             # This parameter's outliers, drawn back in as ringed points (they're
             # excluded from the box/strip above).
@@ -201,7 +201,7 @@ def plot_water_quality(data, filename="water_qualities.png", highlight_anoms=Fal
                             fontsize=8, va="center", ha=ha, zorder=6)
         ax.set_xticks(range(1, len(groups) + 1))
         ax.set_xticklabels([g.split()[-1] for g in groups])
-        ax.set_title(f"{param}\nLevene p = {lev_p}")
+        ax.set_title(f"{param}\nLevene p = {lev.loc[param, 'p']}")
 
     if highlight_anoms:
         axes[1, -1].legend(
