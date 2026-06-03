@@ -18,13 +18,14 @@ plt.rcParams.update({
 })
 
 from matplotlib.lines import Line2D
+from scipy.stats import levene
 
 from src.functions import (
     POND_PARAMS,
     OOR_DRIVERS,
     wq_pond_means,
-    levene_by_param,
     wq_outliers,
+    derive_oor_events,
     oor_resolution_by_parameter,
 )
 
@@ -131,20 +132,29 @@ def plot_water_quality(data, filename="water_qualities.png", highlight_anoms=Fal
     row) and per-pond distributions as box + jittered-strip plots (bottom row),
     one column per parameter (routine visits, averaged per pond).
 
-    With highlight_anoms=True, flagged ponds (wq_outliers) get concentric rings
-    (red = outlier, black = influential) and Pond-ID labels, plus a legend.
+    With highlight_anoms=True the baseline-WQ outlier ponds (|studentized resid| > 2)
+    are dropped from every panel's statistics — bars, box/IQR, n, and Levene p all
+    describe the cleaned distribution, matching the pond set removed in the
+    oor_events.anoms_removed figure. Each outlier is still drawn (red ring, short
+    Pond ID + OOR-event count) in the panel for the parameter it is extreme on, so
+    you can see how far outside the cleaned distribution it sat.
     """
     pond = wq_pond_means(data)
-    wq = pond.groupby("Pond status")[POND_PARAMS].agg(["mean", "std"])
-    n_ponds = pond.groupby("Pond status").size()
-    lev = levene_by_param(data)
     flagged = wq_outliers(data) if highlight_anoms else None
+    # Stats use the cleaned pond set: drop the union of WQ-outlier ponds (the same
+    # exclusion as oor_events.anoms_removed). Empty set => stats over all ponds.
+    excluded = set(flagged.loc[flagged["outlier"], "Pond ID"]) if highlight_anoms else set()
+    stat_pond = pond[~pond["Pond ID"].isin(excluded)]
+    wq = stat_pond.groupby("Pond status")[POND_PARAMS].agg(["mean", "std"])
+    n_ponds = stat_pond.groupby("Pond status").size()
+    # OOR-event count per pond, so each ringed point can show how many events it drives.
+    event_counts = derive_oor_events(data).groupby("Pond ID").size() if highlight_anoms else None
     groups = sorted(pond["Pond status"].unique())
     rng = np.random.default_rng(0)  # reproducible strip jitter
 
     fig, axes = plt.subplots(2, len(POND_PARAMS), figsize=(5 * len(POND_PARAMS), 9))
     for col, param in enumerate(POND_PARAMS):
-        # Top: mean +/- SD bars (n = ponds).
+        # Top: mean +/- SD bars (n = cleaned ponds).
         ax = axes[0, col]
         ax.bar(
             range(len(groups)),
@@ -159,45 +169,46 @@ def plot_water_quality(data, filename="water_qualities.png", highlight_anoms=Fal
         ax.set_title(param)
         ax.margins(y=0.15)
 
-        # Bottom: per-pond distribution (box + strip); Levene p in the title.
+        # Bottom: per-pond distribution (box + strip) over the cleaned set; the
+        # box, the strip, and the Levene p in the title all exclude the outliers.
         ax = axes[1, col]
-        subs = [pond[pond["Pond status"] == g][["Pond ID", param]].dropna() for g in groups]
+        subs = [stat_pond[stat_pond["Pond status"] == g][["Pond ID", param]].dropna() for g in groups]
         bp = ax.boxplot([s[param].values for s in subs], widths=0.5, showfliers=False, patch_artist=True)
         for patch, g in zip(bp["boxes"], groups):
             patch.set_facecolor(GROUP_COLORS[g])
             patch.set_alpha(0.55)
+        lev_p = round(levene(*[s[param].values for s in subs])[1], 3)
         if highlight_anoms:
-            # Concentric rings: red inner = outlier, black outer = influential.
+            # This parameter's outliers, drawn back in as ringed points (they're
+            # excluded from the box/strip above).
             fp = flagged[flagged["parameter"] == param]
             outlier_ids = set(fp.loc[fp["outlier"], "Pond ID"])
-            infl_ids = set(fp.loc[fp["influential"], "Pond ID"])
         for i, (g, sub) in enumerate(zip(groups, subs)):
             xj = rng.normal(i + 1, 0.06, len(sub))
-            y = sub[param].values
-            ax.scatter(xj, y, color=GROUP_COLORS[g], s=15, edgecolor="white", zorder=3)
+            ax.scatter(xj, sub[param].values, color=GROUP_COLORS[g], s=15, edgecolor="white", zorder=3)
             if not highlight_anoms:
                 continue
-            infl = sub["Pond ID"].isin(infl_ids).values
-            out = sub["Pond ID"].isin(outlier_ids).values
-            ax.scatter(xj[infl], y[infl], facecolors="none", edgecolors="black", s=250, linewidths=1.6, zorder=4)
-            ax.scatter(xj[out], y[out], facecolors="none", edgecolors="#d62728", s=110, linewidths=1.8, zorder=5)
+            ring = pond[(pond["Pond status"] == g) & pond["Pond ID"].isin(outlier_ids)][["Pond ID", param]].dropna()
+            xr, yr = rng.normal(i + 1, 0.06, len(ring)), ring[param].values
+            ax.scatter(xr, yr, color=GROUP_COLORS[g], s=15, edgecolor="white", zorder=4)
+            ax.scatter(xr, yr, facecolors="none", edgecolors="#d62728", s=150, linewidths=1.8, zorder=5)
             # Label each ringed pond; flip side for the right-hand group.
-            ring_mask = infl | out
-            ha, dx = ("left", 7) if i < len(groups) - 1 else ("right", -7)
-            for xk, yk, pid in zip(xj[ring_mask], y[ring_mask], sub["Pond ID"].values[ring_mask]):
-                ax.annotate(pid, (xk, yk), xytext=(dx, 0), textcoords="offset points",
-                            fontsize=6, va="center", ha=ha, zorder=6)
+            ha, dx = ("left", 14) if i < len(groups) - 1 else ("right", -14)
+            for xk, yk, pid in zip(xr, yr, ring["Pond ID"].values):
+                # Short pond id + how many OOR events it drives, e.g. "9252e874 (4 ev)".
+                label = f"{pid.replace('pond_', '')} ({event_counts.get(pid, 0)} ev)"
+                ax.annotate(label, (xk, yk), xytext=(dx, 0), textcoords="offset points",
+                            fontsize=8, va="center", ha=ha, zorder=6)
         ax.set_xticks(range(1, len(groups) + 1))
         ax.set_xticklabels([g.split()[-1] for g in groups])
-        ax.set_title(f"{param}\nLevene p = {lev.loc[param, 'p']}")
+        ax.set_title(f"{param}\nLevene p = {lev_p}")
 
     if highlight_anoms:
         axes[1, -1].legend(
             handles=[
                 Line2D([], [], marker="o", markerfacecolor="none", markeredgecolor="#d62728",
-                       linestyle="none", markersize=9, label="outlier (|resid| > 2)"),
-                Line2D([], [], marker="o", markerfacecolor="none", markeredgecolor="black",
-                       linestyle="none", markersize=13, label="influential (Cook's D > 4/n)"),
+                       linestyle="none", markersize=9,
+                       label="outlier (excluded): > 2 SD from mean"),
             ],
             loc="upper right", fontsize=8,
         )

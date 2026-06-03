@@ -35,8 +35,11 @@ def main():
     analyze_oor_events(data, events)            # OOR resolution rate + cross-check vs OOR Events sheet
     describe_resolution_by_parameter(events)    # resolution rate by parameter
 
-    # Sensitivity variant: OOR figure with the WQ-anomalous ponds removed.
-    flagged_ponds = set(wq_outliers(data)["Pond ID"])
+    # Sensitivity variant: OOR figure with the WQ-outlier ponds removed.
+    # Outliers only (|studentized resid| > 2); "influential" is redundant here
+    # (constant within-group leverage makes Cook's D a function of that residual).
+    flagged = wq_outliers(data)
+    flagged_ponds = set(flagged.loc[flagged["outlier"], "Pond ID"])
     events_clean = events[~events["Pond ID"].isin(flagged_ponds)]
 
     # Figures.
