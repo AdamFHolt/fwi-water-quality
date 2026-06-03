@@ -15,8 +15,10 @@ Rough reading order if you're going through this file:
 
   derive_oor_events   rebuild the OOR events from the raw visit rows
   oor_resolution_by_parameter   resolution rate by parameter, from the sheet
-  analyze_oor_events  resolution rate from the derived events, plus a sanity
-                      check that they match the sheet
+  oor_resolution_per_pond  one resolution proportion per pond (the per-pond unit)
+  oor_resolution_by_pond   that, averaged within group (pond-level rate)
+  analyze_oor_events  resolution rate (event- and pond-level) from the derived
+                      events, plus a sanity check that they match the sheet
 
 Two things to keep straight: the group column is "Pond status" in the Data
 sheet but "Group" in the OOR Events sheet, and the resolution number always
@@ -290,12 +292,52 @@ def describe_resolution_by_parameter(events: pd.DataFrame) -> None:
     print()
 
 
+def oor_resolution_per_pond(derived: pd.DataFrame) -> pd.DataFrame:
+    """One row per pond: its events, resolved count, and Day-3 resolution proportion.
+
+    Collapses each pond to its share of OOR events resolved (mean of the 0/1
+    `resolved` flag) — the per-pond unit used to guard against repeat-event ponds
+    dominating the event-level rate (events within a pond aren't independent), the
+    same per-pond move as `wq_pond_means` for baseline WQ. Takes the derived
+    events; no-follow-up events (resolved is None) are dropped first. Returns
+    tidy rows: group, Pond ID, events, resolved, proportion.
+    """
+    followed = derived.dropna(subset=["resolved"]).copy()
+    followed["resolved"] = followed["resolved"].astype(int)
+    per_pond = followed.groupby(["group", "Pond ID"])["resolved"].agg(
+        events="size", resolved="sum"
+    )
+    per_pond["proportion"] = per_pond["resolved"] / per_pond["events"]
+    return per_pond.reset_index()
+
+
+def oor_resolution_by_pond(derived: pd.DataFrame) -> pd.DataFrame:
+    """Pond-level resolution summary: per-pond proportions averaged within group.
+
+    Builds on `oor_resolution_per_pond`, so every pond counts once regardless of
+    how many events it had. `mean_pct` is the unweighted mean of the per-pond
+    percentages (not the same as the overall event rate); `median_pct` is their
+    median. Returns per-group: ponds, events, mean_pct, median_pct.
+    """
+    g = oor_resolution_per_pond(derived).groupby("group")
+    return pd.DataFrame(
+        {
+            "ponds": g.size(),
+            "events": g["events"].sum(),
+            "mean_pct": (g["proportion"].mean() * 100).round(1),
+            "median_pct": (g["proportion"].median() * 100).round(1),
+        }
+    )
+
+
 def analyze_oor_events(data: pd.DataFrame, events: pd.DataFrame) -> None:
     """Count and resolve OOR events reconstructed from the per-visit Data sheet.
 
-    Prints event counts and Day-3 resolution rate per group, then cross-checks
-    the derived counts against the OOR Events sheet (the authoritative source).
-    Raises AssertionError if they disagree.
+    Prints the Day-3 resolution rate per group two ways — event-level (each OOR
+    event counts once) and pond-level (each pond counts once, removing the
+    repeat-pond weighting) — then cross-checks the derived counts against the
+    OOR Events sheet (the authoritative source). Raises AssertionError if they
+    disagree.
     """
     derived = derive_oor_events(data)
 
@@ -315,7 +357,14 @@ def analyze_oor_events(data: pd.DataFrame, events: pd.DataFrame) -> None:
             "pct_resolved": (g.mean() * 100).round(1),      # resolved / with_followup
         }
     )
+    print("Event-level (each OOR event counts once):")
     print(summary.to_string())
+    print()
+
+    # Pond-level: one proportion per pond, then averaged — guards against
+    # repeat-event ponds dominating the event-level rate (pseudoreplication).
+    print("Pond-level (each pond counts once; mean_pct = mean of per-pond rates):")
+    print(oor_resolution_by_pond(derived).to_string())
     print()
 
     # Cross-check: derived counts must match OOR Events sheet exactly.

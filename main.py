@@ -11,7 +11,12 @@ from src.functions import (
     describe_resolution_by_parameter,
     reorder_by_pond,
 )
-from src.plotting_functions import plot_oor_events, plot_water_quality, plot_water_quality_visits
+from src.plotting_functions import (
+    plot_oor_events,
+    plot_oor_resolution_by_pond,
+    plot_water_quality,
+    plot_water_quality_visits,
+)
 
 DATA_PATH = "data/Outcome Evaluation Phase 2 Data_Cleaned And Anonymized.xlsx"
 DATA_PATH_REORD = "data/Outcome Evaluation Phase 2 Data_Cleaned And Anonymized.reordered.xlsx"
@@ -46,6 +51,7 @@ def main():
     print(f"Saved plots:")
     print(f"  {plot_oor_events(events)}")                                        # resolution pies + drivers
     print(f"  {plot_oor_events(events_clean, 'oor_events.anoms_removed.png')}")  # same, anomalous ponds removed
+    print(f"  {plot_oor_resolution_by_pond(data)}")                              # pond-level resolution (one point per pond)
     print(f"  {plot_water_quality(data)}")                                       # WQ bars + distributions
     print(f"  {plot_water_quality(data, 'water_qualities.anoms_highlighted.png', highlight_anoms=True)}")  # WQ with outliers ringed
     print(f"  {plot_water_quality_visits(data)}")                                  # WQ visit-level distributions

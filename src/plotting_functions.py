@@ -27,6 +27,7 @@ from src.functions import (
     wq_outliers,
     derive_oor_events,
     oor_resolution_by_parameter,
+    oor_resolution_per_pond,
 )
 
 PLOTS_DIR = Path("plots")
@@ -35,6 +36,7 @@ PLOTS_DIR = Path("plots")
 # everywhere, and grey always means "not resolved".
 GROUP_COLORS = {"Group D": "#4c72b0", "Group E": "#dd8452"}
 NOT_RESOLVED = "#cccccc"
+INSET_GREY = "#666666"  # subdued axes for the events-per-pond inset
 
 
 def _save(fig, filename):
@@ -122,6 +124,77 @@ def plot_oor_events(events, filename="oor_events.png"):
     ax.set_ylabel("number of OOR events")
     ax.set_title("OOR event drivers (events flagging each parameter; an event may flag several)")
     ax.legend()
+
+    fig.tight_layout()
+    return _save(fig, filename)
+
+
+def plot_oor_resolution_by_pond(data, filename="oor_resolution.by_pond.png"):
+    """Pond-level OOR resolution: one point per pond, sized by its event count.
+
+    Each pond's Day-3 resolution rate (resolved events / its events) is a
+    jittered point, one column per group; point area is proportional to how many
+    OOR events the pond had. A horizontal bar marks each group's mean per-pond
+    rate (the `mean_pct` from oor_resolution_by_pond). Companion to the
+    event-level pies in oor_events.png: it shows the D-vs-E gap survives when
+    every pond counts once (repeat-event ponds aren't driving it) and exposes the
+    per-pond spread the pies hide.
+    """
+    per_pond = oor_resolution_per_pond(derive_oor_events(data))
+    groups = sorted(per_pond["group"].unique())
+    rng = np.random.default_rng(0)  # reproducible jitter
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+    for i, g in enumerate(groups):
+        sub = per_pond[per_pond["group"] == g]
+        y = sub["proportion"].values * 100
+        x = rng.normal(i, 0.07, len(sub))
+        ax.scatter(x, y, s=sub["events"].values * 45, color=GROUP_COLORS[g],
+                   alpha=0.55, edgecolor="white", linewidth=1, zorder=3)
+        mean = y.mean()
+        ax.hlines(mean, i - 0.25, i + 0.25, color=GROUP_COLORS[g], linewidth=3, zorder=4)
+        ax.annotate(f"mean {mean:.1f}%", (i, mean), xytext=(0, 7),
+                    textcoords="offset points", ha="center", va="bottom",
+                    fontweight="bold", color=GROUP_COLORS[g])
+
+    n_ponds = per_pond.groupby("group").size()
+    ax.set_xticks(range(len(groups)))
+    ax.set_xticklabels([f"{g}\n(n={n_ponds[g]} ponds)" for g in groups])
+    ax.set_xlim(-0.6, len(groups) - 1 + 1.6)  # right margin reserved for the key panel
+    ax.spines["bottom"].set_bounds(-0.6, len(groups) - 1 + 0.4)  # stop the axis before the key panel
+    ax.set_ylim(-8, 108)
+    ax.set_ylabel("pond resolution rate\n(% of its OOR events resolved at Day 3)")
+    ax.set_title("Pond-level OOR resolution")
+
+    # Combined right-hand panel: the events-per-pond distribution (horizontal
+    # bars, D vs E) that doubles as the point-size key — each row carries a dot
+    # sized like the main scatter, so size <-> #events is read off the same panel.
+    # This is the spread the event-level rate would weight by (motivates the
+    # pond-level view).
+    ev_counts = sorted(per_pond["events"].unique())
+    kax = ax.inset_axes([0.72, 0.30, 0.26, 0.46])
+    h = 0.38
+    maxn = 0
+    for j, g in enumerate(groups):
+        vc = per_pond[per_pond["group"] == g]["events"].value_counts()
+        vals = [vc.get(e, 0) for e in ev_counts]
+        maxn = max(maxn, *vals)
+        kax.barh([e + (j - 0.5) * h for e in ev_counts], vals, h,
+                 color=GROUP_COLORS[g], edgecolor="white", label=g)
+    # Size key: one representative dot per row, sized like the scatter, left of 0.
+    for e in ev_counts:
+        kax.scatter(-maxn * 0.22, e, s=e * 45, color="#999999",
+                    edgecolor="white", clip_on=False, zorder=5)
+    kax.set_xlim(-maxn * 0.42, maxn * 1.08)
+    kax.set_xticks(range(0, maxn + 1, 2))  # integer pond counts only (skip the dot gutter)
+    kax.set_yticks(ev_counts)
+    kax.set_ylabel("events per pond", fontsize=8, color=INSET_GREY)
+    kax.set_xlabel("ponds", fontsize=8, color=INSET_GREY)
+    kax.tick_params(labelsize=8, colors=INSET_GREY)
+    for spine in kax.spines.values():
+        spine.set_color(INSET_GREY)
+    kax.legend(fontsize=7, loc="upper right", frameon=False, handlelength=1,
+               labelcolor=INSET_GREY)
 
     fig.tight_layout()
     return _save(fig, filename)
