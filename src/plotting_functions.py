@@ -42,7 +42,7 @@ INSET_GREY = "#666666"  # subdued axes for the events-per-pond inset
 def _save(fig, filename):
     PLOTS_DIR.mkdir(exist_ok=True)
     path = PLOTS_DIR / filename
-    fig.savefig(path, dpi=150, bbox_inches="tight")
+    fig.savefig(path, dpi=400, bbox_inches="tight")
     plt.close(fig)
     return path
 
