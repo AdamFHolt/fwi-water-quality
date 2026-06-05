@@ -406,13 +406,12 @@ def plot_oor_improvement(data, filename="oor_improvement.png"):
         ax.set_xticks([1, 2])
         ax.set_xticklabels([f"{g.split()[-1]}\n(n={len(d)})" for g, d in zip(groups, by_g)])
         ax.set_ylabel(f"out-of-range gap closed ({units[scope]})")
-        # Title carries both the all-ponds and outliers-removed test p-values.
-        ax.set_title(
-            f"{scope}\n"
-            f"all: Welch {_fmt_p(tests.loc[scope, 't_p'])} · MWU {_fmt_p(tests.loc[scope, 'u_p'])}\n"
-            f"−outliers: Welch {_fmt_p(tests_out.loc[scope, 't_p'])} · MWU {_fmt_p(tests_out.loc[scope, 'u_p'])}",
-            fontsize=10,
-        )
+        # Parameter name bold (title); the test p-values sit below it in normal weight.
+        ax.set_title(scope, fontsize=13, fontweight="bold", pad=30)
+        stats = (f"all: Welch {_fmt_p(tests.loc[scope, 't_p'])} · MWU {_fmt_p(tests.loc[scope, 'u_p'])}\n"
+                 f"−outliers: Welch {_fmt_p(tests_out.loc[scope, 't_p'])} · MWU {_fmt_p(tests_out.loc[scope, 'u_p'])}")
+        ax.text(0.5, 1.0, stats, transform=ax.transAxes, ha="center", va="bottom",
+                fontsize=9, fontweight="normal", linespacing=1.3)
 
     axes[-1].legend(
         handles=[Line2D([], [], marker="o", markerfacecolor="none",
