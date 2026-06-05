@@ -19,6 +19,7 @@ from src.plotting_functions import (
     plot_oor_resolution_by_pond,
     plot_water_quality,
     plot_water_quality_visits,
+    plot_oor_improvement,
 )
 
 DATA_PATH = "data/Outcome Evaluation Phase 2 Data_Cleaned And Anonymized.xlsx"
@@ -44,22 +45,26 @@ def main():
     analyze_oor_events(data, events)            # OOR resolution rate + cross-check vs OOR Events sheet
     describe_resolution_by_parameter(events)    # resolution rate by parameter
 
+    # Baseline-WQ outlier ponds (|studentized resid| > 2); used for the sensitivity
+    # variants below and the anoms-removed plots.
+    flagged = wq_outliers(data)
+    flagged_ponds = set(flagged.loc[flagged["outlier"], "Pond ID"])
+    events_clean = events[~events["Pond ID"].isin(flagged_ponds)]
+
     # Comparative tests (protocol §4.4): does the intervention improve WQ?
     print(f"Doing comparative statistical tests:")
     describe_resolution_fisher(events)          # Fisher's exact on binary Day-3 outcome, D vs E
     describe_improvement_tests(data)            # Welch t + Mann-Whitney U on distance-to-range improvement, D vs E
-
-    # Sensitivity variant: OOR figure with the WQ-outlier ponds removed.
-    # Detect outliers (|studentized resid| > 2)
-    flagged = wq_outliers(data)
-    flagged_ponds = set(flagged.loc[flagged["outlier"], "Pond ID"])
-    events_clean = events[~events["Pond ID"].isin(flagged_ponds)]
+    # Same two tests with the baseline-WQ outlier ponds removed (sensitivity).
+    describe_resolution_fisher(events, exclude=flagged_ponds)
+    describe_improvement_tests(data, exclude=flagged_ponds)
 
     # Make plots
     print(f"Saved plots:")
     print(f"  {plot_oor_events(events)}")                                        # resolution pies + drivers
     print(f"  {plot_oor_events(events_clean, 'oor_events.anoms_removed.png')}")  # same, anomalous ponds removed
     print(f"  {plot_oor_resolution_by_pond(data)}")                              # pond-level resolution (one point per pond)
+    print(f"  {plot_oor_improvement(data)}")                                     # per-pond improvement (the t / U test inputs)
     print(f"  {plot_water_quality(data)}")                                       # WQ bars + distributions
     print(f"  {plot_water_quality(data, 'water_qualities.anoms_highlighted.png', highlight_anoms=True)}")  # WQ with outliers ringed
     print(f"  {plot_water_quality_visits(data)}")                                # WQ visit-level distributions

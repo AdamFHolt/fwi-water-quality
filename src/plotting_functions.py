@@ -28,6 +28,8 @@ from src.functions import (
     derive_oor_events,
     oor_resolution_by_parameter,
     oor_resolution_per_pond,
+    oor_event_improvements,
+    improvement_tests,
 )
 
 PLOTS_DIR = Path("plots")
@@ -345,5 +347,71 @@ def plot_water_quality_visits(data, filename="water_qualities.visits.png"):
         ax.set_xticklabels([g.split()[-1] for g in groups])
         ax.set_title(title)
 
+    fig.tight_layout()
+    return _save(fig, filename)
+
+
+def _fmt_p(v):
+    """Compact p-value label: '<0.001' below that floor, else 3 dp."""
+    return "<0.001" if v < 0.001 else f"{v:.3f}"
+
+
+def plot_oor_improvement(data, filename="oor_improvement.png"):
+    """Per-pond OOR improvement by group (D vs E) — the data behind the t / U tests.
+
+    Four panels: DO, pH, Ammonia show per-pond mean improvement in native units
+    (distance-to-range closed, +ve = moved toward the in-range band); POOLED shows
+    the unit-free gap-closed fraction (1.0 = fully back in range). Each panel is a
+    box + jittered strip per group, titled with the Welch-t and Mann-Whitney
+    p-values — so the figure shows the effect, why the two tests agree (rank
+    separation), and the outlier sensitivity at once. The baseline-WQ outlier
+    ponds (the set dropped in the outliers-removed sensitivity) are drawn as red
+    rings. A dashed line at 0 marks "no change".
+    """
+    imp = oor_event_improvements(data)
+    tests = improvement_tests(data).set_index("scope")
+    flagged_ponds = set(wq_outliers(data)["Pond ID"])  # union across parameters
+    scopes = OOR_DRIVERS + ["POOLED"]
+    groups = ["Group D", "Group E"]
+    rng = np.random.default_rng(0)
+
+    fig, axes = plt.subplots(1, len(scopes), figsize=(4.5 * len(scopes), 5))
+    for ax, scope in zip(axes, scopes):
+        col = "gap_closed" if scope == "POOLED" else "improvement"
+        sub = imp if scope == "POOLED" else imp[imp["parameter"] == scope]
+        per_pond = sub.groupby(["group", "Pond ID"])[col].mean().reset_index()
+        by_g = [per_pond[per_pond["group"] == g] for g in groups]
+
+        bp = ax.boxplot([d[col].values for d in by_g], widths=0.5,
+                        showfliers=False, patch_artist=True)
+        for patch, g in zip(bp["boxes"], groups):
+            patch.set_facecolor(GROUP_COLORS[g])
+            patch.set_alpha(0.55)
+
+        for i, (g, d) in enumerate(zip(groups, by_g)):
+            xj = rng.normal(i + 1, 0.07, len(d))
+            ax.scatter(xj, d[col].values, color=GROUP_COLORS[g], s=22,
+                       edgecolor="white", zorder=3)
+            # Ring the baseline-WQ outlier ponds (those dropped in the sensitivity).
+            ring = d["Pond ID"].isin(flagged_ponds).values
+            ax.scatter(xj[ring], d[col].values[ring], facecolors="none",
+                       edgecolors="#d62728", s=150, linewidths=1.8, zorder=5)
+
+        ax.axhline(0, color="#999999", lw=1, ls="--", zorder=1)  # no change
+        if scope == "POOLED":
+            ax.axhline(1, color="#999999", lw=1, ls=":", zorder=1)  # fully resolved
+        ax.set_xticks([1, 2])
+        ax.set_xticklabels([f"{g.split()[-1]}\n(n={len(d)})" for g, d in zip(groups, by_g)])
+        ax.set_ylabel("gap-closed fraction" if scope == "POOLED" else "distance-to-range closed")
+        ax.set_title(f"{scope}\nWelch p {_fmt_p(tests.loc[scope, 't_p'])}"
+                     f" · MWU p {_fmt_p(tests.loc[scope, 'u_p'])}")
+
+    axes[-1].legend(
+        handles=[Line2D([], [], marker="o", markerfacecolor="none",
+                        markeredgecolor="#d62728", linestyle="none", markersize=9,
+                        label="baseline-WQ outlier")],
+        loc="lower right", fontsize=8,
+    )
+    fig.suptitle("Per-pond OOR improvement toward range, Group D vs E", y=1.02)
     fig.tight_layout()
     return _save(fig, filename)

@@ -388,7 +388,7 @@ def analyze_oor_events(data: pd.DataFrame, events: pd.DataFrame) -> None:
 
 
 # ---------------------------------------------------------------------------
-# Comparative tests (per protocol V7 §4.4): does the intervention improve WQ?
+# Comparative tests: does the intervention improve WQ?
 #   resolution_fisher        Fisher's exact on the binary Day-3 outcome
 #   oor_event_improvements   per-event distance-to-range closed, Day 0 -> Day 3
 #   improvement_tests        independent Welch t + Mann-Whitney U on improvement
@@ -487,7 +487,7 @@ def oor_event_improvements(data: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def improvement_tests(data: pd.DataFrame) -> pd.DataFrame:
+def improvement_tests(data: pd.DataFrame, exclude: set | None = None) -> pd.DataFrame:
     """Independent two-sample tests on OOR improvement, Group D vs E, pond-level.
 
     Each pond contributes one value (the mean over its OOR instances) so ponds
@@ -496,10 +496,13 @@ def improvement_tests(data: pd.DataFrame) -> pd.DataFrame:
     gap-closed fraction so all parameters share a scale. Runs two tests so the
     result can be checked for robustness to the small-n normality assumption:
     Welch's t (parametric, compares means, unequal-variance) and Mann-Whitney U
-    (nonparametric, rank-based). Returns tidy rows: scope, metric, n_D, mean_D,
-    n_E, mean_E, t, t_p, U, u_p.
+    (nonparametric, rank-based). Pass `exclude` (a set of Pond IDs, e.g. the WQ
+    outliers) to drop those ponds first (sensitivity variant). Returns tidy rows:
+    scope, metric, n_D, mean_D, n_E, mean_E, t, t_p, U, u_p.
     """
     imp = oor_event_improvements(data)
+    if exclude:
+        imp = imp[~imp["Pond ID"].isin(exclude)]
     rows = []
 
     def add(scope, metric, sub, col):
@@ -522,39 +525,44 @@ def improvement_tests(data: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def describe_improvement_tests(data: pd.DataFrame) -> None:
+def describe_improvement_tests(data: pd.DataFrame, exclude: set | None = None) -> None:
     """Print the independent improvement tests (Welch t + Mann-Whitney U), D vs E."""
+    note = " — baseline-WQ outliers removed" if exclude else ""
     _section(
-        "OOR IMPROVEMENT — INDEPENDENT TESTS (Group D vs E)",
+        f"OOR IMPROVEMENT — INDEPENDENT TESTS (Group D vs E){note}",
         "(pond-level; per-param = distance-to-range closed, native units;",
         " POOLED = gap-closed fraction [1.0 = back in range]; +mean = more improvement.",
         " t = Welch t [means], t_p its p; U = Mann-Whitney [ranks], u_p its p)",
     )
-    print(improvement_tests(data).to_string(index=False))
+    print(improvement_tests(data, exclude=exclude).to_string(index=False))
     print()
 
 
-def resolution_fisher(events: pd.DataFrame):
+def resolution_fisher(events: pd.DataFrame, exclude: set | None = None):
     """Fisher's exact test on Day-3 resolution (resolved vs not), Group D vs E.
 
     Event-level (pond-per-day OOR events), the protocol's primary-outcome unit
     and the basis of its sample-size calc. Resolved = `2nd FU WQ improvement` ==
-    "Yes". Returns (table, odds_ratio, p): table is the 2x2 [group x outcome]
-    with columns ordered resolved, unresolved.
+    "Yes". Pass `exclude` (a set of Pond IDs) to drop those ponds' events first
+    (sensitivity variant). Returns (table, odds_ratio, p): table is the 2x2
+    [group x outcome] with columns ordered resolved, unresolved.
     """
     e = events.dropna(subset=["2nd FU WQ improvement"])
+    if exclude:
+        e = e[~e["Pond ID"].isin(exclude)]
     outcome = e["2nd FU WQ improvement"].map({"Yes": "resolved", "No": "unresolved"})
     table = pd.crosstab(e["Group"], outcome)[["resolved", "unresolved"]]
     odds, p = fisher_exact(table.values)
     return table, odds, p
 
 
-def describe_resolution_fisher(events: pd.DataFrame) -> None:
+def describe_resolution_fisher(events: pd.DataFrame, exclude: set | None = None) -> None:
     """Print Fisher's exact test on the Day-3 resolution outcome (Group D vs E)."""
-    table, odds, p = resolution_fisher(events)
+    table, odds, p = resolution_fisher(events, exclude=exclude)
     pct = (table["resolved"] / table.sum(axis=1) * 100).round(1)
+    note = " — baseline-WQ outliers removed" if exclude else ""
     _section(
-        "OOR RESOLUTION — FISHER'S EXACT (Group D vs E)",
+        f"OOR RESOLUTION — FISHER'S EXACT (Group D vs E){note}",
         "(event-level Day-3 primary outcome; resolved = back in range)",
     )
     print(table.to_string())
