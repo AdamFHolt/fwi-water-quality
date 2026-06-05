@@ -9,6 +9,8 @@ from src.functions import (
     wq_outliers,
     analyze_oor_events,
     describe_resolution_by_parameter,
+    describe_resolution_fisher,
+    describe_improvement_ttests,
     reorder_by_pond,
 )
 
@@ -41,6 +43,11 @@ def main():
     describe_wq_outliers(data)                  # outlier diagnostics
     analyze_oor_events(data, events)            # OOR resolution rate + cross-check vs OOR Events sheet
     describe_resolution_by_parameter(events)    # resolution rate by parameter
+
+    # Comparative tests (protocol §4.4): does the intervention improve WQ?
+    print(f"Doing comparative statistical tests:")
+    describe_resolution_fisher(events)          # Fisher's exact on binary Day-3 outcome, D vs E
+    describe_improvement_ttests(data)           # Welch t on distance-to-range improvement, D vs E
 
     # Sensitivity variant: OOR figure with the WQ-outlier ponds removed.
     # Detect outliers (|studentized resid| > 2)

@@ -20,13 +20,18 @@ Rough reading order if you're going through this file:
   analyze_oor_events  resolution rate (event- and pond-level) from the derived
                       events, plus a sanity check that they match the sheet
 
+  Comparative tests (does the intervention improve WQ?, protocol §4.4):
+  resolution_fisher   Fisher's exact on the binary Day-3 outcome, D vs E
+  oor_event_improvements   distance-to-range closed per event, Day 0 -> Day 3
+  improvement_ttests  independent Welch t on that improvement, D vs E
+
 Two things to keep straight: the group column is "Pond status" in the Data
 sheet but "Group" in the OOR Events sheet, and the resolution number always
 means the Day-3 (primary) measure.
 """
 
 import pandas as pd
-from scipy.stats import levene
+from scipy.stats import levene, ttest_ind, fisher_exact
 
 
 def _section(*lines: str) -> None:
@@ -380,3 +385,175 @@ def analyze_oor_events(data: pd.DataFrame, events: pd.DataFrame) -> None:
             f"Mismatch for {grp}: derived ({len(dg)}, {int(dg['resolved'].sum())}) "
             f"vs sheet ({sheet_n[grp]}, {sheet_res[grp]})"
         )
+
+
+# ---------------------------------------------------------------------------
+# Comparative tests (per protocol V7 §4.4): does the intervention improve WQ?
+#   resolution_fisher        Fisher's exact on the binary Day-3 outcome
+#   oor_event_improvements   per-event distance-to-range closed, Day 0 -> Day 3
+#   improvement_ttests       independent Welch t on that improvement, D vs E
+# ---------------------------------------------------------------------------
+
+# In-range bands from protocol V7 Table 1: (low, high); None = unbounded that
+# side. DO's band depends on time of day; ammonia is one-sided (upper only).
+# Verified to reproduce the dataset's `Is WQ in range?` flag exactly (998/998).
+WQ_BANDS = {
+    "DO Morning": (3, 5),
+    "DO Evening": (8, 12),
+    "pH": (6.5, 8.5),
+    "Ammonia": (None, 0.05),
+}
+
+
+def _range_distance(x: float, lo: float | None, hi: float | None) -> float:
+    """How far x sits outside [lo, hi] (0 if inside, NaN if x is NaN)."""
+    if pd.isna(x):
+        return float("nan")
+    d = 0.0
+    if lo is not None and x < lo:
+        d = lo - x
+    if hi is not None and x > hi:
+        d = max(d, x - hi)
+    return d
+
+
+def _pond_day_distances(rows: pd.DataFrame) -> dict:
+    """Worst (max) distance-to-range per parameter over one pond-day's visits.
+
+    Takes the max across the day's Morning/Evening rows so a parameter reads
+    distance 0 only when every reading that day is in range — matching the
+    all-readings-in-range rule used for resolution. DO uses the time-of-day band.
+    """
+    do, ph, nh = [], [], []
+    for _, r in rows.iterrows():
+        band = WQ_BANDS["DO Morning"] if r["Type"] == "Morning" else WQ_BANDS["DO Evening"]
+        do.append(_range_distance(r["DO (mg/L)"], *band))
+        ph.append(_range_distance(r["pH"], *WQ_BANDS["pH"]))
+        nh.append(_range_distance(r["Ammonia—NH3 (mg/L)"], *WQ_BANDS["Ammonia"]))
+
+    def mx(v):
+        v = [d for d in v if not pd.isna(d)]
+        return max(v) if v else float("nan")
+
+    return {"DO": mx(do), "pH": mx(ph), "Ammonia": mx(nh)}
+
+
+def oor_event_improvements(data: pd.DataFrame) -> pd.DataFrame:
+    """Per-parameter WQ improvement toward the in-range band for each OOR event.
+
+    For every OOR event (Day-0 detection, pond-day) and each parameter out of
+    range that day, computes the distance-to-range at Day 0 and at the Day-3
+    primary follow-up (same window rule as derive_oor_events: the latest
+    follow-up within 5 days). Two improvement measures:
+      improvement = dist0 - dist3   native units, +ve = moved toward range
+      gap_closed  = improvement / dist0   unit-free (1.0 = back in range,
+                    <0 = worse), so it can be pooled across parameters.
+    One row per (event, OOR parameter) that has a Day-3 follow-up reading.
+    Columns: Pond ID, group, date, parameter, dist0, dist3, improvement, gap_closed.
+    """
+    data = data.copy()
+    data["date"] = pd.to_datetime(data["Date of data collection"])
+    day0 = (data["Is WQ in range?"] == "No") & (data["Is follow up"] == "No")
+    events = (
+        data[day0]
+        .groupby(["Pond ID", "date"])
+        .agg(group=("Pond status", "first"))
+        .reset_index()
+    )
+    fu = data[data["Is follow up"] == "Yes"]
+
+    rows = []
+    for _, e in events.iterrows():
+        d0 = _pond_day_distances(
+            data[(data["Pond ID"] == e["Pond ID"]) & (data["date"] == e["date"])]
+        )
+        cand = fu[
+            (fu["Pond ID"] == e["Pond ID"])
+            & (fu["date"] > e["date"])
+            & (fu["date"] <= e["date"] + pd.Timedelta(days=5))
+        ]
+        if cand.empty:
+            continue
+        d3 = _pond_day_distances(cand[cand["date"] == cand["date"].max()])
+        for p in OOR_DRIVERS:
+            if pd.isna(d0[p]) or d0[p] <= 0:  # parameter wasn't OOR at Day 0
+                continue
+            imp = d0[p] - d3[p]
+            rows.append({
+                "Pond ID": e["Pond ID"], "group": e["group"], "date": e["date"],
+                "parameter": p, "dist0": d0[p], "dist3": d3[p],
+                "improvement": imp, "gap_closed": imp / d0[p],
+            })
+    return pd.DataFrame(rows)
+
+
+def improvement_ttests(data: pd.DataFrame) -> pd.DataFrame:
+    """Independent Welch t-tests on OOR improvement, Group D vs E, pond-level.
+
+    Each pond contributes one value (the mean over its OOR instances) so ponds
+    aren't pseudo-replicated. Per parameter the value is mean improvement in
+    native units (distance-to-range closed); the POOLED row uses the unit-free
+    gap-closed fraction so all parameters share a scale. Welch's t (does not
+    assume equal variance). Returns tidy rows: scope, metric, n_D, mean_D, n_E,
+    mean_E, t, p.
+    """
+    imp = oor_event_improvements(data)
+    rows = []
+
+    def add(scope, metric, sub, col):
+        pond = sub.groupby(["group", "Pond ID"])[col].mean().reset_index()
+        a = pond.loc[pond["group"] == "Group D", col]
+        b = pond.loc[pond["group"] == "Group E", col]
+        t, p = ttest_ind(a, b, equal_var=False)
+        rows.append({
+            "scope": scope, "metric": metric,
+            "n_D": len(a), "mean_D": round(a.mean(), 3),
+            "n_E": len(b), "mean_E": round(b.mean(), 3),
+            "t": round(t, 3), "p": round(p, 4),
+        })
+
+    for p in OOR_DRIVERS:
+        add(p, "dist closed (units)", imp[imp["parameter"] == p], "improvement")
+    add("POOLED", "gap-closed frac", imp, "gap_closed")
+    return pd.DataFrame(rows)
+
+
+def describe_improvement_ttests(data: pd.DataFrame) -> None:
+    """Print the independent Welch t-tests on OOR improvement (Group D vs E)."""
+    _section(
+        "OOR IMPROVEMENT — INDEPENDENT WELCH t (Group D vs E)",
+        "(pond-level; per-param = distance-to-range closed, native units;",
+        " POOLED = gap-closed fraction [1.0 = back in range]; +mean = more improvement)",
+    )
+    print(improvement_ttests(data).to_string(index=False))
+    print()
+
+
+def resolution_fisher(events: pd.DataFrame):
+    """Fisher's exact test on Day-3 resolution (resolved vs not), Group D vs E.
+
+    Event-level (pond-per-day OOR events), the protocol's primary-outcome unit
+    and the basis of its sample-size calc. Resolved = `2nd FU WQ improvement` ==
+    "Yes". Returns (table, odds_ratio, p): table is the 2x2 [group x outcome]
+    with columns ordered resolved, unresolved.
+    """
+    e = events.dropna(subset=["2nd FU WQ improvement"])
+    outcome = e["2nd FU WQ improvement"].map({"Yes": "resolved", "No": "unresolved"})
+    table = pd.crosstab(e["Group"], outcome)[["resolved", "unresolved"]]
+    odds, p = fisher_exact(table.values)
+    return table, odds, p
+
+
+def describe_resolution_fisher(events: pd.DataFrame) -> None:
+    """Print Fisher's exact test on the Day-3 resolution outcome (Group D vs E)."""
+    table, odds, p = resolution_fisher(events)
+    pct = (table["resolved"] / table.sum(axis=1) * 100).round(1)
+    _section(
+        "OOR RESOLUTION — FISHER'S EXACT (Group D vs E)",
+        "(event-level Day-3 primary outcome; resolved = back in range)",
+    )
+    print(table.to_string())
+    print()
+    print(f"% resolved: {pct.to_dict()}")
+    print(f"odds ratio = {odds:.3f}   p = {p:.3g}")
+    print()
