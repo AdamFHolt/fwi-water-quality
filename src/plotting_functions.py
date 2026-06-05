@@ -432,7 +432,9 @@ def plot_oor_improvement(data, filename="oor_improvement.png"):
         # Parameter name bold (title); the test p-values sit below it in normal
         # weight, three rows colon-aligned (labels right of, values left of centre):
         # all events, then outliers removed whole-pond, then per-parameter.
-        ax.set_title(scope, fontsize=13, fontweight="bold", pad=44)
+        ax.set_title(scope, fontsize=13, fontweight="bold", pad=46,
+                     bbox=dict(boxstyle="round,pad=0.4", facecolor="white",
+                               edgecolor="black", linewidth=1.3))
         labels = "all ponds:\nw/o outliers (any param):\nw/o outliers (this param):"
         line = lambda r: f"Welch {_fmt_p(r['t_p'])} · MWU {_fmt_p(r['u_p'])}"
         vals = "\n".join([line(tests.loc[scope]), line(tests_pond.loc[scope]),
