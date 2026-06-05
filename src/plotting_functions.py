@@ -244,7 +244,10 @@ def plot_water_quality(data, filename="water_qualities.png", highlight_anoms=Fal
         )
         ax.set_xticks(range(len(groups)))
         ax.set_xticklabels([f"{g.split()[-1]}\n(n={n_ponds[g]})" for g in groups])
-        ax.set_title(f"{param}\nHedges' g = {bal.loc[param, 'g']}")  # standardized D-E mean gap
+        # Parameter name bold (title); the stat below it in normal weight.
+        ax.set_title(param, pad=24)
+        ax.text(0.5, 1.0, f"Hedges' g = {bal.loc[param, 'g']}", transform=ax.transAxes,
+                ha="center", va="bottom", fontsize=10, fontweight="normal")  # standardized D-E mean gap
         ax.margins(y=0.15)
 
         # Bottom: per-pond distribution (box + strip) over the cleaned set; the
@@ -278,7 +281,9 @@ def plot_water_quality(data, filename="water_qualities.png", highlight_anoms=Fal
                             fontsize=8, va="center", ha=ha, zorder=6)
         ax.set_xticks(range(1, len(groups) + 1))
         ax.set_xticklabels([g.split()[-1] for g in groups])
-        ax.set_title(f"{param}\nLevene p = {bal.loc[param, 'p']}")
+        ax.set_title(param, pad=24)
+        ax.text(0.5, 1.0, f"Levene p = {bal.loc[param, 'p']}", transform=ax.transAxes,
+                ha="center", va="bottom", fontsize=10, fontweight="normal")
 
     if highlight_anoms:
         axes[1, -1].legend(
@@ -434,9 +439,7 @@ def plot_oor_improvement(data, filename="oor_improvement.png"):
         # Parameter name bold (title); the test p-values sit below it in normal
         # weight, three rows colon-aligned (labels right of, values left of centre):
         # all events, then outliers removed whole-pond, then per-parameter.
-        ax.set_title(scope, fontsize=13, fontweight="bold", pad=46,
-                     bbox=dict(boxstyle="round,pad=0.4", facecolor="white",
-                               edgecolor="black", linewidth=1.3))
+        ax.set_title(scope, fontsize=13, fontweight="bold", pad=44)
         labels = "all ponds:\nw/o outliers (any param):\nw/o outliers (this param):"
         line = lambda r: f"Welch {_fmt_p(r['t_p'])} · MWU {_fmt_p(r['u_p'])}"
         vals = "\n".join([line(tests.loc[scope]), line(tests_pond.loc[scope]),
