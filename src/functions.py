@@ -23,7 +23,7 @@ Rough reading order if you're going through this file:
   Comparative tests (does the intervention improve WQ?, protocol §4.4):
   resolution_fisher   Fisher's exact on the binary Day-3 outcome, D vs E
   oor_event_improvements   distance-to-range closed per event, Day 0 -> Day 3
-  improvement_ttests  independent Welch t on that improvement, D vs E
+  improvement_tests   independent Welch t + Mann-Whitney U on that improvement, D vs E
 
 Two things to keep straight: the group column is "Pond status" in the Data
 sheet but "Group" in the OOR Events sheet, and the resolution number always
@@ -31,7 +31,7 @@ means the Day-3 (primary) measure.
 """
 
 import pandas as pd
-from scipy.stats import levene, ttest_ind, fisher_exact
+from scipy.stats import levene, ttest_ind, fisher_exact, mannwhitneyu
 
 
 def _section(*lines: str) -> None:
@@ -391,7 +391,7 @@ def analyze_oor_events(data: pd.DataFrame, events: pd.DataFrame) -> None:
 # Comparative tests (per protocol V7 §4.4): does the intervention improve WQ?
 #   resolution_fisher        Fisher's exact on the binary Day-3 outcome
 #   oor_event_improvements   per-event distance-to-range closed, Day 0 -> Day 3
-#   improvement_ttests       independent Welch t on that improvement, D vs E
+#   improvement_tests        independent Welch t + Mann-Whitney U on improvement
 # ---------------------------------------------------------------------------
 
 # In-range bands from protocol V7 Table 1: (low, high); None = unbounded that
@@ -487,15 +487,17 @@ def oor_event_improvements(data: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def improvement_ttests(data: pd.DataFrame) -> pd.DataFrame:
-    """Independent Welch t-tests on OOR improvement, Group D vs E, pond-level.
+def improvement_tests(data: pd.DataFrame) -> pd.DataFrame:
+    """Independent two-sample tests on OOR improvement, Group D vs E, pond-level.
 
     Each pond contributes one value (the mean over its OOR instances) so ponds
     aren't pseudo-replicated. Per parameter the value is mean improvement in
     native units (distance-to-range closed); the POOLED row uses the unit-free
-    gap-closed fraction so all parameters share a scale. Welch's t (does not
-    assume equal variance). Returns tidy rows: scope, metric, n_D, mean_D, n_E,
-    mean_E, t, p.
+    gap-closed fraction so all parameters share a scale. Runs two tests so the
+    result can be checked for robustness to the small-n normality assumption:
+    Welch's t (parametric, compares means, unequal-variance) and Mann-Whitney U
+    (nonparametric, rank-based). Returns tidy rows: scope, metric, n_D, mean_D,
+    n_E, mean_E, t, t_p, U, u_p.
     """
     imp = oor_event_improvements(data)
     rows = []
@@ -504,12 +506,14 @@ def improvement_ttests(data: pd.DataFrame) -> pd.DataFrame:
         pond = sub.groupby(["group", "Pond ID"])[col].mean().reset_index()
         a = pond.loc[pond["group"] == "Group D", col]
         b = pond.loc[pond["group"] == "Group E", col]
-        t, p = ttest_ind(a, b, equal_var=False)
+        t, t_p = ttest_ind(a, b, equal_var=False)
+        u, u_p = mannwhitneyu(a, b, alternative="two-sided")
         rows.append({
             "scope": scope, "metric": metric,
             "n_D": len(a), "mean_D": round(a.mean(), 3),
             "n_E": len(b), "mean_E": round(b.mean(), 3),
-            "t": round(t, 3), "p": round(p, 4),
+            "t": round(t, 3), "t_p": round(t_p, 4),
+            "U": round(u, 1), "u_p": round(u_p, 4),
         })
 
     for p in OOR_DRIVERS:
@@ -518,14 +522,15 @@ def improvement_ttests(data: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def describe_improvement_ttests(data: pd.DataFrame) -> None:
-    """Print the independent Welch t-tests on OOR improvement (Group D vs E)."""
+def describe_improvement_tests(data: pd.DataFrame) -> None:
+    """Print the independent improvement tests (Welch t + Mann-Whitney U), D vs E."""
     _section(
-        "OOR IMPROVEMENT — INDEPENDENT WELCH t (Group D vs E)",
+        "OOR IMPROVEMENT — INDEPENDENT TESTS (Group D vs E)",
         "(pond-level; per-param = distance-to-range closed, native units;",
-        " POOLED = gap-closed fraction [1.0 = back in range]; +mean = more improvement)",
+        " POOLED = gap-closed fraction [1.0 = back in range]; +mean = more improvement.",
+        " t = Welch t [means], t_p its p; U = Mann-Whitney [ranks], u_p its p)",
     )
-    print(improvement_ttests(data).to_string(index=False))
+    print(improvement_tests(data).to_string(index=False))
     print()
 
 

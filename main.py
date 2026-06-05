@@ -10,7 +10,7 @@ from src.functions import (
     analyze_oor_events,
     describe_resolution_by_parameter,
     describe_resolution_fisher,
-    describe_improvement_ttests,
+    describe_improvement_tests,
     reorder_by_pond,
 )
 
@@ -47,7 +47,7 @@ def main():
     # Comparative tests (protocol §4.4): does the intervention improve WQ?
     print(f"Doing comparative statistical tests:")
     describe_resolution_fisher(events)          # Fisher's exact on binary Day-3 outcome, D vs E
-    describe_improvement_ttests(data)           # Welch t on distance-to-range improvement, D vs E
+    describe_improvement_tests(data)            # Welch t + Mann-Whitney U on distance-to-range improvement, D vs E
 
     # Sensitivity variant: OOR figure with the WQ-outlier ponds removed.
     # Detect outliers (|studentized resid| > 2)
