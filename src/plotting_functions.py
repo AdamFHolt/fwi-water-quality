@@ -359,24 +359,25 @@ def _fmt_p(v):
 def plot_oor_improvement(data, filename="oor_improvement.png"):
     """Per-pond OOR improvement by group (D vs E) — the data behind the t / U tests.
 
-    Four panels: DO, pH, Ammonia show per-pond mean improvement in native units
+    2x2 panels: DO, pH, Ammonia show per-pond mean improvement in native units
     (distance-to-range closed, +ve = moved toward the in-range band); POOLED shows
     the unit-free gap-closed fraction (1.0 = fully back in range). Each panel is a
     box + jittered strip per group, titled with the Welch-t and Mann-Whitney
-    p-values — so the figure shows the effect, why the two tests agree (rank
-    separation), and the outlier sensitivity at once. The baseline-WQ outlier
-    ponds (the set dropped in the outliers-removed sensitivity) are drawn as red
-    rings. A dashed line at 0 marks "no change".
+    p-values both for all ponds and with the baseline-WQ outliers removed — so the
+    figure shows the effect, why the two tests agree (rank separation), and the
+    outlier sensitivity at once. The outlier ponds (the set dropped in the
+    sensitivity) are drawn as red rings. A dashed line at 0 marks "no change".
     """
     imp = oor_event_improvements(data)
-    tests = improvement_tests(data).set_index("scope")
     flagged_ponds = set(wq_outliers(data)["Pond ID"])  # union across parameters
+    tests = improvement_tests(data).set_index("scope")
+    tests_out = improvement_tests(data, exclude=flagged_ponds).set_index("scope")  # outliers removed
     scopes = OOR_DRIVERS + ["POOLED"]
     groups = ["Group D", "Group E"]
     rng = np.random.default_rng(0)
 
-    fig, axes = plt.subplots(1, len(scopes), figsize=(4.5 * len(scopes), 5))
-    for ax, scope in zip(axes, scopes):
+    fig, axes = plt.subplots(2, 2, figsize=(11, 9))
+    for ax, scope in zip(axes.flat, scopes):
         col = "gap_closed" if scope == "POOLED" else "improvement"
         sub = imp if scope == "POOLED" else imp[imp["parameter"] == scope]
         per_pond = sub.groupby(["group", "Pond ID"])[col].mean().reset_index()
@@ -403,15 +404,19 @@ def plot_oor_improvement(data, filename="oor_improvement.png"):
         ax.set_xticks([1, 2])
         ax.set_xticklabels([f"{g.split()[-1]}\n(n={len(d)})" for g, d in zip(groups, by_g)])
         ax.set_ylabel("gap-closed fraction" if scope == "POOLED" else "distance-to-range closed")
-        ax.set_title(f"{scope}\nWelch p {_fmt_p(tests.loc[scope, 't_p'])}"
-                     f" · MWU p {_fmt_p(tests.loc[scope, 'u_p'])}")
+        # Title carries both the all-ponds and outliers-removed test p-values.
+        ax.set_title(
+            f"{scope}\n"
+            f"all: Welch {_fmt_p(tests.loc[scope, 't_p'])} · MWU {_fmt_p(tests.loc[scope, 'u_p'])}\n"
+            f"−outliers: Welch {_fmt_p(tests_out.loc[scope, 't_p'])} · MWU {_fmt_p(tests_out.loc[scope, 'u_p'])}",
+            fontsize=10,
+        )
 
-    axes[-1].legend(
+    axes.flat[-1].legend(
         handles=[Line2D([], [], marker="o", markerfacecolor="none",
                         markeredgecolor="#d62728", linestyle="none", markersize=9,
                         label="baseline-WQ outlier")],
         loc="lower right", fontsize=8,
     )
-    fig.suptitle("Per-pond OOR improvement toward range, Group D vs E", y=1.02)
     fig.tight_layout()
     return _save(fig, filename)
