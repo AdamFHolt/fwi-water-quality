@@ -115,7 +115,7 @@ distinct ponds easy to count:
 |---|--:|--:|
 | **All ponds** | | |
 | &nbsp;&nbsp;event-level (each event once) | 5 / 30 = **16.7%** | 23 / 28 = **82.1%** |
-| &nbsp;&nbsp;pond-level (mean of per-pond rates) | **15.6%** | **83.8%** |
+| &nbsp;&nbsp;pond-level (mean of per-pond rates) | **15.6%** (15 ponds) | **83.8%** (17 ponds) |
 | **Baseline-WQ outlier ponds removed** | | |
 | &nbsp;&nbsp;event-level | 5 / 22 = **22.7%** | 19 / 22 = **86.4%** |
 | &nbsp;&nbsp;pond-level | **19.4%** (12 ponds) | **86.7%** (15 ponds) |
