@@ -370,8 +370,11 @@ def plot_oor_improvement(data, filename="oor_improvement.png"):
     removed whole-pond (any param), then per-parameter (drop only ponds extreme
     on this panel's parameter) — so the figure shows the effect, why the two
     tests agree (rank separation), and how the result holds under each outlier
-    rule at once. The outlier ponds are coloured red. A dashed line at 0 marks
-    "no change". The cross-parameter "overall" story is left to the binary
+    rule at once. Faint background points are the individual OOR events (the solid
+    black-edged dots are their pond means) — context only; the box, n, and tests
+    are all pond-level, since events within a pond aren't independent. Outlier
+    ponds' means are coloured red. A dashed line at 0 marks "no change". The
+    cross-parameter "overall" story is left to the binary
     resolution rate (Fisher) — a cleaner pooled summary than a continuous metric.
     """
     imp = oor_event_improvements(data)
@@ -395,10 +398,11 @@ def plot_oor_improvement(data, filename="oor_improvement.png"):
 
     fig, axes = plt.subplots(1, len(OOR_DRIVERS), figsize=(4.5 * len(OOR_DRIVERS), 5))
     for ax, scope in zip(axes, OOR_DRIVERS):
-        per_pond = (imp[imp["parameter"] == scope]
-                    .groupby(["group", "Pond ID"])["improvement"].mean().reset_index())
+        ev = imp[imp["parameter"] == scope]  # one row per OOR event-instance
+        per_pond = ev.groupby(["group", "Pond ID"])["improvement"].mean().reset_index()
         by_g = [per_pond[per_pond["group"] == g] for g in groups]
 
+        # Box summarises the pond means (the inferential unit), not the events.
         bp = ax.boxplot([d["improvement"].values for d in by_g], widths=0.5,
                         showfliers=False, patch_artist=True)
         for patch, g in zip(bp["boxes"], groups):
@@ -406,15 +410,20 @@ def plot_oor_improvement(data, filename="oor_improvement.png"):
             patch.set_alpha(0.55)
 
         for i, (g, d) in enumerate(zip(groups, by_g)):
+            # Faint raw events behind, for context only (NOT independent — the
+            # stats are pond-level); solid pond means on top.
+            eg = ev[ev["group"] == g]
+            ax.scatter(rng.normal(i + 1, 0.07, len(eg)), eg["improvement"].values,
+                       color=GROUP_COLORS[g], s=9, alpha=0.25, edgecolor="none", zorder=2)
             xj = rng.normal(i + 1, 0.07, len(d))
             vals = d["improvement"].values
             # Colour the baseline-WQ outlier ponds (those dropped in the sensitivity)
             # red; the rest take the group colour.
             is_out = d["Pond ID"].isin(flagged_ponds).values
-            ax.scatter(xj[~is_out], vals[~is_out], color=GROUP_COLORS[g], s=22,
-                       edgecolor="white", zorder=3)
-            ax.scatter(xj[is_out], vals[is_out], color="#d62728", s=22,
-                       edgecolor="white", zorder=4)
+            ax.scatter(xj[~is_out], vals[~is_out], color=GROUP_COLORS[g], s=30,
+                       edgecolor="black", linewidths=0.8, zorder=3)
+            ax.scatter(xj[is_out], vals[is_out], color="#d62728", s=30,
+                       edgecolor="black", linewidths=0.8, zorder=4)
 
         ax.axhline(0, color="#999999", lw=1, ls="--", zorder=1)  # no change
         ax.set_xticks([1, 2])
@@ -433,11 +442,15 @@ def plot_oor_improvement(data, filename="oor_improvement.png"):
         ax.text(0.51, 1.0, vals, transform=ax.transAxes, ha="left", va="bottom",
                 fontsize=8.5, fontweight="normal", linespacing=1.4)
 
-    axes[-1].legend(
-        handles=[Line2D([], [], marker="o", markerfacecolor="#d62728",
-                        markeredgecolor="white", linestyle="none", markersize=8,
-                        label="baseline-WQ outlier")],
-        loc="lower right", fontsize=8,
-    )
     fig.tight_layout()
+    legend_dot = lambda fc, ec, a, ms, lab: Line2D(
+        [], [], marker="o", markerfacecolor=fc, markeredgecolor=ec,
+        alpha=a, linestyle="none", markersize=ms, label=lab)
+    fig.legend(
+        handles=[legend_dot("#888888", "black", 1.0, 8, "pond mean (test unit)"),
+                 legend_dot("#888888", "none", 0.25, 6, "event"),
+                 legend_dot("#d62728", "black", 1.0, 8, "baseline-WQ outlier")],
+        loc="lower center", ncol=3, fontsize=8, frameon=False,
+        bbox_to_anchor=(0.5, -0.04),
+    )
     return _save(fig, filename)
