@@ -87,15 +87,17 @@ baseline artifact.
 
 Ponds whose baseline value sits more than 2 SD from their group mean (internally
 studentized residual). Used only for sensitivity checks — they are *not* dropped
-from the headline numbers. **5 ponds, 9 flags:**
+from the headline numbers. **5 ponds, 9 flags** — some ponds are extreme on more
+than one parameter, so each pond's **first appearance is bold** to make the 5
+distinct ponds easy to count:
 
 | Parameter | Group | Pond | Value | Std. residual |
 |---|---|---|--:|--:|
-| DO morning | E | 44f24b9a | 2.73 | −2.53 |
-| DO morning | E | 917e0459 | 2.78 | −2.30 |
-| DO evening | D | 87edd7c9 | 13.05 | 2.24 |
-| DO evening | D | 9252e874 | 15.26 | 5.00 |
-| pH | D | 6772b310 | 8.48 | 2.13 |
+| DO morning | E | **44f24b9a** | 2.73 | −2.53 |
+| DO morning | E | **917e0459** | 2.78 | −2.30 |
+| DO evening | D | **87edd7c9** | 13.05 | 2.24 |
+| DO evening | D | **9252e874** | 15.26 | 5.00 |
+| pH | D | **6772b310** | 8.48 | 2.13 |
 | pH | D | 9252e874 | 8.57 | 3.09 |
 | pH | E | 917e0459 | 8.47 | 2.07 |
 | Ammonia | D | 6772b310 | 0.049 | 2.71 |
