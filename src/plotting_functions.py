@@ -359,31 +359,30 @@ def _fmt_p(v):
 def plot_oor_improvement(data, filename="oor_improvement.png"):
     """Per-pond OOR improvement by group (D vs E) — the data behind the t / U tests.
 
-    2x2 panels: DO, pH, Ammonia show per-pond mean improvement in native units
-    (distance-to-range closed, +ve = moved toward the in-range band); POOLED shows
-    the unit-free gap-closed fraction (1.0 = fully back in range). Each panel is a
-    box + jittered strip per group, titled with the Welch-t and Mann-Whitney
-    p-values both for all ponds and with the baseline-WQ outliers removed — so the
-    figure shows the effect, why the two tests agree (rank separation), and the
-    outlier sensitivity at once. The outlier ponds (the set dropped in the
-    sensitivity) are drawn as red rings. A dashed line at 0 marks "no change".
+    One panel per OOR parameter (DO, pH, Ammonia): per-pond mean improvement in
+    native units (distance-to-range closed, +ve = moved toward the in-range band).
+    Each panel is a box + jittered strip per group, titled with the Welch-t and
+    Mann-Whitney p-values both for all ponds and with the baseline-WQ outliers
+    removed — so the figure shows the effect, why the two tests agree (rank
+    separation), and the outlier sensitivity at once. The outlier ponds (the set
+    dropped in the sensitivity) are drawn as red rings. A dashed line at 0 marks
+    "no change". The cross-parameter "overall" story is left to the binary
+    resolution rate (Fisher) — a cleaner pooled summary than a continuous metric.
     """
     imp = oor_event_improvements(data)
     flagged_ponds = set(wq_outliers(data)["Pond ID"])  # union across parameters
     tests = improvement_tests(data).set_index("scope")
     tests_out = improvement_tests(data, exclude=flagged_ponds).set_index("scope")  # outliers removed
-    scopes = OOR_DRIVERS + ["POOLED"]
     groups = ["Group D", "Group E"]
     rng = np.random.default_rng(0)
 
-    fig, axes = plt.subplots(2, 2, figsize=(11, 9))
-    for ax, scope in zip(axes.flat, scopes):
-        col = "gap_closed" if scope == "POOLED" else "improvement"
-        sub = imp if scope == "POOLED" else imp[imp["parameter"] == scope]
-        per_pond = sub.groupby(["group", "Pond ID"])[col].mean().reset_index()
+    fig, axes = plt.subplots(1, len(OOR_DRIVERS), figsize=(4.5 * len(OOR_DRIVERS), 5))
+    for ax, scope in zip(axes, OOR_DRIVERS):
+        per_pond = (imp[imp["parameter"] == scope]
+                    .groupby(["group", "Pond ID"])["improvement"].mean().reset_index())
         by_g = [per_pond[per_pond["group"] == g] for g in groups]
 
-        bp = ax.boxplot([d[col].values for d in by_g], widths=0.5,
+        bp = ax.boxplot([d["improvement"].values for d in by_g], widths=0.5,
                         showfliers=False, patch_artist=True)
         for patch, g in zip(bp["boxes"], groups):
             patch.set_facecolor(GROUP_COLORS[g])
@@ -391,19 +390,17 @@ def plot_oor_improvement(data, filename="oor_improvement.png"):
 
         for i, (g, d) in enumerate(zip(groups, by_g)):
             xj = rng.normal(i + 1, 0.07, len(d))
-            ax.scatter(xj, d[col].values, color=GROUP_COLORS[g], s=22,
+            ax.scatter(xj, d["improvement"].values, color=GROUP_COLORS[g], s=22,
                        edgecolor="white", zorder=3)
             # Ring the baseline-WQ outlier ponds (those dropped in the sensitivity).
             ring = d["Pond ID"].isin(flagged_ponds).values
-            ax.scatter(xj[ring], d[col].values[ring], facecolors="none",
+            ax.scatter(xj[ring], d["improvement"].values[ring], facecolors="none",
                        edgecolors="#d62728", s=150, linewidths=1.8, zorder=5)
 
         ax.axhline(0, color="#999999", lw=1, ls="--", zorder=1)  # no change
-        if scope == "POOLED":
-            ax.axhline(1, color="#999999", lw=1, ls=":", zorder=1)  # fully resolved
         ax.set_xticks([1, 2])
         ax.set_xticklabels([f"{g.split()[-1]}\n(n={len(d)})" for g, d in zip(groups, by_g)])
-        ax.set_ylabel("gap-closed fraction" if scope == "POOLED" else "distance-to-range closed")
+        ax.set_ylabel("distance-to-range closed")
         # Title carries both the all-ponds and outliers-removed test p-values.
         ax.set_title(
             f"{scope}\n"
@@ -412,7 +409,7 @@ def plot_oor_improvement(data, filename="oor_improvement.png"):
             fontsize=10,
         )
 
-    axes.flat[-1].legend(
+    axes[-1].legend(
         handles=[Line2D([], [], marker="o", markerfacecolor="none",
                         markeredgecolor="#d62728", linestyle="none", markersize=9,
                         label="baseline-WQ outlier")],
