@@ -406,12 +406,17 @@ def plot_oor_improvement(data, filename="oor_improvement.png"):
         ax.set_xticks([1, 2])
         ax.set_xticklabels([f"{g.split()[-1]}\n(n={len(d)})" for g, d in zip(groups, by_g)])
         ax.set_ylabel(f"out-of-range gap closed ({units[scope]})")
-        # Parameter name bold (title); the test p-values sit below it in normal weight.
+        # Parameter name bold (title); the test p-values sit below it in normal weight,
+        # the two rows colon-aligned (labels right of, values left of, the centre).
         ax.set_title(scope, fontsize=13, fontweight="bold", pad=30)
-        stats = (f"all: Welch {_fmt_p(tests.loc[scope, 't_p'])} · MWU {_fmt_p(tests.loc[scope, 'u_p'])}\n"
-                 f"−outliers: Welch {_fmt_p(tests_out.loc[scope, 't_p'])} · MWU {_fmt_p(tests_out.loc[scope, 'u_p'])}")
-        ax.text(0.5, 1.0, stats, transform=ax.transAxes, ha="center", va="bottom",
-                fontsize=9, fontweight="normal", linespacing=1.3)
+        labels = "all events:\nw/o outliers:"
+        vals = (f"Welch {_fmt_p(tests.loc[scope, 't_p'])} · MWU {_fmt_p(tests.loc[scope, 'u_p'])}\n"
+                f"Welch {_fmt_p(tests_out.loc[scope, 't_p'])} · MWU {_fmt_p(tests_out.loc[scope, 'u_p'])}")
+        # Colon sits left of centre so the wider value column balances the block.
+        ax.text(0.40, 1.0, labels, transform=ax.transAxes, ha="right", va="bottom",
+                fontsize=9, fontweight="normal", linespacing=1.4)
+        ax.text(0.42, 1.0, vals, transform=ax.transAxes, ha="left", va="bottom",
+                fontsize=9, fontweight="normal", linespacing=1.4)
 
     axes[-1].legend(
         handles=[Line2D([], [], marker="o", markerfacecolor="none",
