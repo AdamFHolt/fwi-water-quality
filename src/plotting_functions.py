@@ -23,7 +23,7 @@ from src.functions import (
     POND_PARAMS,
     OOR_DRIVERS,
     wq_pond_means,
-    levene_by_param,
+    baseline_balance_by_param,
     wq_outliers,
     derive_oor_events,
     oor_resolution_by_parameter,
@@ -111,7 +111,7 @@ def plot_oor_events(events, filename="oor_events.png"):
                 rv = int(res.loc[(level, g), "resolved"])
             else:
                 ev = rv = 0
-            _resolution_pie(ax, rv, ev - rv, GROUP_COLORS[g], f"{g} — {level} (n={ev})")
+            _resolution_pie(ax, rv, ev - rv, GROUP_COLORS[g], f"{g} - {level} (n={ev})")
 
     # --- Grouped bars: how many OOR events flagged each parameter, per group ---
     ax = axd["drv"]
@@ -167,7 +167,7 @@ def plot_oor_resolution_by_pond(data, filename="oor_resolution.by_pond.png"):
     ax.set_title("Pond-level OOR resolution")
 
     # Combined right-hand panel: the events-per-pond distribution (horizontal
-    # bars, D vs E) that doubles as the point-size key — each row carries a dot
+    # bars, D vs E) that doubles as the point-size key - each row carries a dot
     # sized like the main scatter, so size <-> #events is read off the same panel.
     # This is the spread the event-level rate would weight by (motivates the
     # pond-level view).
@@ -206,7 +206,7 @@ def plot_water_quality(data, filename="water_qualities.png", highlight_anoms=Fal
     one column per parameter (routine visits, averaged per pond).
 
     With highlight_anoms=True the baseline-WQ outlier ponds (|studentized resid| > 2)
-    are dropped from every panel's statistics — bars, box/IQR, n, and Levene p all
+    are dropped from every panel's statistics - bars, box/IQR, n, and Levene p all
     describe the cleaned distribution, matching the pond set removed in the
     oor_events.anoms_removed figure. Each outlier is still drawn (red ring, short
     Pond ID + OOR-event count) in the panel for the parameter it is extreme on, so
@@ -220,7 +220,7 @@ def plot_water_quality(data, filename="water_qualities.png", highlight_anoms=Fal
     stat_pond = pond[~pond["Pond ID"].isin(excluded)]
     wq = stat_pond.groupby("Pond status")[POND_PARAMS].agg(["mean", "std"])
     n_ponds = stat_pond.groupby("Pond status").size()
-    lev = levene_by_param(data, exclude=excluded)  # same exclusion as the stats above
+    bal = baseline_balance_by_param(data, exclude=excluded)  # same exclusion as the stats above
     # OOR-event count per pond, so each ringed point can show how many events it drives.
     event_counts = derive_oor_events(data).groupby("Pond ID").size() if highlight_anoms else None
     groups = sorted(pond["Pond status"].unique())
@@ -240,7 +240,7 @@ def plot_water_quality(data, filename="water_qualities.png", highlight_anoms=Fal
         )
         ax.set_xticks(range(len(groups)))
         ax.set_xticklabels([f"{g.split()[-1]}\n(n={n_ponds[g]})" for g in groups])
-        ax.set_title(param)
+        ax.set_title(f"{param}\nHedges' g = {bal.loc[param, 'g']}")  # standardized D-E mean gap
         ax.margins(y=0.15)
 
         # Bottom: per-pond distribution (box + strip) over the cleaned set; the
@@ -274,7 +274,7 @@ def plot_water_quality(data, filename="water_qualities.png", highlight_anoms=Fal
                             fontsize=8, va="center", ha=ha, zorder=6)
         ax.set_xticks(range(1, len(groups) + 1))
         ax.set_xticklabels([g.split()[-1] for g in groups])
-        ax.set_title(f"{param}\nLevene p = {lev.loc[param, 'p']}")
+        ax.set_title(f"{param}\nLevene p = {bal.loc[param, 'p']}")
 
     if highlight_anoms:
         axes[1, -1].legend(
@@ -293,7 +293,7 @@ def plot_water_quality(data, filename="water_qualities.png", highlight_anoms=Fal
 def plot_water_quality_visits(data, filename="water_qualities.visits.png"):
     """Visit-level WQ figure: routine visits only, one point per visit.
 
-    Columns: DO (Morning), DO (Evening), pH, Ammonia — DO is split by time of
+    Columns: DO (Morning), DO (Evening), pH, Ammonia - DO is split by time of
     day because morning and evening values differ substantially (~3 vs ~11 mg/L).
     Top row: mean +/- SD bars. Bottom row: box + dense jittered strip.
     """
@@ -303,8 +303,8 @@ def plot_water_quality_visits(data, filename="water_qualities.visits.png"):
 
     # Each column is (param, time_filter, title).
     cols = [
-        ("DO (mg/L)", "Morning", "DO — Morning (mg/L)"),
-        ("DO (mg/L)", "Evening", "DO — Evening (mg/L)"),
+        ("DO (mg/L)", "Morning", "DO - Morning (mg/L)"),
+        ("DO (mg/L)", "Evening", "DO - Evening (mg/L)"),
         ("pH",        None,      "pH"),
         ("Ammonia—NH3 (mg/L)", None, "Ammonia—NH3 (mg/L)"),
     ]

@@ -112,9 +112,14 @@ DO Evening, pH, Ammonia–NH₃), using one value per pond (routine visits).
 
 - **Top row — mean ± SD bars.** Bar height = group mean across ponds; error bar =
   ± 1 standard deviation across ponds. `n` in the x-label is the number of ponds.
+  The subplot title shows **Hedges' g**, the standardized D-vs-E mean gap (see
+  glossary).
 - **Bottom row — box + strip.** A box plot of the per-pond values with every pond
   drawn as a jittered point on top. The subplot title shows **Levene p** for that
   parameter (see glossary).
+
+Together the two titles give the standard baseline-balance pair: **Hedges' g**
+(difference in *means*) and **Levene p** (difference in *spread*).
 
 This is the figure to read for whether the two groups start out comparable.
 
@@ -168,19 +173,27 @@ used for the statistics, to avoid pseudoreplication).
   differ** (spreads look similar between D and E); a small p (≤ 0.05) would
   suggest the groups differ in variability. It says nothing about the means.
 
-- **Baseline-WQ outliers (studentized residual & Cook's distance).** For each
-  parameter we fit a simple `value ~ group` model on the per-pond values and ask
-  which ponds are unusual:
-  - **Internally studentized residual** — how many standard deviations a pond
-    sits from its group mean, scaled by the model's residual spread. A pond is
-    flagged an **outlier** if its absolute studentized residual exceeds **2**
-    (i.e. >2 SD from its group mean).
-  - **Cook's distance** — how much the fitted model would move if that pond were
-    deleted; a measure of **influence**. Threshold used: **4/n**.
-  - *Note:* with a two-group factor, leverage is constant within a group, so
-    Cook's distance is essentially a function of the residual — the **outlier**
-    flag is the meaningful one here. These flagged ponds are what gets removed in
-    the `anoms_removed` / `anoms_highlighted` variants.
+- **Hedges' g (standardized mean difference).** The gap between the two groups'
+  means expressed in pooled-SD units: `(mean_D - mean_E) / pooled_SD`, with a
+  small-sample correction (the "Hedges" part, which matters at this n ~ 25). It
+  is the *location* companion to Levene's *spread*: g measures how far apart the
+  means are, scaled so it's comparable across parameters and independent of
+  sample size. Convention: **|g| < 0.1 negligible**, 0.2 small, 0.5 medium, 0.8
+  large. Reported descriptively, with **no significance test** — testing baseline
+  differences for significance confounds effect size with sample size, so a bare
+  effect size is the honest summary.
+
+- **Baseline-WQ outliers (studentized residual).** For each parameter we fit a
+  simple `value ~ group` model on the per-pond values and flag unusual ponds by
+  their **internally studentized residual** — how many standard deviations a pond
+  sits from its group mean, scaled by the model's residual spread. A pond is an
+  **outlier** if its absolute studentized residual exceeds **2** (i.e. >2 SD from
+  its group mean). These flagged ponds are what gets removed in the
+  `anoms_removed` / `anoms_highlighted` variants.
+  - *Why not Cook's distance?* It's the usual influence companion to the
+    residual, but a two-group factor has constant within-group leverage, so
+    Cook's distance is just a monotone function of the residual (rank correlation
+    0.999 on this data) — it flags nothing the residual doesn't, so it's omitted.
 
 - **Pseudoreplication.** Treating non-independent measurements as if they were
   independent — e.g. counting many visits (or events) from one pond as separate

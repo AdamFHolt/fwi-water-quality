@@ -10,8 +10,8 @@ Rough reading order if you're going through this file:
   wq_pond_means       one baseline row per pond (DO split AM/PM); most WQ
                       functions below build on this
   describe_water_quality   mean/SD per group
-  levene_by_param     do the two groups have equal variance?
-  wq_outliers         flag odd ponds (studentized residual + Cook's D)
+  baseline_balance_by_param   are the groups balanced at baseline? (Levene + Hedges' g)
+  wq_outliers         flag odd ponds (studentized residual > 2)
 
   derive_oor_events   rebuild the OOR events from the raw visit rows
   oor_resolution_by_parameter   resolution rate by parameter, from the sheet
@@ -119,14 +119,17 @@ def describe_water_quality(data: pd.DataFrame) -> None:
     print()
 
 
-def levene_by_param(data: pd.DataFrame, exclude: set | None = None) -> pd.DataFrame:
-    """Levene's variance-homogeneity test (Group D vs E) per WQ parameter.
+def baseline_balance_by_param(data: pd.DataFrame, exclude: set | None = None) -> pd.DataFrame:
+    """Baseline balance (Group D vs E) per WQ parameter: variance + mean difference.
 
-    Uses the per-pond baseline values (see wq_pond_means) so ponds aren't
-    pseudo-replicated. Median-centred (Brown-Forsythe), robust to non-normality.
+    Per-pond baseline values (see wq_pond_means) so ponds aren't pseudo-replicated.
+    Two complementary, purely descriptive balance metrics:
+      - Levene's W, p: variance homogeneity, median-centred,
+        robust to non-normality. p > 0.05 = no evidence variances differ.
+      - Hedges' g: standardized mean difference (mean_D - mean_E) / pooled SD,
+        with the small-sample correction. |g| < 0.1 = negligible mean gap. 
     Pass `exclude` (a set of Pond IDs, e.g. the WQ outliers) to run on the
-    outlier-removed set. Returns a DataFrame indexed by parameter with columns
-    W (statistic) and p.
+    outlier-removed set. Returns a DataFrame indexed by parameter, columns W, p, g.
     """
     pond = wq_pond_means(data)
     if exclude:
@@ -134,29 +137,32 @@ def levene_by_param(data: pd.DataFrame, exclude: set | None = None) -> pd.DataFr
     groups = sorted(pond["Pond status"].unique())
     rows = {}
     for param in POND_PARAMS:
-        samples = [pond.loc[pond["Pond status"] == g, param].dropna() for g in groups]
-        w, p = levene(*samples)
-        rows[param] = {"W": round(w, 3), "p": round(p, 3)}
+        a, b = (pond.loc[pond["Pond status"] == g, param].dropna() for g in groups)
+        w, p = levene(a, b)
+        na, nb = len(a), len(b)
+        pooled_sd = (((na - 1) * a.var(ddof=1) + (nb - 1) * b.var(ddof=1)) / (na + nb - 2)) ** 0.5
+        d = (a.mean() - b.mean()) / pooled_sd
+        g = d * (1 - 3 / (4 * (na + nb) - 9))  # Hedges' small-sample correction
+        rows[param] = {"W": round(w, 3), "p": round(p, 3), "g": round(g, 3)}
     return pd.DataFrame(rows).T
 
 
-def describe_variance_homogeneity(data: pd.DataFrame) -> None:
-    """Print Levene's variance-homogeneity test (Group D vs E) per WQ parameter."""
-    _section("VARIANCE HOMOGENEITY — LEVENE (Group D vs E)",
-             "(per-pond baseline values; p > 0.05 = equal variance)")
-    print(levene_by_param(data).to_string())
+def describe_baseline_balance(data: pd.DataFrame) -> None:
+    """Print baseline balance (Group D vs E) per WQ parameter: Levene W/p + Hedges' g."""
+    _section("BASELINE BALANCE (Group D vs E)",
+             "(per-pond values; Levene p > 0.05 = equal variance; |g| < 0.1 = negligible mean gap)")
+    print(baseline_balance_by_param(data).to_string())
     print()
 
 
 def wq_outliers(data: pd.DataFrame, resid_thresh: float = 2.0) -> pd.DataFrame:
-    """Flag baseline-WQ outliers/influential ponds from the group-means model.
+    """Flag WQ outlier ponds from the group-means model.
 
     For each parameter, fits param ~ group on per-pond values and computes each
-    pond's internally studentized residual and Cook's distance. A pond is an
-    *outlier* if |studentized resid| > resid_thresh, *influential* if Cook's D >
-    4/n. NB: with a two-group factor, leverage is constant within a group
-    (= 1/n_group), so Cook's D is essentially a function of the residual here.
-    Returns only the flagged ponds (tidy).
+    pond's internally studentized residual. A pond is an *outlier* if
+    |studentized resid| > resid_thresh, i.e. more than resid_thresh SD from its
+    group mean (scaled by the model's residual spread). Returns only the flagged
+    ponds.
     """
     pond = wq_pond_means(data)
     out = []
@@ -169,20 +175,18 @@ def wq_outliers(data: pd.DataFrame, resid_thresh: float = 2.0) -> pd.DataFrame:
         s2 = (resid ** 2).sum() / (n - p)  # residual variance (model MSE)
         std = resid / (s2 * (1 - h)) ** 0.5  # internally studentized residual
         df["std_resid"] = std.round(2)
-        df["cooks_d"] = ((std ** 2 / p) * (h / (1 - h))).round(3)
         df["outlier"] = df["std_resid"].abs() > resid_thresh
-        df["influential"] = df["cooks_d"] > 4 / n
         out.append(df.assign(parameter=param))
     res = pd.concat(out, ignore_index=True)
-    cols = ["parameter", "Pond status", "Pond ID", "value", "std_resid", "cooks_d", "outlier", "influential"]
-    return res[res["outlier"] | res["influential"]][cols]
+    cols = ["parameter", "Pond status", "Pond ID", "value", "std_resid", "outlier"]
+    return res[res["outlier"]][cols]
 
 
 def describe_wq_outliers(data: pd.DataFrame) -> None:
-    """Print baseline-WQ outliers and influential ponds (group-means model)."""
+    """Print baseline-WQ outlier ponds (group-means model)."""
     flagged = wq_outliers(data)
-    _section("WATER QUALITY OUTLIERS / INFLUENCE (per-pond, param ~ group)",
-             "(|studentized residual| > 2; Cook's D > 4/n)")
+    _section("WATER QUALITY OUTLIERS (per-pond, param ~ group)",
+             "(|studentized residual| > 2 from group mean)")
     print("None flagged." if flagged.empty else flagged.to_string(index=False))
     print()
 
@@ -222,11 +226,10 @@ def derive_oor_events(data: pd.DataFrame) -> pd.DataFrame:
         .reset_index()
     )
 
-    # Resolve one event: among this pond's follow-ups in the window (Day0, Day0+5],
-    # take the latest (the Day-3 primary measure) and return whether it was in range.
-    # Assumes a pond's OOR events are >5 days apart, so every follow-up in the window
-    # belongs to this event (verified: min same-pond gap is 12 days). If two events
-    # fell within 5 days, the earlier one could absorb the later's follow-ups.
+    # Resolve one event: take the latest follow-up in (Day0, Day0+5] (the Day-3
+    # primary measure) and return whether it was in range. Safe because a pond's
+    # events are >5 days apart (min same-pond gap is 12 days), so the window can't
+    # capture a later event's follow-ups.
     def resolve(row):
         cand = fu_day[
             (fu_day["Pond ID"] == row["Pond ID"])
@@ -377,6 +380,3 @@ def analyze_oor_events(data: pd.DataFrame, events: pd.DataFrame) -> None:
             f"Mismatch for {grp}: derived ({len(dg)}, {int(dg['resolved'].sum())}) "
             f"vs sheet ({sheet_n[grp]}, {sheet_res[grp]})"
         )
-
-
-
