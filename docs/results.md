@@ -128,7 +128,9 @@ anything — so the result isn't an artifact of a few unusual ponds.
 ### 3.2 Fisher's exact test (the formal primary test)
 
 The binary outcome (resolved vs not) by group is a 2×2 table → Fisher's exact.
-Left: all ponds. Right: with the 5 baseline-WQ outlier ponds removed.
+Left: all ponds. Right: with the 5 baseline-WQ outlier ponds removed. Cells are
+**event counts**, so the rates here match the *event-level* rows in §3.1 (22.7% /
+86.4% on the right), not the pond-level rows.
 
 <table>
 <tr><td>
