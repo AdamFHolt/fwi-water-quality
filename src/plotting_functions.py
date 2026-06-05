@@ -39,6 +39,8 @@ PLOTS_DIR = Path("plots")
 GROUP_COLORS = {"Group D": "#4c72b0", "Group E": "#dd8452"}
 NOT_RESOLVED = "#cccccc"
 INSET_GREY = "#666666"  # subdued axes for the events-per-pond inset
+OUTLIER_RED = "#d62728"  # baseline-WQ outlier ponds, used in every figure
+OUTLIER_LABEL = "baseline-WQ outlier (>2 SD)"  # one legend wording everywhere
 
 
 def _save(fig, filename):
@@ -266,7 +268,7 @@ def plot_water_quality(data, filename="water_qualities.png", highlight_anoms=Fal
             ring = pond[(pond["Pond status"] == g) & pond["Pond ID"].isin(outlier_ids)][["Pond ID", param]].dropna()
             xr, yr = rng.normal(i + 1, 0.06, len(ring)), ring[param].values
             ax.scatter(xr, yr, color=GROUP_COLORS[g], s=15, edgecolor="white", zorder=4)
-            ax.scatter(xr, yr, facecolors="none", edgecolors="#d62728", s=150, linewidths=1.8, zorder=5)
+            ax.scatter(xr, yr, facecolors="none", edgecolors=OUTLIER_RED, s=150, linewidths=1.8, zorder=5)
             # Label each ringed pond; flip side for the right-hand group.
             ha, dx = ("left", 14) if i < len(groups) - 1 else ("right", -14)
             for xk, yk, pid in zip(xr, yr, ring["Pond ID"].values):
@@ -281,9 +283,9 @@ def plot_water_quality(data, filename="water_qualities.png", highlight_anoms=Fal
     if highlight_anoms:
         axes[1, -1].legend(
             handles=[
-                Line2D([], [], marker="o", markerfacecolor="none", markeredgecolor="#d62728",
+                Line2D([], [], marker="o", markerfacecolor="none", markeredgecolor=OUTLIER_RED,
                        linestyle="none", markersize=9,
-                       label="outlier (> 2 SD)"),
+                       label=OUTLIER_LABEL),
             ],
             loc="upper right", fontsize=8,
         )
@@ -422,7 +424,7 @@ def plot_oor_improvement(data, filename="oor_improvement.png"):
             is_out = d["Pond ID"].isin(flagged_ponds).values
             ax.scatter(xj[~is_out], vals[~is_out], color=GROUP_COLORS[g], s=30,
                        edgecolor="black", linewidths=0.8, zorder=3)
-            ax.scatter(xj[is_out], vals[is_out], color="#d62728", s=30,
+            ax.scatter(xj[is_out], vals[is_out], color=OUTLIER_RED, s=30,
                        edgecolor="black", linewidths=0.8, zorder=4)
 
         ax.axhline(0, color="#999999", lw=1, ls="--", zorder=1)  # no change
@@ -451,7 +453,7 @@ def plot_oor_improvement(data, filename="oor_improvement.png"):
     fig.legend(
         handles=[legend_dot("#888888", "black", 1.0, 8, "pond mean (test unit)"),
                  legend_dot("#888888", "none", 0.25, 6, "event"),
-                 legend_dot("#d62728", "black", 1.0, 8, "baseline-WQ outlier")],
+                 legend_dot(OUTLIER_RED, "black", 1.0, 8, OUTLIER_LABEL)],
         loc="lower center", ncol=3, fontsize=8, frameon=False,
         bbox_to_anchor=(0.5, -0.04),
     )
