@@ -127,16 +127,34 @@ anything — so the result isn't an artifact of a few unusual ponds.
 
 ### 3.2 Fisher's exact test (the formal primary test)
 
-The binary outcome (resolved vs not) by group is a 2×2 table → Fisher's exact:
+The binary outcome (resolved vs not) by group is a 2×2 table → Fisher's exact.
+Left: all ponds. Right: with the 5 baseline-WQ outlier ponds removed.
+
+<table>
+<tr><td>
+
+**All ponds**
 
 | | Resolved | Not resolved |
 |---|--:|--:|
 | Group D | 5 | 25 |
 | Group E | 23 | 5 |
 
-**Odds ratio = 0.043, p = 9.4×10⁻⁷.** Strong evidence the groups differ.
-With the 5 baseline-WQ outlier ponds removed it holds: 22.7% vs 86.4%,
-**p = 4.8×10⁻⁵**.
+</td><td>
+
+**Outlier ponds removed**
+
+| | Resolved | Not resolved |
+|---|--:|--:|
+| Group D | 5 | 17 |
+| Group E | 19 | 3 |
+
+</td></tr>
+</table>
+
+**All ponds:** odds ratio 0.043, **p = 9.4×10⁻⁷**.
+**Outliers removed:** odds ratio 0.046, **p = 4.8×10⁻⁵**.
+Either way, strong evidence the groups differ.
 
 ### 3.3 Resolution by parameter (Day 3)
 
