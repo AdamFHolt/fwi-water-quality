@@ -1,4 +1,4 @@
-# Results — statistical tests and values
+# Analysis Results 
 
 All numbers here are produced by `python main.py` (printed to the console). This
 file is the human-readable summary; see [`figures.md`](figures.md) for the plots
@@ -78,10 +78,10 @@ are (or vice versa):
   0.2 is small, 0.5 medium, 0.8 large. Here the largest is ammonia at 0.24 (small)
   and the rest are near zero.
 
-**In short:** Levene asks *"same spread?"*, Hedges' g asks *"same average?"* —
-together they are the standard baseline-balance pair. Both say yes, so the groups
-start out comparable and the large differences seen later (Sections 3–5) are not a
-baseline artifact.
+- **In short:** Levene asks *"same spread?"*, Hedges' g asks *"same average?"* —
+  together they are the standard baseline-balance pair. Both say yes, so the groups
+  start out comparable and the large differences seen later (Sections 3–5) are not a
+  baseline artifact.
 
 ### 2.3 Baseline-WQ outlier ponds
 
@@ -111,13 +111,19 @@ distinct ponds easy to count:
 
 ### 3.1 Resolution rate
 
-| | Group D | Group E |
+| Resolution rate | Group D | Group E |
 |---|--:|--:|
-| Event-level (each event counts once) | 5 / 30 = **16.7%** | 23 / 28 = **82.1%** |
-| Pond-level (each pond counts once, mean of per-pond rates) | **15.6%** | **83.8%** |
+| **All ponds** | | |
+| &nbsp;&nbsp;event-level (each event once) | 5 / 30 = **16.7%** | 23 / 28 = **82.1%** |
+| &nbsp;&nbsp;pond-level (mean of per-pond rates) | **15.6%** | **83.8%** |
+| **Baseline-WQ outlier ponds removed** | | |
+| &nbsp;&nbsp;event-level | 5 / 22 = **22.7%** | 19 / 22 = **86.4%** |
+| &nbsp;&nbsp;pond-level | **19.4%** (12 ponds) | **86.7%** (15 ponds) |
 
-The pond-level view (each pond once) rules out the gap being driven by a few
-repeat-event ponds.
+Event-level counts each event once; **pond-level** counts each pond once (mean of
+per-pond rates), which rules out a few repeat-event ponds driving the gap.
+Removing the 5 outlier ponds leaves the gap intact — it widens slightly, if
+anything — so the result isn't an artifact of a few unusual ponds.
 
 ### 3.2 Fisher's exact test (the formal primary test)
 
