@@ -369,7 +369,7 @@ def plot_oor_improvement(data, filename="oor_improvement.png"):
     Mann-Whitney p-values both for all ponds and with the baseline-WQ outliers
     removed — so the figure shows the effect, why the two tests agree (rank
     separation), and the outlier sensitivity at once. The outlier ponds (the set
-    dropped in the sensitivity) are drawn as red rings. A dashed line at 0 marks
+    dropped in the sensitivity) are coloured red. A dashed line at 0 marks
     "no change". The cross-parameter "overall" story is left to the binary
     resolution rate (Fisher) — a cleaner pooled summary than a continuous metric.
     """
@@ -395,12 +395,14 @@ def plot_oor_improvement(data, filename="oor_improvement.png"):
 
         for i, (g, d) in enumerate(zip(groups, by_g)):
             xj = rng.normal(i + 1, 0.07, len(d))
-            ax.scatter(xj, d["improvement"].values, color=GROUP_COLORS[g], s=22,
+            vals = d["improvement"].values
+            # Colour the baseline-WQ outlier ponds (those dropped in the sensitivity)
+            # red; the rest take the group colour.
+            is_out = d["Pond ID"].isin(flagged_ponds).values
+            ax.scatter(xj[~is_out], vals[~is_out], color=GROUP_COLORS[g], s=22,
                        edgecolor="white", zorder=3)
-            # Ring the baseline-WQ outlier ponds (those dropped in the sensitivity).
-            ring = d["Pond ID"].isin(flagged_ponds).values
-            ax.scatter(xj[ring], d["improvement"].values[ring], facecolors="none",
-                       edgecolors="#d62728", s=150, linewidths=1.8, zorder=5)
+            ax.scatter(xj[is_out], vals[is_out], color="#d62728", s=22,
+                       edgecolor="white", zorder=4)
 
         ax.axhline(0, color="#999999", lw=1, ls="--", zorder=1)  # no change
         ax.set_xticks([1, 2])
@@ -419,8 +421,8 @@ def plot_oor_improvement(data, filename="oor_improvement.png"):
                 fontsize=9, fontweight="normal", linespacing=1.4)
 
     axes[-1].legend(
-        handles=[Line2D([], [], marker="o", markerfacecolor="none",
-                        markeredgecolor="#d62728", linestyle="none", markersize=9,
+        handles=[Line2D([], [], marker="o", markerfacecolor="#d62728",
+                        markeredgecolor="white", linestyle="none", markersize=8,
                         label="baseline-WQ outlier")],
         loc="lower right", fontsize=8,
     )
