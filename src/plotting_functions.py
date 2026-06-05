@@ -366,17 +366,29 @@ def plot_oor_improvement(data, filename="oor_improvement.png"):
     it clamps at the band edge (no credit for overshoot) and is direction-folded
     so improvement is always positive whichever way the parameter was OOR.
     Each panel is a box + jittered strip per group, titled with the Welch-t and
-    Mann-Whitney p-values both for all ponds and with the baseline-WQ outliers
-    removed — so the figure shows the effect, why the two tests agree (rank
-    separation), and the outlier sensitivity at once. The outlier ponds (the set
-    dropped in the sensitivity) are coloured red. A dashed line at 0 marks
+    Mann-Whitney p-values three ways: all events, then baseline-WQ outliers
+    removed whole-pond (any param), then per-parameter (drop only ponds extreme
+    on this panel's parameter) — so the figure shows the effect, why the two
+    tests agree (rank separation), and how the result holds under each outlier
+    rule at once. The outlier ponds are coloured red. A dashed line at 0 marks
     "no change". The cross-parameter "overall" story is left to the binary
     resolution rate (Fisher) — a cleaner pooled summary than a continuous metric.
     """
     imp = oor_event_improvements(data)
-    flagged_ponds = set(wq_outliers(data)["Pond ID"])  # union across parameters
+    fl = wq_outliers(data)
+    flagged_ponds = set(fl["Pond ID"])  # union across parameters (whole-pond removal)
     tests = improvement_tests(data).set_index("scope")
-    tests_out = improvement_tests(data, exclude=flagged_ponds).set_index("scope")  # outliers removed
+    tests_pond = improvement_tests(data, exclude=flagged_ponds).set_index("scope")  # any-param outlier
+    # Per-parameter removal: for each panel drop only ponds extreme on THAT
+    # parameter's baseline (DO spans both the AM and PM bands).
+    baseline_params = {"DO": ["DO Morning (mg/L)", "DO Evening (mg/L)"],
+                       "pH": ["pH"], "Ammonia": ["Ammonia—NH3 (mg/L)"]}
+    tests_param = {
+        sc: improvement_tests(
+            data, exclude=set(fl.loc[fl["parameter"].isin(ps), "Pond ID"])
+        ).set_index("scope").loc[sc]
+        for sc, ps in baseline_params.items()
+    }
     groups = ["Group D", "Group E"]
     units = {"DO": "mg/L", "pH": "pH units", "Ammonia": "mg/L"}
     rng = np.random.default_rng(0)
@@ -408,17 +420,18 @@ def plot_oor_improvement(data, filename="oor_improvement.png"):
         ax.set_xticks([1, 2])
         ax.set_xticklabels([f"{g.split()[-1]}\n(n={len(d)})" for g, d in zip(groups, by_g)])
         ax.set_ylabel(f"out-of-range gap closed ({units[scope]})")
-        # Parameter name bold (title); the test p-values sit below it in normal weight,
-        # the two rows colon-aligned (labels right of, values left of, the centre).
-        ax.set_title(scope, fontsize=13, fontweight="bold", pad=30)
-        labels = "all events:\nw/o outliers:"
-        vals = (f"Welch {_fmt_p(tests.loc[scope, 't_p'])} · MWU {_fmt_p(tests.loc[scope, 'u_p'])}\n"
-                f"Welch {_fmt_p(tests_out.loc[scope, 't_p'])} · MWU {_fmt_p(tests_out.loc[scope, 'u_p'])}")
-        # Colon sits left of centre so the wider value column balances the block.
-        ax.text(0.40, 1.0, labels, transform=ax.transAxes, ha="right", va="bottom",
-                fontsize=9, fontweight="normal", linespacing=1.4)
-        ax.text(0.42, 1.0, vals, transform=ax.transAxes, ha="left", va="bottom",
-                fontsize=9, fontweight="normal", linespacing=1.4)
+        # Parameter name bold (title); the test p-values sit below it in normal
+        # weight, three rows colon-aligned (labels right of, values left of centre):
+        # all events, then outliers removed whole-pond, then per-parameter.
+        ax.set_title(scope, fontsize=13, fontweight="bold", pad=44)
+        labels = "all events:\nw/o outliers (any param):\nw/o outliers (this param):"
+        line = lambda r: f"Welch {_fmt_p(r['t_p'])} · MWU {_fmt_p(r['u_p'])}"
+        vals = "\n".join([line(tests.loc[scope]), line(tests_pond.loc[scope]),
+                          line(tests_param[scope])])
+        ax.text(0.49, 1.0, labels, transform=ax.transAxes, ha="right", va="bottom",
+                fontsize=8.5, fontweight="normal", linespacing=1.4)
+        ax.text(0.51, 1.0, vals, transform=ax.transAxes, ha="left", va="bottom",
+                fontsize=8.5, fontweight="normal", linespacing=1.4)
 
     axes[-1].legend(
         handles=[Line2D([], [], marker="o", markerfacecolor="#d62728",
