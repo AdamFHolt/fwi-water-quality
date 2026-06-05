@@ -55,23 +55,20 @@ time of day because morning and evening differ by design.
 
 ### 2.2 Baseline balance — variance and mean gap
 
-| Parameter | Levene W | Levene p | Hedges' g |
-|---|--:|--:|--:|
-| DO morning | 0.153 | 0.697 | −0.005 |
-| DO evening | 3.030 | 0.088 | −0.171 |
-| pH | 0.191 | 0.664 | 0.022 |
-| Ammonia | 0.001 | 0.972 | 0.241 |
+| Parameter | Levene p | Hedges' g |
+|---|--:|--:|
+| DO morning | 0.697 | −0.005 |
+| DO evening | 0.088 | −0.171 |
+| pH | 0.664 | 0.022 |
+| Ammonia | 0.972 | 0.241 |
 
 **What the two columns mean.** Baseline balance asks two *separate* questions,
 because two groups can match on their average yet differ in how spread out they
 are (or vice versa):
 
-- **Levene's test (W, p)** — compares the groups' **variability (spread)**. *W*
-  is the test statistic (a form of F-statistic): the larger it is, the more the
-  two groups' spreads differ. On its own *W* isn't on a familiar scale, so you
-  judge it through its **p-value** — p > 0.05 means no evidence the spreads
-  differ. Here every p clears 0.05 (smallest 0.088, DO evening), so the spreads
-  match.
+- **Levene's test (p)** — compares the groups' **variability (spread)**. p > 0.05
+  means no evidence the spreads differ. Here every p clears 0.05 (smallest 0.088,
+  DO evening), so the spreads match.
 
 - **Hedges' g** — measures the **difference in means**, rescaled into pooled-SD
   units: `g = (mean_D − mean_E) / pooled SD`, with a small-sample correction (the
@@ -235,9 +232,8 @@ effect — which is exactly why the protocol makes Day 3 the primary measure.
   small-sample correction. An **effect size, not a test** (no p-value): it says
   how far apart the averages are. Rough scale: 0.2 small, 0.5 medium, 0.8 large.
   The location companion to Levene (which instead compares spread).
-- **Levene's test** — checks whether two groups have equal *variance* (spread).
-  The statistic **W** grows with the difference in spreads; read it via its
-  p-value (p > 0.05 = no evidence they differ).
+- **Levene's test** — checks whether two groups have equal *variance* (spread);
+  reported as a p-value (p > 0.05 = no evidence they differ).
 - **Studentized residual** — how many SDs a pond sits from its group mean; |value|
   > 2 flags an outlier.
 - **Fisher's exact test** — exact test for a 2×2 table of counts; right for binary
