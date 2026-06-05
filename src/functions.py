@@ -24,6 +24,7 @@ Rough reading order if you're going through this file:
   resolution_fisher   Fisher's exact on the binary Day-3 outcome, D vs E
   oor_event_improvements   distance-to-range closed per event, Day 0 -> Day 3
   improvement_tests   independent Welch t + Mann-Whitney U on that improvement, D vs E
+  resolution_day2_vs_day3   Day-2 vs Day-3 resolution within events (McNemar)
 
 Two things to keep straight: the group column is "Pond status" in the Data
 sheet but "Group" in the OOR Events sheet, and the resolution number always
@@ -31,7 +32,7 @@ means the Day-3 (primary) measure.
 """
 
 import pandas as pd
-from scipy.stats import levene, ttest_ind, fisher_exact, mannwhitneyu
+from scipy.stats import levene, ttest_ind, fisher_exact, mannwhitneyu, binomtest
 
 
 def _section(*lines: str) -> None:
@@ -569,4 +570,47 @@ def describe_resolution_fisher(events: pd.DataFrame, exclude: set | None = None)
     print()
     print(f"% resolved: {pct.to_dict()}")
     print(f"odds ratio = {odds:.3f}   p = {p:.3g}")
+    print()
+
+
+def resolution_day2_vs_day3(events: pd.DataFrame) -> pd.DataFrame:
+    """Secondary analysis: does resolution differ between Day 2 and Day 3?
+
+    Protocol §4.4 "Day 2 vs Day 3 Comparison". Day 2 (`1st FU WQ improvement`)
+    and Day 3 (`2nd FU WQ improvement`) are the SAME events measured twice, so
+    this is matched/paired binary data -> McNemar's test (the binary analog of
+    the paired/Wilcoxon test). Restricted to events with both follow-ups recorded.
+    Per group: resolved counts/% at each day, plus the discordant pairs
+    `gained` (No@Day2 -> Yes@Day3) and `lost` (Yes@Day2 -> No@Day3). `mcnemar_p`
+    is the exact two-sided binomial test on the discordant pairs. One row per group.
+    """
+    e = events.dropna(subset=["1st FU WQ improvement", "2nd FU WQ improvement"])
+    rows = []
+    for g, sub in e.groupby("Group"):
+        d2 = sub["1st FU WQ improvement"].eq("Yes")
+        d3 = sub["2nd FU WQ improvement"].eq("Yes")
+        gained = int((~d2 & d3).sum())  # unresolved at Day 2, resolved by Day 3
+        lost = int((d2 & ~d3).sum())    # resolved at Day 2, not at Day 3
+        disc = gained + lost
+        p = binomtest(lost, disc, 0.5).pvalue if disc else 1.0  # exact McNemar
+        rows.append({
+            "group": g, "n": len(sub),
+            "day2_res": int(d2.sum()), "day2_pct": round(d2.mean() * 100, 1),
+            "day3_res": int(d3.sum()), "day3_pct": round(d3.mean() * 100, 1),
+            "gained": gained, "lost": lost, "mcnemar_p": p,
+        })
+    return pd.DataFrame(rows).set_index("group")
+
+
+def describe_resolution_day2_vs_day3(events: pd.DataFrame) -> None:
+    """Print the Day-2 vs Day-3 resolution comparison (McNemar, per group)."""
+    res = resolution_day2_vs_day3(events)
+    disp = res.copy()
+    disp["mcnemar_p"] = disp["mcnemar_p"].map(lambda v: f"{v:.3g}")
+    _section(
+        "DAY 2 vs DAY 3 RESOLUTION — McNEMAR (within-event, secondary analysis)",
+        "(events with both follow-ups; gained = No@Day2->Yes@Day3, lost = reverse;",
+        " McNemar = exact binomial on the discordant pairs; tests if timing matters)",
+    )
+    print(disp.to_string())
     print()

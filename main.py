@@ -11,6 +11,7 @@ from src.functions import (
     describe_resolution_by_parameter,
     describe_resolution_fisher,
     describe_improvement_tests,
+    describe_resolution_day2_vs_day3,
     reorder_by_pond,
 )
 
@@ -58,6 +59,8 @@ def main():
     # Same two tests with the baseline-WQ outlier ponds removed (sensitivity).
     describe_resolution_fisher(events, exclude=flagged_ponds)
     describe_improvement_tests(data, exclude=flagged_ponds)
+    # Secondary: does resolution timing (Day 2 vs Day 3) matter? (McNemar)
+    describe_resolution_day2_vs_day3(events)
 
     # Make plots
     print(f"Saved plots:")
