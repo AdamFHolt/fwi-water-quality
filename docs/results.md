@@ -62,9 +62,29 @@ time of day because morning and evening differ by design.
 | pH | 0.191 | 0.664 | 0.022 |
 | Ammonia | 0.001 | 0.972 | 0.241 |
 
-**Reading it:** every Levene p > 0.05 → no evidence the groups' spreads differ;
-every |g| is small (< 0.25) → the mean gaps are negligible-to-small. The groups
-start out comparable, so later differences aren't a baseline artifact.
+**What the two columns mean.** Baseline balance asks two *separate* questions,
+because two groups can match on their average yet differ in how spread out they
+are (or vice versa):
+
+- **Levene's test (W, p)** — compares the groups' **variability (spread)**. *W*
+  is the test statistic (a form of F-statistic): the larger it is, the more the
+  two groups' spreads differ. On its own *W* isn't on a familiar scale, so you
+  judge it through its **p-value** — p > 0.05 means no evidence the spreads
+  differ. Here every p clears 0.05 (smallest 0.088, DO evening), so the spreads
+  match.
+
+- **Hedges' g** — measures the **difference in means**, rescaled into pooled-SD
+  units: `g = (mean_D − mean_E) / pooled SD`, with a small-sample correction (the
+  "Hedges" part). Unlike Levene it is an **effect size, not a test** — there is no
+  p-value, because testing baseline *differences* for significance mostly rewards
+  larger samples rather than telling you how big the gap is. Rough scale: |g| ≈
+  0.2 is small, 0.5 medium, 0.8 large. Here the largest is ammonia at 0.24 (small)
+  and the rest are near zero.
+
+**In short:** Levene asks *"same spread?"*, Hedges' g asks *"same average?"* —
+together they are the standard baseline-balance pair. Both say yes, so the groups
+start out comparable and the large differences seen later (Sections 3–5) are not a
+baseline artifact.
 
 ### 2.3 Baseline-WQ outlier ponds
 
@@ -211,10 +231,13 @@ effect — which is exactly why the protocol makes Day 3 the primary measure.
   band edge (no credit for overshooting into the range).
 - **Gap-closed fraction** — the above as a fraction of the original gap; 1.0 =
   fully back in range. Unit-free, so parameters can be pooled.
-- **Hedges' g** — standardized difference in means (in pooled-SD units), with a
-  small-sample correction. Rough scale: 0.2 small, 0.5 medium, 0.8 large.
-- **Levene's test** — checks whether two groups have equal variance (spread).
-  p > 0.05 = no evidence they differ.
+- **Hedges' g** — difference in *means* rescaled into pooled-SD units, with a
+  small-sample correction. An **effect size, not a test** (no p-value): it says
+  how far apart the averages are. Rough scale: 0.2 small, 0.5 medium, 0.8 large.
+  The location companion to Levene (which instead compares spread).
+- **Levene's test** — checks whether two groups have equal *variance* (spread).
+  The statistic **W** grows with the difference in spreads; read it via its
+  p-value (p > 0.05 = no evidence they differ).
 - **Studentized residual** — how many SDs a pond sits from its group mean; |value|
   > 2 flags an outlier.
 - **Fisher's exact test** — exact test for a 2×2 table of counts; right for binary
