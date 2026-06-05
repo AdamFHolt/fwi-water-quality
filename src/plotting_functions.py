@@ -359,8 +359,12 @@ def _fmt_p(v):
 def plot_oor_improvement(data, filename="oor_improvement.png"):
     """Per-pond OOR improvement by group (D vs E) — the data behind the t / U tests.
 
-    One panel per OOR parameter (DO, pH, Ammonia): per-pond mean improvement in
-    native units (distance-to-range closed, +ve = moved toward the in-range band).
+    One panel per OOR parameter (DO, pH, Ammonia): per-pond mean out-of-range gap
+    closed in that parameter's native units (mg/L for DO/ammonia, pH units for
+    pH), +ve = moved toward the in-range band. This is dist0 - dist3 (change in
+    how far outside the band the reading sits), not the raw Day-0->Day-3 change:
+    it clamps at the band edge (no credit for overshoot) and is direction-folded
+    so improvement is always positive whichever way the parameter was OOR.
     Each panel is a box + jittered strip per group, titled with the Welch-t and
     Mann-Whitney p-values both for all ponds and with the baseline-WQ outliers
     removed — so the figure shows the effect, why the two tests agree (rank
@@ -374,6 +378,7 @@ def plot_oor_improvement(data, filename="oor_improvement.png"):
     tests = improvement_tests(data).set_index("scope")
     tests_out = improvement_tests(data, exclude=flagged_ponds).set_index("scope")  # outliers removed
     groups = ["Group D", "Group E"]
+    units = {"DO": "mg/L", "pH": "pH units", "Ammonia": "mg/L"}
     rng = np.random.default_rng(0)
 
     fig, axes = plt.subplots(1, len(OOR_DRIVERS), figsize=(4.5 * len(OOR_DRIVERS), 5))
@@ -400,7 +405,7 @@ def plot_oor_improvement(data, filename="oor_improvement.png"):
         ax.axhline(0, color="#999999", lw=1, ls="--", zorder=1)  # no change
         ax.set_xticks([1, 2])
         ax.set_xticklabels([f"{g.split()[-1]}\n(n={len(d)})" for g, d in zip(groups, by_g)])
-        ax.set_ylabel("distance-to-range closed")
+        ax.set_ylabel(f"out-of-range gap closed ({units[scope]})")
         # Title carries both the all-ponds and outliers-removed test p-values.
         ax.set_title(
             f"{scope}\n"
