@@ -6,7 +6,8 @@ across them. All analysis is **blind**: cohorts are labelled **Group D** and
 **orange = Group E**, and **grey = "not resolved"**.
 
 Figures are produced by `main.py` (functions in `src/plotting_functions.py`,
-which call the analysis functions in `src/functions.py`).
+which call the analysis functions in `src/functions.py`). For the numeric
+results and statistical tests in table form, see [`results.md`](results.md).
 
 ---
 
