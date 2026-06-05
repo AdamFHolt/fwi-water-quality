@@ -154,9 +154,28 @@ Left: all ponds. Right: with the 5 baseline-WQ outlier ponds removed. Cells are
 </td></tr>
 </table>
 
-**All ponds:** odds ratio 0.043, **p = 9.4×10⁻⁷**.
-**Outliers removed:** odds ratio 0.046, **p = 4.8×10⁻⁵**.
-Either way, strong evidence the groups differ.
+| | All ponds | Outlier ponds removed |
+|---|--:|--:|
+| Odds ratio | 0.043 | 0.046 |
+| p-value | 9.4×10⁻⁷ | 4.8×10⁻⁵ |
+
+**What these mean.**
+
+- The **odds ratio** measures *how big* the gap is. It compares the odds of an
+  event resolving in one group with the other (odds of resolving = resolved ÷
+  not-resolved: 5/25 for D, 23/5 for E). An odds ratio of **1.0 means no
+  difference**; the further from 1, the bigger the gap. Here **0.043** means Group
+  D's odds of resolution are about 4% of Group E's — equivalently, **Group E's
+  odds of resolving are roughly 23× Group D's**.
+
+- The **p-value** measures *how likely chance alone* could produce a gap this
+  large if the two groups were really identical. **p = 9.4×10⁻⁷ is about 1 in a
+  million** — far below the 0.05 threshold — so the difference is very unlikely to
+  be a fluke. (In short: the p-value says the gap is *real*; the odds ratio says
+  how *large* it is.)
+
+Removing the outlier ponds barely moves either number (odds ratio 0.046, p =
+4.8×10⁻⁵), so the conclusion is robust.
 
 ### 3.3 Resolution by parameter (Day 3)
 
@@ -168,6 +187,8 @@ Events involving each parameter; multi-parameter events count toward each.
 | DO | 28 | 5 | 17.9 | 22 | 19 | 86.4 |
 | pH | 13 | 1 | 7.7 | 15 | 10 | 66.7 |
 | Ammonia | 8 | 0 | 0.0 | 4 | 2 | 50.0 |
+
+> ⏸️ **Adam — reviewed up to here.**
 
 ---
 
