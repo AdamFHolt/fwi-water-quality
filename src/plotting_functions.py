@@ -15,9 +15,17 @@ plt.rcParams.update({
     "figure.titlesize": 15,
     "axes.spines.top": False,
     "axes.spines.right": False,
+    "axes.edgecolor": "#888888",   # lighter spines
+    "axes.labelcolor": "#222222",
+    "xtick.color": "#555555",
+    "ytick.color": "#555555",
+    "axes.axisbelow": True,         # gridlines sit behind the data
+    "grid.color": "#e7e7e7",
+    "grid.linewidth": 0.8,
 })
 
 from matplotlib.lines import Line2D
+from matplotlib.patches import Patch
 
 from src.functions import (
     POND_PARAMS,
@@ -51,6 +59,12 @@ def _save(fig, filename):
     return path
 
 
+def _ygrid(ax):
+    """Faint horizontal gridlines for easier value reading, kept behind the data."""
+    ax.grid(axis="y", zorder=0)
+    ax.set_axisbelow(True)
+
+
 def _resolution_pie(ax, resolved, not_resolved, color, title):
     """Draw one resolved-vs-not pie; resolved slice = group colour, rest grey."""
     total = resolved + not_resolved
@@ -64,7 +78,6 @@ def _resolution_pie(ax, resolved, not_resolved, color, title):
     counts = iter([resolved, not_resolved])
     _, _, autotexts = ax.pie(
         [resolved, not_resolved],
-        labels=["Resolved", "Not resolved"],
         colors=[color, NOT_RESOLVED],
         autopct=lambda pct: f"{pct:.0f}%\n({next(counts)})",
         startangle=90,
@@ -115,7 +128,7 @@ def plot_oor_events(events, filename="oor_events.png"):
                 rv = int(res.loc[(level, g), "resolved"])
             else:
                 ev = rv = 0
-            _resolution_pie(ax, rv, ev - rv, GROUP_COLORS[g], f"{g} - {level} (n={ev})")
+            _resolution_pie(ax, rv, ev - rv, GROUP_COLORS[g], f"{g} – {level} (n={ev})")
 
     # --- Grouped bars: how many OOR events flagged each parameter, per group ---
     ax = axd["drv"]
@@ -127,9 +140,18 @@ def plot_oor_events(events, filename="oor_events.png"):
     ax.set_xticklabels(drivers.index)
     ax.set_ylabel("number of OOR events")
     ax.set_title("OOR event drivers (events flagging each parameter; an event may flag several)")
-    ax.legend()
+    _ygrid(ax)
 
     fig.tight_layout()
+    # One shared key for the whole figure: group colour = resolved slice / bar
+    # identity, grey = not resolved. Replaces the labels that used to crowd each pie.
+    fig.legend(
+        handles=[Patch(facecolor=GROUP_COLORS["Group D"], label="Group D"),
+                 Patch(facecolor=GROUP_COLORS["Group E"], label="Group E"),
+                 Patch(facecolor=NOT_RESOLVED, label="not resolved")],
+        loc="lower center", ncol=3, frameon=False, fontsize=10,
+        bbox_to_anchor=(0.5, -0.015),
+    )
     return _save(fig, filename)
 
 
@@ -169,6 +191,7 @@ def plot_oor_resolution_by_pond(data, filename="oor_resolution.by_pond.png"):
     ax.set_ylim(-8, 108)
     ax.set_ylabel("pond resolution rate\n(% of its OOR events resolved at Day 3)")
     ax.set_title("Pond-level OOR resolution")
+    _ygrid(ax)
 
     # Combined right-hand panel: the events-per-pond distribution (horizontal
     # bars, D vs E) that doubles as the point-size key - each row carries a dot
@@ -249,6 +272,7 @@ def plot_water_quality(data, filename="water_qualities.png", highlight_anoms=Fal
         ax.text(0.5, 1.0, f"Hedges' g = {bal.loc[param, 'g']}", transform=ax.transAxes,
                 ha="center", va="bottom", fontsize=10, fontweight="normal")  # standardized D-E mean gap
         ax.margins(y=0.15)
+        _ygrid(ax)
 
         # Bottom: per-pond distribution (box + strip) over the cleaned set; the
         # box, the strip, and the Levene p in the title all exclude the outliers.
@@ -281,9 +305,10 @@ def plot_water_quality(data, filename="water_qualities.png", highlight_anoms=Fal
                             fontsize=8, va="center", ha=ha, zorder=6)
         ax.set_xticks(range(1, len(groups) + 1))
         ax.set_xticklabels([g.split()[-1] for g in groups])
-        ax.set_title(param, pad=24)
+        ax.set_title("per-pond distribution", pad=24)
         ax.text(0.5, 1.0, f"Levene p = {bal.loc[param, 'p']}", transform=ax.transAxes,
                 ha="center", va="bottom", fontsize=10, fontweight="normal")
+        _ygrid(ax)
 
     if highlight_anoms:
         axes[1, -1].legend(
@@ -312,8 +337,8 @@ def plot_water_quality_visits(data, filename="water_qualities.visits.png"):
 
     # Each column is (param, time_filter, title).
     cols = [
-        ("DO (mg/L)", "Morning", "DO - Morning (mg/L)"),
-        ("DO (mg/L)", "Evening", "DO - Evening (mg/L)"),
+        ("DO (mg/L)", "Morning", "DO – Morning (mg/L)"),
+        ("DO (mg/L)", "Evening", "DO – Evening (mg/L)"),
         ("pH",        None,      "pH"),
         ("Ammonia—NH3 (mg/L)", None, "Ammonia—NH3 (mg/L)"),
     ]
@@ -338,6 +363,7 @@ def plot_water_quality_visits(data, filename="water_qualities.visits.png"):
         ax.set_xticklabels([f"{g.split()[-1]}\n(n={n_visits[g]})" for g in groups])
         ax.set_title(title)
         ax.margins(y=0.15)
+        _ygrid(ax)
 
         # Bottom: box + dense strip.
         ax = axes[1, col]
@@ -352,7 +378,8 @@ def plot_water_quality_visits(data, filename="water_qualities.visits.png"):
                        edgecolor="none", zorder=3)
         ax.set_xticks(range(1, len(groups) + 1))
         ax.set_xticklabels([g.split()[-1] for g in groups])
-        ax.set_title(title)
+        ax.set_title("per-visit distribution")
+        _ygrid(ax)
 
     fig.tight_layout()
     return _save(fig, filename)
@@ -433,21 +460,22 @@ def plot_oor_improvement(data, filename="oor_improvement.png"):
                        edgecolor="black", linewidths=0.8, zorder=4)
 
         ax.axhline(0, color="#999999", lw=1, ls="--", zorder=1)  # no change
+        _ygrid(ax)
         ax.set_xticks([1, 2])
         ax.set_xticklabels([f"{g.split()[-1]}\n(n={len(d)})" for g, d in zip(groups, by_g)])
         ax.set_ylabel(f"out-of-range gap closed ({units[scope]})")
-        # Parameter name bold (title); the test p-values sit below it in normal
-        # weight, three rows colon-aligned (labels right of, values left of centre):
-        # all events, then outliers removed whole-pond, then per-parameter.
-        ax.set_title(scope, fontsize=13, fontweight="bold", pad=44)
-        labels = "all ponds:\nw/o outliers (any param):\nw/o outliers (this param):"
-        line = lambda r: f"Welch {_fmt_p(r['t_p'])} · MWU {_fmt_p(r['u_p'])}"
-        vals = "\n".join([line(tests.loc[scope]), line(tests_pond.loc[scope]),
-                          line(tests_param[scope])])
-        ax.text(0.49, 1.0, labels, transform=ax.transAxes, ha="right", va="bottom",
-                fontsize=8.5, fontweight="normal", linespacing=1.4)
-        ax.text(0.51, 1.0, vals, transform=ax.transAxes, ha="left", va="bottom",
-                fontsize=8.5, fontweight="normal", linespacing=1.4)
+        # Parameter name bold (title); below it, a compact monospace table of the
+        # Welch-t and Mann-Whitney p-values under each outlier rule (aligned cols).
+        ax.set_title(scope, fontsize=13, fontweight="bold", pad=52)
+        rows = [
+            ("",               "Welch", "MWU"),
+            ("all ponds",      _fmt_p(tests.loc[scope, "t_p"]),      _fmt_p(tests.loc[scope, "u_p"])),
+            ("w/o out (any)",  _fmt_p(tests_pond.loc[scope, "t_p"]), _fmt_p(tests_pond.loc[scope, "u_p"])),
+            ("w/o out (this)", _fmt_p(tests_param[scope]["t_p"]),    _fmt_p(tests_param[scope]["u_p"])),
+        ]
+        block = "\n".join(f"{lab:<15}{w:>6}{u:>6}" for lab, w, u in rows)
+        ax.text(0.5, 1.0, block, transform=ax.transAxes, ha="center", va="bottom",
+                family="monospace", fontsize=8, color="#333333", linespacing=1.35)
 
     fig.tight_layout()
     legend_dot = lambda fc, ec, a, ms, lab: Line2D(
