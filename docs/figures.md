@@ -74,11 +74,11 @@ the figure to read for whether the two groups start out comparable.
 
 - **Top row — mean ± SD bars.** Bar height = group mean across ponds; error bar =
   ± 1 standard deviation across ponds. `n` in the x-label is the number of ponds.
-  The subplot title shows **Hedges' g**, the standardized D-vs-E mean gap (see
-  glossary).
+  The subplot title shows **Hedges' g**, the standardized D-vs-E mean gap (defined
+  in [`results.md`](results.md)).
 - **Bottom row — box + strip.** A box plot of the per-pond values with every pond
   drawn as a jittered point on top. The subplot title shows **Levene p** for that
-  parameter (see glossary).
+  parameter (defined in [`results.md`](results.md)).
 
 Together the two titles give the standard baseline-balance pair: **Hedges' g**
 (difference in *means*) and **Levene p** (difference in *spread*).
@@ -199,23 +199,6 @@ Mann-Whitney tests in [`results.md`](results.md) §4.
   random amount so overlapping values are visible. Jitter is reproducible (fixed
   random seed).
 
-- **Levene's test (p).** Tests whether two groups have **equal variance**
-  (equal spread), as opposed to equal means. We use the median-centred variant
-  (**Brown–Forsythe**), which is robust to non-normal data, on the per-pond
-  baseline values. Interpretation: **p > 0.05 ⇒ no evidence the variances
-  differ** (spreads look similar between D and E); a small p (≤ 0.05) would
-  suggest the groups differ in variability. It says nothing about the means.
-
-- **Hedges' g (standardized mean difference).** The gap between the two groups'
-  means expressed in pooled-SD units: `(mean_D - mean_E) / pooled_SD`, with a
-  small-sample correction (the "Hedges" part, which matters at this n ~ 25). It
-  is the *location* companion to Levene's *spread*: g measures how far apart the
-  means are, scaled so it's comparable across parameters and independent of
-  sample size. Convention: **|g| < 0.1 negligible**, 0.2 small, 0.5 medium, 0.8
-  large. Reported descriptively, with **no significance test** — testing baseline
-  differences for significance confounds effect size with sample size, so a bare
-  effect size is the honest summary.
-
 - **Baseline-WQ outliers (studentized residual).** For each parameter we fit a
   simple `value ~ group` model on the per-pond values and flag unusual ponds by
   their **internally studentized residual** — how many standard deviations a pond
@@ -228,7 +211,5 @@ Mann-Whitney tests in [`results.md`](results.md) §4.
     Cook's distance is just a monotone function of the residual (rank correlation
     0.999 on this data) — it flags nothing the residual doesn't, so it's omitted.
 
-- **Pseudoreplication.** Treating non-independent measurements as if they were
-  independent — e.g. counting many visits (or events) from one pond as separate
-  observations. Addressed by collapsing to one value per pond before computing
-  group statistics.
+(Levene's test, Hedges' g, and pseudoreplication are defined in the
+[`results.md`](results.md) glossary.)

@@ -1,8 +1,9 @@
 # Analysis Results 
 
 Headline numbers are produced by `python main.py`. This file is the
-human-readable summary; see [`figures.md`](figures.md) for the plots and a more detailed methods
-walkthrough.
+human-readable summary, with the key figures embedded inline; see
+[`figures.md`](figures.md) for a panel-by-panel walkthrough of every figure and
+the figure-methods detail.
 
 Cohorts are blind, labelled Group D and Group E (not
 Control/Treatment) to reduce analyst bias. All tests are run two-sided as D vs E.
@@ -51,6 +52,12 @@ time of day because morning and evening differ by design.
 | DO evening (mg/L) | 8–12 | 11.26 (1.01) | 11.40 (0.52) |
 | pH | 6.5–8.5 | 8.30 (0.10) | 8.29 (0.08) |
 | Ammonia, NH₃ (mg/L) | < 0.05 | 0.018 (0.013) | 0.016 (0.010) |
+
+![Fig2 — per-pond baseline water quality](../plots/Fig2.water_quality_per_pond.png)
+
+*Fig2 — per-pond baseline water quality: mean ± SD bars (top) and box + strip
+(bottom) for each parameter, with Hedges' g and Levene p in the panel titles
+(§2.2). The visit-level companion — one point per routine visit — is Fig1.*
 
 ### 2.2 Baseline balance — variance and mean gap
 
@@ -103,11 +110,23 @@ distinct ponds easy to count:
 | Ammonia | D | 6772b310 | 0.049 | 2.71 |
 | Ammonia | D | 9252e874 | 0.064 | 4.07 |
 
+![Fig3 — baseline water quality with outlier ponds highlighted](../plots/Fig3.water_quality_outliers.png)
+
+*Fig3 — the §2.1 per-pond baseline with these 5 outlier ponds excluded from every
+statistic and drawn back as red-ringed points (labelled with their OOR-event
+count), so you can see how far outside the cleaned spread they sat.*
+
 ---
 
 ## 3. Primary outcome — resolution at Day 3
 
 "Resolved" = the pond was back in range at the Day-3 (primary) follow-up.
+
+![Fig4 — Day-3 resolution by group](../plots/Fig4.oor_resolution.png)
+
+*Fig4 — Day-3 resolution: overall pies per group (top), how many events flagged
+each parameter (middle bars), and per-parameter pies (bottom). Group colour =
+resolved, grey = not resolved.*
 
 ### 3.1 Resolution rate
 
@@ -125,12 +144,19 @@ per-pond rates), which rules out a few repeat-event ponds driving the gap.
 Removing the 5 outlier ponds leaves the gap intact — it widens slightly, if
 anything — so the result isn't an artifact of a few unusual ponds.
 
+![Fig6 — pond-level resolution](../plots/Fig6.oor_resolution_by_pond.png)
+
+*Fig6 — the pond-level view: one point per pond (area ∝ its OOR-event count); the
+bar marks each group's mean per-pond rate. Shows the D-vs-E gap holds when every
+pond counts once.*
+
 ### 3.2 Fisher's exact test (the formal primary test)
 
 The binary outcome (resolved vs not) by group is a 2×2 table → Fisher's exact.
-Left: all ponds. Right: with the 5 baseline-WQ outlier ponds removed. Cells are
-event counts, so the rates here match the event-level rows in §3.1 (22.7% /
-86.4% on the right), not the pond-level rows.
+Left: all ponds. Right: with the 5 baseline-WQ outlier ponds removed (Fig5 is the
+Fig4 resolution figure recomputed on this cleaned set). Cells are event counts, so
+the rates here match the event-level rows in §3.1 (22.7% / 86.4% on the right),
+not the pond-level rows.
 
 <table>
 <tr><td>
@@ -221,6 +247,12 @@ The effect survives outlier removal on all three parameters. (The lone p >
 rule also strips a DO/pH outlier's ammonia events, dropping ammonia to n = 3 vs 3.
 Under the targeted this-param rule it's 0.030.)
 
+![Fig7 — out-of-range gap closed per pond](../plots/Fig7.oor_improvement.png)
+
+*Fig7 — the data behind these tests: out-of-range gap closed per pond, one panel
+per parameter. The box summarises the pond means (solid dots); faint dots are the
+individual events; red dots are the baseline-WQ outlier ponds.*
+
 **Why two tests.**
 
 - **Welch's t** compares the means and allows the two groups to have unequal
@@ -307,11 +339,12 @@ the primary measure.
 - **Hedges' g** — the difference between the two group means, rescaled into
   pooled-standard-deviation units, with a correction for small samples. It is an
   effect size rather than a test: it reports how far apart the averages are and
-  carries no p-value. Rough scale: 0.2 small, 0.5 medium, 0.8 large. It is the
-  mean-gap companion to Levene, which instead compares spread.
+  carries no p-value. Rough scale: |g| < 0.1 negligible, 0.2 small, 0.5 medium,
+  0.8 large. It is the mean-gap companion to Levene, which instead compares spread.
 - **Levene's test** — tests whether two groups have equal variance (spread),
-  reported as a p-value (p > 0.05 = no evidence the spreads differ). Used here to
-  check baseline balance.
+  reported as a p-value (p > 0.05 = no evidence the spreads differ). We use the
+  median-centred Brown–Forsythe variant (robust to non-normal data) on the
+  per-pond baseline values.
 - **Studentized residual** — how many standard deviations a pond's value sits from
   its group mean; an absolute value above 2 flags it as an outlier.
 - **Fisher's exact test** — computes the exact probability of a 2×2 count table
