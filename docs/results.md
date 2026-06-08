@@ -30,12 +30,21 @@ Significance threshold throughout is p < 0.05.
 | | Group D | Group E | Total |
 |---|--:|--:|--:|
 | Monitoring visits | 532 | 466 | 998 |
+| &nbsp;&nbsp;routine (non-follow-up) | 414 | 354 | 768 |
+| &nbsp;&nbsp;follow-up (Day 2 / Day 3) | 118 | 112 | 230 |
 | Ponds (baseline) | 28 | 25 | 53 |
 | OOR events | 30 | 28 | 58 |
 | Ponds with OOR events | 15 | 17 | 32 |
 
 An OOR event is one pond-day on which a water-quality parameter was out of
-range. Several events can come from the same pond.
+range; several events can come from the same pond. The **routine** (non-follow-up)
+visits are the baseline-WQ sample — follow-ups are conditional on an OOR event, so
+only routine visits give an unbiased baseline (collapsed to per-pond means in §2):
+
+<a href="../plots/Fig1.water_quality_all_visits.png"><img src="../plots/Fig1.water_quality_all_visits.png" width="860" alt="Fig1 — visit-level baseline water quality"></a>
+
+*Fig1 — visit-level baseline water quality: one point per routine visit (DO split
+by time of day), before collapsing to one mean per pond for the §2 balance tests.*
 
 ---
 
