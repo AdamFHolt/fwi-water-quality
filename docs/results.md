@@ -138,11 +138,17 @@ count), so you can see how far outside the cleaned spread they sat.*
 drives most OOR events, then pH, then ammonia — and a single event can flag
 several parameters (the middle "event drivers" bars below).
 
-<a href="../plots/Fig4.oor_resolution.png"><img src="../plots/Fig4.oor_resolution.png" width="440" alt="Fig4 — Day-3 resolution by group"></a>
+<table>
+<tr>
+<td width="50%" valign="top"><a href="../plots/Fig4.oor_resolution.png"><img src="../plots/Fig4.oor_resolution.png" width="100%" alt="Fig4 — Day-3 resolution, all ponds"></a></td>
+<td width="50%" valign="top"><a href="../plots/Fig5.oor_resolution_outliers_removed.png"><img src="../plots/Fig5.oor_resolution_outliers_removed.png" width="100%" alt="Fig5 — Day-3 resolution, outlier ponds removed"></a></td>
+</tr>
+</table>
 
-*Fig4 — Day-3 resolution: overall pies per group (top), how many events flagged
-each parameter (middle bars), and per-parameter pies (bottom). Group colour =
-resolved, grey = not resolved.*
+*Fig4 (left, all ponds) and Fig5 (right, the 5 baseline-WQ outlier ponds removed)
+— Day-3 resolution: overall pies per group (top), how many events flagged each
+parameter (middle bars), and per-parameter pies (bottom). Group colour = resolved,
+grey = not resolved. Fig5 is the sensitivity check — the picture barely changes.*
 
 ---
 
@@ -162,18 +168,11 @@ per-pond rates), which rules out a few repeat-event ponds driving the gap.
 Removing the 5 outlier ponds leaves the gap intact — it widens slightly, if
 anything — so the result isn't an artifact of a few unusual ponds.
 
-<table>
-<tr>
-<td width="42%" valign="top"><a href="../plots/Fig5.oor_resolution_outliers_removed.png"><img src="../plots/Fig5.oor_resolution_outliers_removed.png" width="100%" alt="Fig5 — resolution with outlier ponds removed"></a></td>
-<td width="58%" valign="top"><a href="../plots/Fig6.oor_resolution_by_pond.png"><img src="../plots/Fig6.oor_resolution_by_pond.png" width="100%" alt="Fig6 — pond-level resolution"></a></td>
-</tr>
-</table>
+<a href="../plots/Fig6.oor_resolution_by_pond.png"><img src="../plots/Fig6.oor_resolution_by_pond.png" width="560" alt="Fig6 — pond-level resolution"></a>
 
-*Fig5 (left) — Day-3 resolution recomputed with the 5 baseline-WQ outlier ponds
-removed (the sensitivity check for §3.1/§3.2). Fig6 (right) — the pond-level view:
-one point per pond (area ∝ its OOR-event count), the bar marks each group's mean
-per-pond rate. Together: the gap holds both with outliers dropped and with every
-pond counting once.*
+*Fig6 — the pond-level view: one point per pond (area ∝ its OOR-event count); the
+bar marks each group's mean per-pond rate. Shows the D-vs-E gap holds when every
+pond counts once.*
 
 ---
 
