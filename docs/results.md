@@ -20,8 +20,9 @@ Significance threshold throughout is p < 0.05.
 - On the continuous measure (how much of the out-of-range gap each pond closed),
   Group E improves significantly more on every parameter — DO, pH, and ammonia —
   and the result survives both a rank-based test and outlier removal.
-- The effect emerges only by Day 3: at Day 2 the groups look identical (~20–25% OOR events resolved);
-  Group E jumps to 82% by Day 3. Day 2 alone would have missed it, confirming Day 3 as the right measure.
+- The effect emerges only by Day 3: at Day 2 the groups look identical (~20–25%
+  OOR events resolved); Group E jumps to 82% by Day 3. Day 2 alone would have
+  missed it, confirming Day 3 as the right measure.
 
 ---
 
@@ -133,7 +134,9 @@ count), so you can see how far outside the cleaned spread they sat.*
 
 ## 3. Primary outcome — resolution at Day 3
 
-"Resolved" = the pond was back in range at the Day-3 (primary) follow-up.
+"Resolved" = the pond was back in range at the Day-3 (primary) follow-up. DO
+drives most OOR events, then pH, then ammonia — and a single event can flag
+several parameters (the middle "event drivers" bars below).
 
 <a href="../plots/Fig4.oor_resolution.png"><img src="../plots/Fig4.oor_resolution.png" width="440" alt="Fig4 — Day-3 resolution by group"></a>
 
@@ -266,12 +269,6 @@ The effect survives outlier removal on all three parameters. (The lone p >
 rule also strips a DO/pH outlier's ammonia events, dropping ammonia to n = 3 vs 3.
 Under the targeted this-param rule it's 0.030.)
 
-<a href="../plots/Fig7.oor_improvement.png"><img src="../plots/Fig7.oor_improvement.png" width="860" alt="Fig7 — out-of-range gap closed per pond"></a>
-
-*Fig7 — the data behind these tests: out-of-range gap closed per pond, one panel
-per parameter. The box summarises the pond means (solid dots); faint dots are the
-individual events; red dots are the baseline-WQ outlier ponds.*
-
 **Why two tests.**
 
 - **Welch's t** compares the means and allows the two groups to have unequal
@@ -282,6 +279,12 @@ individual events; red dots are the baseline-WQ outlier ponds.*
 
 - With small n and the baseline outliers, having a mean-based and a rank-based
   test agree is the reassurance that the result isn't riding on one odd pond.
+
+<a href="../plots/Fig7.oor_improvement.png"><img src="../plots/Fig7.oor_improvement.png" width="860" alt="Fig7 — out-of-range gap closed per pond"></a>
+
+*Fig7 — the data behind these tests: out-of-range gap closed per pond, one panel
+per parameter. The box summarises the pond means (solid dots); faint dots are the
+individual events; red dots are the baseline-WQ outlier ponds.*
 
 ---
 
@@ -369,6 +372,10 @@ the primary measure.
 - **Fisher's exact test** — computes the exact probability of a 2×2 count table
   (here resolved/not by group) instead of relying on a large-sample approximation,
   so it stays valid when the cell counts are small.
+- **Odds ratio** — for a 2×2 table, the ratio of one group's odds of resolving to
+  the other's (odds = resolved ÷ not-resolved). 1.0 = no difference; the further
+  from 1, the larger the gap. It is the effect-size companion to Fisher's p: the p
+  says whether the gap is real, the odds ratio says how big.
 - **Welch's t-test** — compares two group means without assuming the groups have
   equal variance or equal sample size.
 - **Mann-Whitney U** — ranks all the values from both groups together and tests
