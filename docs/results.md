@@ -53,7 +53,7 @@ time of day because morning and evening differ by design.
 | pH | 6.5–8.5 | 8.30 (0.10) | 8.29 (0.08) |
 | Ammonia, NH₃ (mg/L) | < 0.05 | 0.018 (0.013) | 0.016 (0.010) |
 
-![Fig2 — per-pond baseline water quality](../plots/Fig2.water_quality_per_pond.png)
+<p align="center"><a href="../plots/Fig2.water_quality_per_pond.png"><img src="../plots/Fig2.water_quality_per_pond.png" width="760" alt="Fig2 — per-pond baseline water quality"></a></p>
 
 *Fig2 — per-pond baseline water quality: mean ± SD bars (top) and box + strip
 (bottom) for each parameter, with Hedges' g and Levene p in the panel titles
@@ -110,7 +110,7 @@ distinct ponds easy to count:
 | Ammonia | D | 6772b310 | 0.049 | 2.71 |
 | Ammonia | D | 9252e874 | 0.064 | 4.07 |
 
-![Fig3 — baseline water quality with outlier ponds highlighted](../plots/Fig3.water_quality_outliers.png)
+<p align="center"><a href="../plots/Fig3.water_quality_outliers.png"><img src="../plots/Fig3.water_quality_outliers.png" width="760" alt="Fig3 — baseline water quality with outlier ponds highlighted"></a></p>
 
 *Fig3 — the §2.1 per-pond baseline with these 5 outlier ponds excluded from every
 statistic and drawn back as red-ringed points (labelled with their OOR-event
@@ -122,7 +122,7 @@ count), so you can see how far outside the cleaned spread they sat.*
 
 "Resolved" = the pond was back in range at the Day-3 (primary) follow-up.
 
-![Fig4 — Day-3 resolution by group](../plots/Fig4.oor_resolution.png)
+<p align="center"><a href="../plots/Fig4.oor_resolution.png"><img src="../plots/Fig4.oor_resolution.png" width="440" alt="Fig4 — Day-3 resolution by group"></a></p>
 
 *Fig4 — Day-3 resolution: overall pies per group (top), how many events flagged
 each parameter (middle bars), and per-parameter pies (bottom). Group colour =
@@ -144,7 +144,7 @@ per-pond rates), which rules out a few repeat-event ponds driving the gap.
 Removing the 5 outlier ponds leaves the gap intact — it widens slightly, if
 anything — so the result isn't an artifact of a few unusual ponds.
 
-![Fig6 — pond-level resolution](../plots/Fig6.oor_resolution_by_pond.png)
+<p align="center"><a href="../plots/Fig6.oor_resolution_by_pond.png"><img src="../plots/Fig6.oor_resolution_by_pond.png" width="560" alt="Fig6 — pond-level resolution"></a></p>
 
 *Fig6 — the pond-level view: one point per pond (area ∝ its OOR-event count); the
 bar marks each group's mean per-pond rate. Shows the D-vs-E gap holds when every
@@ -247,7 +247,7 @@ The effect survives outlier removal on all three parameters. (The lone p >
 rule also strips a DO/pH outlier's ammonia events, dropping ammonia to n = 3 vs 3.
 Under the targeted this-param rule it's 0.030.)
 
-![Fig7 — out-of-range gap closed per pond](../plots/Fig7.oor_improvement.png)
+<p align="center"><a href="../plots/Fig7.oor_improvement.png"><img src="../plots/Fig7.oor_improvement.png" width="760" alt="Fig7 — out-of-range gap closed per pond"></a></p>
 
 *Fig7 — the data behind these tests: out-of-range gap closed per pond, one panel
 per parameter. The box summarises the pond means (solid dots); faint dots are the
