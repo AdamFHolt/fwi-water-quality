@@ -140,8 +140,8 @@ several parameters (the middle "event drivers" bars below).
 
 <table>
 <tr>
-<td width="50%" valign="top"><a href="../plots/Fig4.oor_resolution.png"><img src="../plots/Fig4.oor_resolution.png" width="100%" alt="Fig4 — Day-3 resolution, all ponds"></a></td>
-<td width="50%" valign="top"><a href="../plots/Fig5.oor_resolution_outliers_removed.png"><img src="../plots/Fig5.oor_resolution_outliers_removed.png" width="100%" alt="Fig5 — Day-3 resolution, outlier ponds removed"></a></td>
+<td valign="top"><a href="../plots/Fig4.oor_resolution.png"><img src="../plots/Fig4.oor_resolution.png" width="340" alt="Fig4 — Day-3 resolution, all ponds"></a></td>
+<td valign="top"><a href="../plots/Fig5.oor_resolution_outliers_removed.png"><img src="../plots/Fig5.oor_resolution_outliers_removed.png" width="340" alt="Fig5 — Day-3 resolution, outlier ponds removed"></a></td>
 </tr>
 </table>
 
