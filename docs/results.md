@@ -162,21 +162,27 @@ per-pond rates), which rules out a few repeat-event ponds driving the gap.
 Removing the 5 outlier ponds leaves the gap intact — it widens slightly, if
 anything — so the result isn't an artifact of a few unusual ponds.
 
-<a href="../plots/Fig6.oor_resolution_by_pond.png"><img src="../plots/Fig6.oor_resolution_by_pond.png" width="560" alt="Fig6 — pond-level resolution"></a>
+<table>
+<tr>
+<td width="42%" valign="top"><a href="../plots/Fig5.oor_resolution_outliers_removed.png"><img src="../plots/Fig5.oor_resolution_outliers_removed.png" width="100%" alt="Fig5 — resolution with outlier ponds removed"></a></td>
+<td width="58%" valign="top"><a href="../plots/Fig6.oor_resolution_by_pond.png"><img src="../plots/Fig6.oor_resolution_by_pond.png" width="100%" alt="Fig6 — pond-level resolution"></a></td>
+</tr>
+</table>
 
-*Fig6 — the pond-level view: one point per pond (area ∝ its OOR-event count); the
-bar marks each group's mean per-pond rate. Shows the D-vs-E gap holds when every
-pond counts once.*
+*Fig5 (left) — Day-3 resolution recomputed with the 5 baseline-WQ outlier ponds
+removed (the sensitivity check for §3.1/§3.2). Fig6 (right) — the pond-level view:
+one point per pond (area ∝ its OOR-event count), the bar marks each group's mean
+per-pond rate. Together: the gap holds both with outliers dropped and with every
+pond counting once.*
 
 ---
 
 ### 3.2 Fisher's exact test (the formal primary test)
 
 The binary outcome (resolved vs not) by group is a 2×2 table → Fisher's exact.
-Left: all ponds. Right: with the 5 baseline-WQ outlier ponds removed (Fig5 is the
-Fig4 resolution figure recomputed on this cleaned set). Cells are event counts, so
-the rates here match the event-level rows in §3.1 (22.7% / 86.4% on the right),
-not the pond-level rows.
+Left: all ponds. Right: with the 5 baseline-WQ outlier ponds removed (shown as
+Fig5 above). Cells are event counts, so the rates here match the event-level rows
+in §3.1 (22.7% / 86.4% on the right), not the pond-level rows.
 
 <table>
 <tr><td>
