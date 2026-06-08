@@ -296,7 +296,7 @@ than 30 — which is why its Day-3 rate reads 17.2% (5/29) instead of the 16.7%
 | D | 29 | 20.7% | 17.2% | 1 | 2 | 1.0 |
 | E | 28 | 25.0% | 82.1% | 16 | 0 | 3.05×10⁻⁵ |
 
-<a href="../plots/Fig8.day2_vs_day3.png"><img src="../plots/Fig8.day2_vs_day3.png" width="500" alt="Fig8 — Day-2 vs Day-3 resolution pies"></a>
+<a href="../plots/Fig8.day2_vs_day3.png"><img src="../plots/Fig8.day2_vs_day3.png" width="480" alt="Fig8 — Day-2 vs Day-3 resolution pies"></a>
 
 *Fig8 — the same events scored at Day 2 (top) and Day 3 (bottom). At Day 2 both
 groups sit near 20–25% resolved; only by Day 3 does Group E fill in (82%) while
