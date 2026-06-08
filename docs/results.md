@@ -1,11 +1,11 @@
-# Analysis Results 
+# Analysis Results
 
 Headline numbers are produced by `python main.py`. This file is the
 summary, with the key figures embedded inline; see
 [`figures.md`](figures.md) for a panel-by-panel walkthrough of every figure and
-more methodological detail. 
+more methodological detail.
 
-Cohorts are blind, labelled Group D and Group E (not Control/Treatment) 
+Cohorts are blind, labelled Group D and Group E (not Control/Treatment)
 to reduce analyst bias. All tests are run two-sided as D vs E.
 Significance threshold throughout is p < 0.05.
 
