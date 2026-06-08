@@ -1,10 +1,10 @@
 # Analysis Results 
 
 Headline numbers are produced by `python main.py`. This file is the
-human-readable summary; see [`figures.md`](figures.md) for the plots and a methods
+human-readable summary; see [`figures.md`](figures.md) for the plots and a more detailed methods
 walkthrough.
 
-**Blind analysis.** Cohorts are labelled Group D and Group E (not
+Cohorts are blind, labelled Group D and Group E (not
 Control/Treatment) to reduce analyst bias. All tests are run two-sided as D vs E.
 Significance threshold throughout is p < 0.05.
 
@@ -15,13 +15,12 @@ Significance threshold throughout is p < 0.05.
 - The two groups are well matched at baseline (no meaningful differences in
   water-quality means or spreads).
 - Group E resolves far more out-of-range (OOR) events than Group D: 82.1% vs
-  16.7% at the Day-3 follow-up (Fisher's exact p = 9.4×10⁻⁷).
+  16.7% at the Day-3 follow-up (Fisher's p = 9.4×10⁻⁷).
 - On the continuous measure (how much of the out-of-range gap each pond closed),
   Group E improves significantly more on every parameter — DO, pH, and ammonia —
   and the result survives both a rank-based test and outlier removal.
-- The effect emerges only by Day 3: at Day 2 the groups look identical (~20–25%);
-  Group E jumps to 82% by Day 3 (McNemar p = 3×10⁻⁵). Day 2 alone would have
-  missed it — confirming Day 3 as the right primary measure.
+- The effect emerges only by Day 3: at Day 2 the groups look identical (~20–25% OOR events resolved);
+  Group E jumps to 82% by Day 3. Day 2 alone would have missed it, confirming Day 3 as the right measure.
 
 ---
 
