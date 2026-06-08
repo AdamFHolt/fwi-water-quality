@@ -64,13 +64,13 @@ def main():
 
     # Make plots
     print(f"Saved plots:")
-    print(f"  {plot_oor_events(events)}")                                        # resolution pies + drivers
-    print(f"  {plot_oor_events(events_clean, 'oor_events.anoms_removed.png')}")  # same, anomalous ponds removed
-    print(f"  {plot_oor_resolution_by_pond(data)}")                              # pond-level resolution (one point per pond)
-    print(f"  {plot_oor_improvement(data)}")                                     # per-pond improvement (the t / U test inputs)
-    print(f"  {plot_water_quality(data)}")                                       # WQ bars + distributions
-    print(f"  {plot_water_quality(data, 'water_qualities.anoms_highlighted.png', highlight_anoms=True)}")  # WQ with outliers ringed
-    print(f"  {plot_water_quality_visits(data)}")                                # WQ visit-level distributions
+    print(f"  {plot_water_quality_visits(data)}")                                # Fig1: WQ, all visits
+    print(f"  {plot_water_quality(data)}")                                       # Fig2: WQ per-pond bars + distributions
+    print(f"  {plot_water_quality(data, 'Fig3.water_quality_outliers.png', highlight_anoms=True)}")  # Fig3: WQ with outliers ringed
+    print(f"  {plot_oor_events(events)}")                                        # Fig4: resolution pies + drivers
+    print(f"  {plot_oor_events(events_clean, 'Fig5.oor_resolution_outliers_removed.png')}")  # Fig5: same, outlier ponds removed
+    print(f"  {plot_oor_resolution_by_pond(data)}")                              # Fig6: pond-level resolution (one point per pond)
+    print(f"  {plot_oor_improvement(data)}")                                     # Fig7: per-pond improvement (the t / U test inputs)
 
 
 if __name__ == "__main__":

@@ -91,7 +91,7 @@ def _resolution_pie(ax, resolved, not_resolved, color, title):
     ax.set_title(title, pad=10)
 
 
-def plot_oor_events(events, filename="oor_events.png"):
+def plot_oor_events(events, filename="Fig4.oor_resolution.png"):
     """OOR-events figure: overall resolution pies, event-driver bars, and a
     per-parameter resolution pie for each group (Day-3 primary measure).
 
@@ -155,14 +155,14 @@ def plot_oor_events(events, filename="oor_events.png"):
     return _save(fig, filename)
 
 
-def plot_oor_resolution_by_pond(data, filename="oor_resolution.by_pond.png"):
+def plot_oor_resolution_by_pond(data, filename="Fig6.oor_resolution_by_pond.png"):
     """Pond-level OOR resolution: one point per pond, sized by its event count.
 
     Each pond's Day-3 resolution rate (resolved events / its events) is a
     jittered point, one column per group; point area is proportional to how many
     OOR events the pond had. A horizontal bar marks each group's mean per-pond
     rate (the `mean_pct` from oor_resolution_by_pond). Companion to the
-    event-level pies in oor_events.png: it shows the D-vs-E gap survives when
+    event-level pies in Fig4.oor_resolution.png: it shows the D-vs-E gap survives when
     every pond counts once (repeat-event ponds aren't driving it) and exposes the
     per-pond spread the pies hide.
     """
@@ -227,7 +227,7 @@ def plot_oor_resolution_by_pond(data, filename="oor_resolution.by_pond.png"):
     return _save(fig, filename)
 
 
-def plot_water_quality(data, filename="water_qualities.png", highlight_anoms=False):
+def plot_water_quality(data, filename="Fig2.water_quality_per_pond.png", highlight_anoms=False):
     """Pond-properties figure: per group, baseline WQ as mean +/- SD bars (top
     row) and per-pond distributions as box + jittered-strip plots (bottom row),
     one column per parameter (routine visits, averaged per pond).
@@ -235,14 +235,14 @@ def plot_water_quality(data, filename="water_qualities.png", highlight_anoms=Fal
     With highlight_anoms=True the baseline-WQ outlier ponds (|studentized resid| > 2)
     are dropped from every panel's statistics - bars, box/IQR, n, and Levene p all
     describe the cleaned distribution, matching the pond set removed in the
-    oor_events.anoms_removed figure. Each outlier is still drawn (red ring, short
+    Fig5.oor_resolution_outliers_removed figure. Each outlier is still drawn (red ring, short
     Pond ID + OOR-event count) in the panel for the parameter it is extreme on, so
     you can see how far outside the cleaned distribution it sat.
     """
     pond = wq_pond_means(data)
     flagged = wq_outliers(data) if highlight_anoms else None
     # Stats use the cleaned pond set: drop the union of WQ-outlier ponds (the same
-    # exclusion as oor_events.anoms_removed). Empty set => stats over all ponds.
+    # exclusion as Fig5.oor_resolution_outliers_removed). Empty set => stats over all ponds.
     excluded = set(flagged.loc[flagged["outlier"], "Pond ID"]) if highlight_anoms else set()
     stat_pond = pond[~pond["Pond ID"].isin(excluded)]
     wq = stat_pond.groupby("Pond status")[POND_PARAMS].agg(["mean", "std"])
@@ -324,7 +324,7 @@ def plot_water_quality(data, filename="water_qualities.png", highlight_anoms=Fal
     return _save(fig, filename)
 
 
-def plot_water_quality_visits(data, filename="water_qualities.visits.png"):
+def plot_water_quality_visits(data, filename="Fig1.water_quality_all_visits.png"):
     """Visit-level WQ figure: routine visits only, one point per visit.
 
     Columns: DO (Morning), DO (Evening), pH, Ammonia - DO is split by time of
@@ -390,7 +390,7 @@ def _fmt_p(v):
     return "<0.001" if v < 0.001 else f"{v:.3f}"
 
 
-def plot_oor_improvement(data, filename="oor_improvement.png"):
+def plot_oor_improvement(data, filename="Fig7.oor_improvement.png"):
     """Per-pond OOR improvement by group (D vs E) — the data behind the t / U tests.
 
     One panel per OOR parameter (DO, pH, Ammonia): per-pond mean out-of-range gap

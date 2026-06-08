@@ -5,9 +5,11 @@ across them. All analysis is **blind**: cohorts are labelled **Group D** and
 **Group E**, never Control/Treatment. Throughout, **blue = Group D**,
 **orange = Group E**, and **grey = "not resolved"**.
 
-Figures are produced by `main.py` (functions in `src/plotting_functions.py`,
-which call the analysis functions in `src/functions.py`). For the numeric
-results and statistical tests in table form, see [`results.md`](results.md).
+Figures are numbered `Fig1`–`Fig7` in reading order (baseline water quality
+first, then the OOR outcomes). They are produced by `main.py` (functions in
+`src/plotting_functions.py`, which call the analysis functions in
+`src/functions.py`). For the numeric results and statistical tests in table form,
+see [`results.md`](results.md).
 
 ---
 
@@ -33,7 +35,7 @@ These recur in several figures; defined once here.
     average those across ponds. Each *pond* counts once. This guards against
     **pseudoreplication**: multiple events from the same pond aren't independent
     (same pond, farmer, management), so the event-level rate can be dominated by
-    a few repeat-event ponds. (See `oor_resolution.by_pond.png`.)
+    a few repeat-event ponds. (See `Fig6.oor_resolution_by_pond.png`.)
 
 - **Denominator / "with follow-up".** Events with no Day-3 follow-up are
   excluded from the rate (they have no outcome to score). In this dataset every
@@ -51,7 +53,51 @@ These recur in several figures; defined once here.
 
 ---
 
-## `oor_events.png`
+## `Fig1.water_quality_all_visits.png`
+
+The **visit-level** view of baseline water quality: **one point per routine
+visit** (not collapsed to ponds). Four columns (DO Morning, DO Evening, pH,
+Ammonia). Top row: mean ± SD bars (`n` = number of visits). Bottom row: box plot
+with a dense, semi-transparent strip of all visits.
+
+Contrast with `Fig2.water_quality_per_pond.png`: this one shows the raw
+visit-to-visit spread, whereas the per-pond figure shows the spread *between
+ponds* (the unit used for the statistics, to avoid pseudoreplication).
+
+---
+
+## `Fig2.water_quality_per_pond.png`
+
+**Baseline water quality per group**, one column per parameter (DO Morning,
+DO Evening, pH, Ammonia–NH₃), using one value per pond (routine visits). This is
+the figure to read for whether the two groups start out comparable.
+
+- **Top row — mean ± SD bars.** Bar height = group mean across ponds; error bar =
+  ± 1 standard deviation across ponds. `n` in the x-label is the number of ponds.
+  The subplot title shows **Hedges' g**, the standardized D-vs-E mean gap (see
+  glossary).
+- **Bottom row — box + strip.** A box plot of the per-pond values with every pond
+  drawn as a jittered point on top. The subplot title shows **Levene p** for that
+  parameter (see glossary).
+
+Together the two titles give the standard baseline-balance pair: **Hedges' g**
+(difference in *means*) and **Levene p** (difference in *spread*).
+
+---
+
+## `Fig3.water_quality_outliers.png`
+
+Same layout as `Fig2`, but the **WQ-outlier ponds are excluded from all
+statistics** (bars, box, `n`, and Levene p all describe the cleaned distribution
+— matching the pond set dropped in `Fig5.oor_resolution_outliers_removed.png`).
+Each excluded outlier is still drawn back in as a **red-ringed point**, labelled
+with its short Pond ID and OOR-event count (e.g. `9252e874 (4 ev)`), in the panel
+for the parameter it is extreme on — so you can see how far outside the cleaned
+distribution it sat.
+
+---
+
+## `Fig4.oor_resolution.png`
 
 The primary-outcome figure, built entirely from the **OOR Events** sheet. One
 column per group. Rows, top to bottom:
@@ -73,17 +119,22 @@ column per group. Rows, top to bottom:
    resolution of the *events that included* that parameter — not whether that
    specific parameter came back into range.
 
-### `oor_events.anoms_removed.png`
-
-Identical to the above, but with the **baseline-WQ outlier ponds removed**
-(see "outliers" in the glossary). A sensitivity check: it shows the resolution
-picture isn't being driven by a few atypical ponds.
+A single shared legend (group colour = resolved, grey = not resolved) sits below
+the figure.
 
 ---
 
-## `oor_resolution.by_pond.png`
+## `Fig5.oor_resolution_outliers_removed.png`
 
-The **pond-level** companion to the pies — one point per pond.
+Identical to `Fig4`, but with the **baseline-WQ outlier ponds removed** (see
+"outliers" in the glossary). A sensitivity check: it shows the resolution picture
+isn't being driven by a few atypical ponds.
+
+---
+
+## `Fig6.oor_resolution_by_pond.png`
+
+The **pond-level** companion to the `Fig4` pies — one point per pond.
 
 - **Each point is one pond.** Vertical position = that pond's resolution rate
   (% of *its own* OOR events resolved at Day 3). Points are jittered horizontally
@@ -106,45 +157,26 @@ per-pond spread the pies collapse away. Note per-pond rates are lumpy (0, 50,
 
 ---
 
-## `water_qualities.png`
+## `Fig7.oor_improvement.png`
 
-**Baseline water quality per group**, one column per parameter (DO Morning,
-DO Evening, pH, Ammonia–NH₃), using one value per pond (routine visits).
+The **continuous** companion to the resolution pies: instead of "did it resolve,"
+*how much* of the out-of-range gap each pond closed between Day 0 and Day 3. One
+panel per OOR parameter (DO, pH, Ammonia). This is the data behind the Welch-t /
+Mann-Whitney tests in [`results.md`](results.md) §4.
 
-- **Top row — mean ± SD bars.** Bar height = group mean across ponds; error bar =
-  ± 1 standard deviation across ponds. `n` in the x-label is the number of ponds.
-  The subplot title shows **Hedges' g**, the standardized D-vs-E mean gap (see
-  glossary).
-- **Bottom row — box + strip.** A box plot of the per-pond values with every pond
-  drawn as a jittered point on top. The subplot title shows **Levene p** for that
-  parameter (see glossary).
-
-Together the two titles give the standard baseline-balance pair: **Hedges' g**
-(difference in *means*) and **Levene p** (difference in *spread*).
-
-This is the figure to read for whether the two groups start out comparable.
-
-### `water_qualities.anoms_highlighted.png`
-
-Same layout, but the **WQ-outlier ponds are excluded from all statistics**
-(bars, box, `n`, and Levene p all describe the cleaned distribution — matching
-the pond set dropped in `oor_events.anoms_removed.png`). Each excluded outlier is
-still drawn back in as a **red-ringed point**, labelled with its short Pond ID and
-OOR-event count (e.g. `9252e874 (4 ev)`), in the panel for the parameter it is
-extreme on — so you can see how far outside the cleaned distribution it sat.
-
----
-
-## `water_qualities.visits.png`
-
-The **visit-level** view of baseline water quality: **one point per routine
-visit** (not collapsed to ponds). Same four columns (DO Morning, DO Evening, pH,
-Ammonia). Top row: mean ± SD bars (`n` = number of visits). Bottom row: box plot
-with a dense, semi-transparent strip of all visits.
-
-Contrast with `water_qualities.png`: this one shows the raw visit-to-visit
-spread, whereas the per-pond figure shows the spread *between ponds* (the unit
-used for the statistics, to avoid pseudoreplication).
+- **Y-axis — out-of-range gap closed**, in the parameter's native units (mg/L for
+  DO/ammonia, pH units for pH): the distance outside the band at Day 0 minus at
+  Day 3, direction-folded so improvement is always positive, and clamped at the
+  band edge (no credit for overshooting into range). Positive = moved toward
+  range; the dashed line marks 0 (no change).
+- **Box + points per group.** The box summarises the **pond means** (the
+  inferential unit); solid black-edged dots are those pond means, faint dots
+  behind are the individual OOR events — context only, since events within a pond
+  aren't independent, so the box, `n`, and tests are all pond-level.
+  Baseline-WQ outlier ponds' means are drawn in **red**.
+- **Title table** — the Welch-t and Mann-Whitney p-values under three outlier
+  rules: all ponds, then outliers removed whole-pond (any param), then
+  per-parameter (drop only ponds extreme on this panel's parameter).
 
 ---
 
@@ -190,7 +222,7 @@ used for the statistics, to avoid pseudoreplication).
   sits from its group mean, scaled by the model's residual spread. A pond is an
   **outlier** if its absolute studentized residual exceeds **2** (i.e. >2 SD from
   its group mean). These flagged ponds are what gets removed in the
-  `anoms_removed` / `anoms_highlighted` variants.
+  `Fig3` / `Fig5` variants.
   - *Why not Cook's distance?* It's the usual influence companion to the
     residual, but a two-group factor has constant within-group leverage, so
     Cook's distance is just a monotone function of the residual (rank correlation
@@ -200,5 +232,3 @@ used for the statistics, to avoid pseudoreplication).
   independent — e.g. counting many visits (or events) from one pond as separate
   observations. Addressed by collapsing to one value per pond before computing
   group statistics.
-</content>
-</invoke>
