@@ -180,6 +180,21 @@ Mann-Whitney tests in [`results.md`](results.md) §4.
 
 ---
 
+## `Fig8.day2_vs_day3.png`
+
+The secondary timing analysis (see [`results.md`](results.md) §5). A 2×2 grid of
+resolution pies on the events with both follow-ups: **rows = Day 2 (`1st FU`) /
+Day 3 (`2nd FU`)**, **columns = Group D / E**. Each pie is that group's resolved
+(group colour) vs not resolved (grey) share on the given day, with the percentage
+and raw count.
+
+Reading it top-to-bottom: at **Day 2** both groups are near-identical (~20–25%
+resolved); only by **Day 3** does Group E fill in (82%) while Group D is
+unchanged — the entire effect appears in that one extra day, which is why the
+protocol fixes Day 3 as the primary measure (the McNemar test quantifies it).
+
+---
+
 ## Glossary
 
 - **Group D / Group E.** Blinded cohort labels (Control vs Treatment is

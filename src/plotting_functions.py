@@ -38,6 +38,7 @@ from src.functions import (
     oor_resolution_per_pond,
     oor_event_improvements,
     improvement_tests,
+    resolution_day2_vs_day3,
 )
 
 PLOTS_DIR = Path("plots")
@@ -487,5 +488,36 @@ def plot_oor_improvement(data, filename="Fig7.oor_improvement.png"):
                  legend_dot(OUTLIER_RED, "black", 1.0, 8, OUTLIER_LABEL)],
         loc="lower center", ncol=3, fontsize=8, frameon=False,
         bbox_to_anchor=(0.5, -0.04),
+    )
+    return _save(fig, filename)
+
+
+def plot_day2_vs_day3(events, filename="Fig8.day2_vs_day3.png"):
+    """Day-2 vs Day-3 resolution pies — the §5 secondary (McNemar) analysis.
+
+    2x2 grid of resolution pies: rows = Day 2 (1st FU) / Day 3 (2nd FU), columns
+    = Group D / E, over the events with both follow-ups. Makes the timing story
+    visual: the groups are near-identical at Day 2 (~20-25% resolved) and diverge
+    only by Day 3 (E jumps to ~82%, D stays put).
+    """
+    res = resolution_day2_vs_day3(events)
+    groups = ["Group D", "Group E"]
+    days = [("Day 2", "day2_res"), ("Day 3", "day3_res")]
+
+    fig, axes = plt.subplots(2, 2, figsize=(7.5, 8))
+    for col, g in enumerate(groups):
+        n = int(res.loc[g, "n"])
+        for row, (day, rescol) in enumerate(days):
+            rv = int(res.loc[g, rescol])
+            _resolution_pie(axes[row, col], rv, n - rv, GROUP_COLORS[g],
+                            f"{g} – {day} (n={n})")
+
+    fig.tight_layout()
+    fig.legend(
+        handles=[Patch(facecolor=GROUP_COLORS["Group D"], label="Group D"),
+                 Patch(facecolor=GROUP_COLORS["Group E"], label="Group E"),
+                 Patch(facecolor=NOT_RESOLVED, label="not resolved")],
+        loc="lower center", ncol=3, frameon=False, fontsize=10,
+        bbox_to_anchor=(0.5, -0.02),
     )
     return _save(fig, filename)
