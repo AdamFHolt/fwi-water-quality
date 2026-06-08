@@ -23,6 +23,9 @@ Thumbs.db
 *.swo
 *~
 
+# Claude Code project instructions (local only)
+CLAUDE.md
+
 # LibreOffice/Excel lock files
 .~lock.*#
 
