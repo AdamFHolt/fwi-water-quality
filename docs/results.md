@@ -1,17 +1,17 @@
 # Analysis Results 
 
 Headline numbers are produced by `python main.py`. This file is the
-human-readable summary, with the key figures embedded inline; see
+summary, with the key figures embedded inline; see
 [`figures.md`](figures.md) for a panel-by-panel walkthrough of every figure and
-the figure-methods detail.
+more methodological detail. 
 
-Cohorts are blind, labelled Group D and Group E (not
-Control/Treatment) to reduce analyst bias. All tests are run two-sided as D vs E.
+Cohorts are blind, labelled Group D and Group E (not Control/Treatment) 
+to reduce analyst bias. All tests are run two-sided as D vs E.
 Significance threshold throughout is p < 0.05.
 
 ---
 
-## TL;DR
+## Overview
 
 - The two groups are well matched at baseline (no meaningful differences in
   water-quality means or spreads).
@@ -80,27 +80,24 @@ time of day because morning and evening differ by design.
 | pH | 0.664 | 0.022 |
 | Ammonia | 0.972 | 0.241 |
 
-**What the two columns mean.** Baseline balance asks two separate questions,
-because two groups can match on their average yet differ in how spread out they
-are (or vice versa):
+**What the two columns mean.** Two groups can match on their average yet differ in
+spread, so baseline balance is checked two ways:
 
 - **Levene's test (p)** — compares the groups' variability (spread). The p is the
   probability of seeing spreads as different as these if the groups truly had
   equal spread; p > 0.05 means no evidence they differ. Here every p clears 0.05
   (smallest 0.088, DO evening), so the spreads match.
 
-- **Hedges' g** — measures the difference in means, rescaled into pooled-SD
-  units: `g = (mean_D − mean_E) / pooled SD`, with a small-sample correction (the
-  "Hedges" part). Unlike Levene it is an effect size, not a test — there is no
-  p-value, because testing baseline differences for significance mostly rewards
-  larger samples rather than telling you how big the gap is. Rough scale: |g| ≈
-  0.2 is small, 0.5 medium, 0.8 large. Here the largest is ammonia at 0.24 (small)
-  and the rest are near zero.
+- **Hedges' g** — the difference in means rescaled into pooled-SD units:
+  `g = (mean_D − mean_E) / pooled SD`, with a small-sample correction. It is an
+  effect size, not a test (no p-value): a significance test on a baseline
+  difference mostly reflects sample size, not the size of the gap. Rough scale:
+  |g| ≈ 0.2 small, 0.5 medium, 0.8 large. The largest here is ammonia at 0.24
+  (small); the rest are near zero.
 
-- **In short:** Levene asks "same spread?", Hedges' g asks "same average?" —
-  together they are the standard baseline-balance pair. Both say yes, so the groups
-  start out comparable and the large differences seen later (§§3–5) are not a
-  baseline artifact.
+Levene asks "same spread?", Hedges' g asks "same average?" — both say yes here, so
+the groups start out comparable and the differences in §§3–5 aren't a baseline
+artifact.
 
 ---
 
@@ -128,7 +125,7 @@ distinct ponds easy to count:
 
 *Fig3 — the §2.1 per-pond baseline with these 5 outlier ponds excluded from every
 statistic and drawn back as red-ringed points (labelled with their OOR-event
-count), so you can see how far outside the cleaned spread they sat.*
+count), showing how far outside the cleaned spread they sat.*
 
 ---
 
@@ -140,8 +137,8 @@ several parameters (the middle "event drivers" bars below).
 
 <table>
 <tr>
-<td valign="top"><a href="../plots/Fig4.oor_resolution.png"><img src="../plots/Fig4.oor_resolution.png" width="340" alt="Fig4 — Day-3 resolution, all ponds"></a></td>
-<td valign="top"><a href="../plots/Fig5.oor_resolution_outliers_removed.png"><img src="../plots/Fig5.oor_resolution_outliers_removed.png" width="340" alt="Fig5 — Day-3 resolution, outlier ponds removed"></a></td>
+<td valign="top"><a href="../plots/Fig4.oor_resolution.png"><img src="../plots/Fig4.oor_resolution.png" width="450" alt="Fig4 — Day-3 resolution, all ponds"></a></td>
+<td valign="top"><a href="../plots/Fig5.oor_resolution_outliers_removed.png"><img src="../plots/Fig5.oor_resolution_outliers_removed.png" width="450" alt="Fig5 — Day-3 resolution, outlier ponds removed"></a></td>
 </tr>
 </table>
 
@@ -168,7 +165,7 @@ per-pond rates), which rules out a few repeat-event ponds driving the gap.
 Removing the 5 outlier ponds leaves the gap intact — it widens slightly, if
 anything — so the result isn't an artifact of a few unusual ponds.
 
-<a href="../plots/Fig6.oor_resolution_by_pond.png"><img src="../plots/Fig6.oor_resolution_by_pond.png" width="560" alt="Fig6 — pond-level resolution"></a>
+<a href="../plots/Fig6.oor_resolution_by_pond.png"><img src="../plots/Fig6.oor_resolution_by_pond.png" width="520" alt="Fig6 — pond-level resolution"></a>
 
 *Fig6 — the pond-level view: one point per pond (area ∝ its OOR-event count); the
 bar marks each group's mean per-pond rate. Shows the D-vs-E gap holds when every
@@ -210,25 +207,11 @@ in §3.1 (22.7% / 86.4% on the right), not the pond-level rows.
 | Odds ratio | 0.043 | 0.046 |
 | p-value | 9.4×10⁻⁷ | 4.8×10⁻⁵ |
 
-**What these mean.**
-
-- **Odds ratio** — measures how big the gap is. It compares the odds of an
-  event resolving in one group with the other (odds of resolving = resolved ÷
-  not-resolved: 5/25 for D, 23/5 for E). An odds ratio of 1.0 means no difference;
-  the further from 1, the bigger the gap. Here 0.043 means Group D's odds of
-  resolution are about 4% of Group E's — equivalently, Group E's odds of resolving
-  are roughly 23× Group D's.
-
-- **p-value** — answers one specific question: if the two groups were truly
-  identical, how often would chance alone produce a gap at least as large as the
-  one we saw? Here that probability is p = 9.4×10⁻⁷ — about 1 in a million — so a
-  gap this size would almost never arise by chance if the groups were really the
-  same, which is why we treat the difference as real. (Note what it is not: not the
-  probability that the groups are identical, nor that the result is a fluke — it is
-  computed assuming they are identical.)
-
-Removing the outlier ponds barely moves either number (odds ratio 0.046, p =
-4.8×10⁻⁵), so the conclusion is robust.
+**Reading the numbers.** Group E's odds of resolving are roughly **23× Group D's**
+(odds ratio 0.043: D's odds are about 4% of E's). The p-value, 9.4×10⁻⁷ (~1 in a
+million), is how often chance alone would produce a gap this large if the groups
+were identical — so the difference is real, not noise. Removing the outlier ponds
+barely moves either (0.046; 4.8×10⁻⁵).
 
 ---
 
@@ -282,10 +265,10 @@ Under the targeted this-param rule it's 0.030.)
 - **Mann-Whitney U** compares ranks — whether an E pond tends to out-improve a D
   pond — so it's unbothered by skew or a lone extreme pond.
 
-- With small n and the baseline outliers, having a mean-based and a rank-based
-  test agree is the reassurance that the result isn't riding on one odd pond.
+- With small n and the baseline outliers, a mean-based and a rank-based test
+  agreeing shows the result isn't riding on one odd pond.
 
-<a href="../plots/Fig7.oor_improvement.png"><img src="../plots/Fig7.oor_improvement.png" width="860" alt="Fig7 — out-of-range gap closed per pond"></a>
+<a href="../plots/Fig7.oor_improvement.png"><img src="../plots/Fig7.oor_improvement.png" width="900" alt="Fig7 — out-of-range gap closed per pond"></a>
 
 *Fig7 — the data behind these tests: out-of-range gap closed per pond, one panel
 per parameter. The box summarises the pond means (solid dots); faint dots are the
@@ -313,9 +296,8 @@ than 30 — which is why its Day-3 rate reads 17.2% (5/29) instead of the 16.7%
 | D | 29 | 20.7% | 17.2% | 1 | 2 | 1.0 |
 | E | 28 | 25.0% | 82.1% | 16 | 0 | 3.05×10⁻⁵ |
 
-- **Group D** barely budges — 1 event gained, 2 lost, between Day 2 and Day 3.
-- **Group E** is transformed: 16 events flip from unresolved to resolved and not
-  one slips backward, lifting it from 25% to 82%.
+- **Group D** barely moves — 1 gained, 2 lost (20.7% → 17.2%).
+- **Group E** swings hard — 16 gained, none lost (25.0% → 82.1%).
 - **The p-values** ask how likely each split is by chance if the extra day made no
   difference (an event as likely to slip back as to improve). D's near-even 1-vs-2
   is exactly what chance produces → p = 1.0, no evidence of change. E's 16-to-0
@@ -324,8 +306,8 @@ than 30 — which is why its Day-3 rate reads 17.2% (5/29) instead of the 16.7%
 
 So at Day 2 the two groups look the same (~20–25%); the entire Group-E effect
 appears in that one extra day, between Day 2 and Day 3. Had the study stopped at
-Day 2 it would have found nothing — which is exactly why the protocol makes Day 3
-the primary measure.
+Day 2 it would have found nothing — which is why the protocol makes Day 3 the
+primary measure.
 
 ---
 
