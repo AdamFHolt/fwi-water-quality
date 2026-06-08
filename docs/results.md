@@ -252,17 +252,14 @@ losses. Across the 57 events measured on both days:
 | D | 29 | 20.7% | 17.2% | 1 | 2 | 1.0 |
 | E | 28 | 25.0% | 82.1% | 16 | 0 | 3.05×10⁻⁵ |
 
-The p-value here asks: *if the extra day truly made no difference (an event was
-just as likely to slip backward as to improve), how often would chance alone
-produce a gain/loss split this lopsided?*
-
-- **Group D** barely budges — 1 event gained, 2 lost. A split that even is exactly
-  what you'd expect from chance if the day didn't matter, so p = 1.0: no evidence
-  anything changed between Day 2 and Day 3.
+- **Group D** barely budges — 1 event gained, 2 lost, between Day 2 and Day 3.
 - **Group E** is transformed: 16 events flip from unresolved to resolved and *not
-  one* slips backward, lifting it from 25% to 82%. A 16-to-0 split would essentially
-  never happen by chance if the day made no difference (p = 3.05×10⁻⁵, about 3 in
-  100,000), so that jump is real.
+  one* slips backward, lifting it from 25% to 82%.
+- **The p-values** ask how likely each split is by chance if the extra day made no
+  difference (an event as likely to slip back as to improve). D's near-even 1-vs-2
+  is exactly what chance produces → p = 1.0, no evidence of change. E's 16-to-0
+  would essentially never happen by chance → p = 3.05×10⁻⁵ (about 3 in 100,000),
+  so that jump is real.
 
 So at Day 2 the two groups look the same (~20–25%); the entire Group-E effect
 appears in that one extra day, between Day 2 and Day 3. Had the study stopped at
@@ -273,49 +270,64 @@ the primary measure.
 
 ## 6. Notes on test choices
 
-- **Two-sided tests.** Because the analysis is blind (D vs E), we don't assume a
-  direction; two-sided is the honest choice and is conservative.
-- **Pond-level vs event-level.** The continuous tests use one value per pond (the
-  independent unit) to avoid pseudoreplication. The binary resolution/Fisher and
-  Day-2/3 analyses are event-level — the protocol's defined unit for that outcome.
-- **No within-cohort before/after test.** Day-0 readings are selected for being
-  extreme, so they drift back toward normal on their own (regression to the mean).
-  A within-group before/after test would mistake that for a treatment effect, so
-  we rely on the *between-cohort* comparison, where regression to the mean affects
-  both groups equally and cancels.
+- **Two-sided tests.** The analysis is blind (D vs E), so we don't assume in
+  advance which group should do better. Every test is therefore two-sided, which
+  is the more conservative choice: it splits the 0.05 significance budget across
+  both tails rather than spending it all on one expected direction.
+- **Pond-level vs event-level.** The continuous tests (Section 4) use one value
+  per pond, because repeated events from the same pond are not independent and
+  counting each separately would overstate the sample size (pseudoreplication).
+  The binary resolution tests (Fisher, Section 3) and the Day-2/3 test (Section 5)
+  are event-level, since a resolved/not-resolved event is the unit the protocol
+  defines for the primary outcome.
+- **No within-cohort before/after test.** Day-0 readings are picked precisely
+  because they are out of range, so on re-measurement they tend to drift back
+  toward normal on their own — regression to the mean. A before/after test within
+  one group would credit that drift to the intervention. The between-cohort
+  comparison sidesteps it: regression to the mean acts on both groups, so it
+  cancels, and any remaining gap is attributable to the treatment.
 
 ---
 
 ## Glossary
 
-- **OOR event / resolution** — an out-of-range pond-day; "resolved" = back inside
-  the acceptable band at the Day-3 follow-up.
+- **OOR event / resolution** — an out-of-range pond-day (a parameter outside its
+  band on a given day); "resolved" = back inside the band at the Day-3 follow-up.
 - **In-range band** — the acceptable range per parameter (protocol Table 1): DO
   3–5 mg/L morning, 8–12 evening; pH 6.5–8.5; ammonia < 0.05 mg/L.
-- **Out-of-range gap closed** — how far a reading sat outside its band at Day 0
-  minus at Day 3 (native units). Positive = moved toward range. It clamps at the
-  band edge (no credit for overshooting into the range).
-- **Gap-closed fraction** — the above as a fraction of the original gap; 1.0 =
-  fully back in range. Unit-free, so parameters can be pooled.
-- **Hedges' g** — difference in *means* rescaled into pooled-SD units, with a
-  small-sample correction. An *effect size, not a test* (no p-value): it says
-  how far apart the averages are. Rough scale: 0.2 small, 0.5 medium, 0.8 large.
-  The location companion to Levene (which instead compares spread).
-- **Levene's test** — checks whether two groups have equal *variance* (spread);
-  reported as a p-value (p > 0.05 = no evidence they differ).
-- **Studentized residual** — how many SDs a pond sits from its group mean; |value|
-  > 2 flags an outlier.
-- **Fisher's exact test** — exact test for a 2×2 table of counts; right for binary
-  outcomes (resolved vs not) with small samples.
-- **Welch's t-test** — compares two group *means* without assuming equal variance.
-- **Mann-Whitney U** — compares two groups by *ranks* (whether one tends to be
-  larger); makes no normality assumption, so it's robust to skew/outliers.
-- **McNemar's test** — the paired version for binary data: tests whether a
-  before/after (Day 2 → Day 3) proportion changed, using the discordant pairs.
+- **Out-of-range gap closed** — the distance a reading sat outside its band at Day
+  0 minus the distance at Day 3 (native units). Positive means it moved toward
+  range. It clamps at the band edge, so a reading that overshoots into the range
+  earns no extra credit.
+- **Gap-closed fraction** — the gap closed expressed as a fraction of the original
+  Day-0 gap: 1.0 = fully back in range, 0 = no movement, negative = drifted
+  further out. Being unit-free, it lets the three parameters be pooled.
+- **Hedges' g** — the difference between the two group means, rescaled into
+  pooled-standard-deviation units, with a correction for small samples. It is an
+  effect size rather than a test: it reports how far apart the averages are and
+  carries no p-value. Rough scale: 0.2 small, 0.5 medium, 0.8 large. It is the
+  mean-gap companion to Levene, which instead compares spread.
+- **Levene's test** — tests whether two groups have equal variance (spread),
+  reported as a p-value (p > 0.05 = no evidence the spreads differ). Used here to
+  check baseline balance.
+- **Studentized residual** — how many standard deviations a pond's value sits from
+  its group mean; an absolute value above 2 flags it as an outlier.
+- **Fisher's exact test** — computes the exact probability of a 2×2 count table
+  (here resolved/not by group) instead of relying on a large-sample approximation,
+  so it stays valid when the cell counts are small.
+- **Welch's t-test** — compares two group means without assuming the groups have
+  equal variance or equal sample size.
+- **Mann-Whitney U** — ranks all the values from both groups together and tests
+  whether one group's values tend to rank higher. It uses only order, not the raw
+  values, so it assumes no particular distribution and resists skew and outliers.
+- **McNemar's test** — the paired counterpart for binary data. It tests whether a
+  before/after proportion (Day 2 → Day 3) changed, using only the discordant pairs
+  (events that flipped one way or the other) and ignoring those that stayed put.
 - **Pseudoreplication** — treating non-independent measurements (e.g. several
-  events from one pond) as independent, which fakes statistical power. Avoided by
-  analysing one value per pond.
-- **p-value** — the probability of seeing a difference *at least as large* as the
-  one observed if the groups were really the same (computed *assuming* no
-  difference, so it is not the probability that there's no effect). Smaller =
+  events from the same pond) as if they were independent, which inflates the
+  apparent sample size and overstates significance. Avoided by analysing one value
+  per pond.
+- **p-value** — the probability of seeing a difference at least as large as the
+  one observed if the groups were truly the same. It is computed assuming no real
+  difference, so it is not the probability that there is no effect. Smaller =
   stronger evidence; we use p < 0.05.
