@@ -10,24 +10,17 @@ venv/
 # Jupyter
 .ipynb_checkpoints/
 
-# Data (keep raw data out of version control if large)
-# Uncomment below to ignore raw data:
-# data/raw/
-
-# OS
-.DS_Store
-Thumbs.db
-
 # Editor swap/backup files
 *.swp
 *.swo
 *~
 
-# Claude Code project instructions (local only)
-CLAUDE.md
+# OS
+.DS_Store
+Thumbs.db
 
 # LibreOffice/Excel lock files
 .~lock.*#
 
-# Outputs (optional: ignore generated files)
-# outputs/
+# Claude Code project instructions (local only)
+CLAUDE.md
