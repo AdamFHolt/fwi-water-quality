@@ -59,6 +59,8 @@ time of day because morning and evening differ by design.
 (bottom) for each parameter, with Hedges' g and Levene p in the panel titles
 (§2.2). The visit-level companion — one point per routine visit — is Fig1.*
 
+---
+
 ### 2.2 Baseline balance — variance and mean gap
 
 | Parameter | Levene p | Hedges' g |
@@ -89,6 +91,8 @@ are (or vice versa):
   together they are the standard baseline-balance pair. Both say yes, so the groups
   start out comparable and the large differences seen later (§§3–5) are not a
   baseline artifact.
+
+---
 
 ### 2.3 Baseline-WQ outlier ponds
 
@@ -128,6 +132,8 @@ count), so you can see how far outside the cleaned spread they sat.*
 each parameter (middle bars), and per-parameter pies (bottom). Group colour =
 resolved, grey = not resolved.*
 
+---
+
 ### 3.1 Resolution rate
 
 | Resolution rate | Group D | Group E |
@@ -149,6 +155,8 @@ anything — so the result isn't an artifact of a few unusual ponds.
 *Fig6 — the pond-level view: one point per pond (area ∝ its OOR-event count); the
 bar marks each group's mean per-pond rate. Shows the D-vs-E gap holds when every
 pond counts once.*
+
+---
 
 ### 3.2 Fisher's exact test (the formal primary test)
 
@@ -204,6 +212,8 @@ not the pond-level rows.
 
 Removing the outlier ponds barely moves either number (odds ratio 0.046, p =
 4.8×10⁻⁵), so the conclusion is robust.
+
+---
 
 ### 3.3 Resolution by parameter (Day 3)
 
