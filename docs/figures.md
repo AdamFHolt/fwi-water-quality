@@ -5,7 +5,7 @@ across them. All analysis is **blind**: cohorts are labelled **Group D** and
 **Group E**, never Control/Treatment. Throughout, **blue = Group D**,
 **orange = Group E**, and **grey = "not resolved"**.
 
-Figures are numbered `Fig1`–`Fig7` in reading order (baseline water quality
+Figures are numbered `Fig1`–`Fig8` in reading order (baseline water quality
 first, then the OOR outcomes). They are produced by `main.py` (functions in
 `src/plotting_functions.py`, which call the analysis functions in
 `src/functions.py`). For the numeric results and statistical tests in table form,
@@ -47,9 +47,9 @@ These recur in several figures; defined once here.
   value per pond** to avoid pseudoreplication. **DO is split by time of day**
   (Morning vs Evening) because dissolved oxygen swings strongly over the day
   (~3 mg/L morning vs ~11 mg/L evening); pooling them would manufacture a huge,
-  meaningless spread. So the per-pond parameters are: **DO (Morning)**,
-  **DO (Evening)**, **pH**, **Ammonia–NH₃**. Only these three parameters are
-  populated in the dataset.
+  meaningless spread. So the per-pond parameters are **DO (Morning)**,
+  **DO (Evening)**, **pH**, and **Ammonia–NH₃** — only DO, pH, and ammonia are
+  populated in the dataset (DO shown as two columns).
 
 ---
 
@@ -92,7 +92,7 @@ statistics** (bars, box, `n`, and Levene p all describe the cleaned distribution
 — matching the pond set dropped in `Fig5.oor_resolution_outliers_removed.png`).
 Each excluded outlier is still drawn back in as a **red-ringed point**, labelled
 with its short Pond ID and OOR-event count (e.g. `9252e874 (4 ev)`), in the panel
-for the parameter it is extreme on — so you can see how far outside the cleaned
+for the parameter it is extreme on — showing how far outside the cleaned
 distribution it sat.
 
 ---
@@ -127,8 +127,8 @@ the figure.
 ## `Fig5.oor_resolution_outliers_removed.png`
 
 Identical to `Fig4`, but with the **baseline-WQ outlier ponds removed** (see
-"outliers" in the glossary). A sensitivity check: it shows the resolution picture
-isn't being driven by a few atypical ponds.
+"outliers" in the glossary). A sensitivity check: the resolution gap isn't driven
+by a few atypical ponds.
 
 ---
 
@@ -150,10 +150,9 @@ The **pond-level** companion to the `Fig4` pies — one point per pond.
   - **Grey dots** down the left edge = the **point-size key**, each sized like
     the main scatter and aligned to its event-count row.
 
-Why this figure exists: it shows the D-vs-E gap survives when each pond counts
-once, so the result isn't an artifact of repeat-event ponds, and it exposes the
-per-pond spread the pies collapse away. Note per-pond rates are lumpy (0, 50,
-100 %) because most ponds have very few events.
+It shows the D-vs-E gap survives when each pond counts once (so it isn't an
+artifact of repeat-event ponds), and exposes the per-pond spread the pies hide.
+Per-pond rates are lumpy (0, 50, 100 %) because most ponds have very few events.
 
 ---
 
@@ -188,10 +187,10 @@ Day 3 (`2nd FU`)**, **columns = Group D / E**. Each pie is that group's resolved
 (group colour) vs not resolved (grey) share on the given day, with the percentage
 and raw count.
 
-Reading it top-to-bottom: at **Day 2** both groups are near-identical (~20–25%
-resolved); only by **Day 3** does Group E fill in (82%) while Group D is
-unchanged — the entire effect appears in that one extra day, which is why the
-protocol fixes Day 3 as the primary measure (the McNemar test quantifies it).
+At **Day 2** both groups are near-identical (~20–25% resolved); only by **Day 3**
+does Group E fill in (82%) while Group D is unchanged. The entire effect appears
+in that one extra day — which is why the protocol fixes Day 3 as the primary
+measure, and the McNemar test (§5) quantifies it.
 
 ---
 
