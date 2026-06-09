@@ -17,16 +17,10 @@ all methodological details.
 ## Highlights
 
 > [!IMPORTANT]
-> - The two groups are **well matched at baseline** (no meaningful differences in
->   water quality means or spreads).
-> - Group E resolves far more out-of-range (OOR) events than Group D: **82.1% vs
->   16.7%** at the Day-3 follow-up (Fisher's p = 9.4×10⁻⁷).
-> - On the continuous measure (how much of the out-of-range gap each pond closed),
->   Group E improves significantly more on **every parameter** — DO, pH, and ammonia —
->   and the result survives both outlier removal and a rank-based test.
-> - The effect **emerges only by Day 3**: at Day 2 the groups look identical (~20–25%
->   OOR events resolved); Group E jumps to 82% by Day 3. Day 2 alone would have
->   missed it, confirming Day 3 as the correct measure.
+> - **The groups are well matched at baseline — same water-quality means and spreads.**
+> - **Group E resolves far more OOR events: 82.1% vs 16.7% at Day 3 (Fisher's p = 9.4×10⁻⁷).**
+> - **Group E improves more on every parameter (DO, pH, ammonia), surviving outlier removal and a rank-based test.**
+> - **The effect appears only by Day 3: the groups look alike at Day 2 (~20–25%), then E jumps to 82%.**
 
 <br>
 
