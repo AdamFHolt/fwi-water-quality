@@ -22,8 +22,5 @@ Thumbs.db
 # LibreOffice/Excel lock files
 .~lock.*#
 
-# Non-anonymized (de-blinding) source data — keep local only, never commit
-data/Outcome Evaluation Phase 2 Data_Cleaned.xlsx
-
 # Claude Code project instructions (local only)
 CLAUDE.md
