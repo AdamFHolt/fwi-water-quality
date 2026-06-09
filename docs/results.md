@@ -157,6 +157,7 @@ several parameters (see the middle "event drivers" bars below).
 </table>
 
 <div align="center">
+
 <sub>*Figure 4 (left, all ponds) and Figure 5 (right, the 5 baseline-WQ outlier ponds removed)
 — Day-3 resolution: overall pies per group (top), how many events flagged each
 parameter (middle bars), and per-parameter pies (bottom). Group colour = resolved,
