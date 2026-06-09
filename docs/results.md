@@ -3,30 +3,30 @@
 Headline numbers are produced by `python main.py`. This file is the
 summary, with the key figures embedded inline; see
 [`figures.md`](figures.md) for a panel-by-panel walkthrough of every figure and
-more methodological detail.
+all methodological details.
 
-Cohorts are blind, labelled Group D and Group E (not Control/Treatment)
+Cohorts are labelled Group D and Group E (not Control/Treatment)
 to reduce analyst bias. All tests are run two-sided as D vs E.
 Significance threshold throughout is p < 0.05.
 
 ---
 
-## Overview
+## Highlights
 
 - The two groups are well matched at baseline (no meaningful differences in
-  water-quality means or spreads).
+  water quality means or spreads).
 - Group E resolves far more out-of-range (OOR) events than Group D: 82.1% vs
   16.7% at the Day-3 follow-up (Fisher's p = 9.4×10⁻⁷).
 - On the continuous measure (how much of the out-of-range gap each pond closed),
   Group E improves significantly more on every parameter — DO, pH, and ammonia —
-  and the result survives both a rank-based test and outlier removal.
+  and the result survives both outlier removal and a rank-based test. 
 - The effect emerges only by Day 3: at Day 2 the groups look identical (~20–25%
   OOR events resolved); Group E jumps to 82% by Day 3. Day 2 alone would have
-  missed it, confirming Day 3 as the right measure.
+  missed it, confirming Day 3 as the correct measure.
 
 ---
 
-## 1. Dataset at a glance
+## 1. Dataset overview
 
 | | Group D | Group E | Total |
 |---|--:|--:|--:|
@@ -38,14 +38,17 @@ Significance threshold throughout is p < 0.05.
 | Ponds with OOR events | 15 | 17 | 32 |
 
 An OOR event is one pond-day on which a water-quality parameter was out of
-range; several events can come from the same pond. The **routine** (non-follow-up)
-visits are the baseline-WQ sample — follow-ups are conditional on an OOR event, so
-only routine visits give an unbiased baseline (collapsed to per-pond means in §2):
+range; several events can come from the same pond. The routine (non-follow-up)
+visits are the baseline-WQ sample; follow-ups are conditional on an OOR event, so
+only routine visits (i.e., excluding follow-ups) give an unbiased baseline 
+(collapsed to per-pond means in §2):
 
 <a href="../plots/Fig1.water_quality_all_visits.png"><img src="../plots/Fig1.water_quality_all_visits.png" width="860" alt="Fig1 — visit-level baseline water quality"></a>
 
 *Fig1 — visit-level baseline water quality: one point per routine visit (DO split
-by time of day), before collapsing to one mean per pond for the §2 balance tests.*
+by time of day). Top panels show the group mean ± SD; bottom panels show the
+box (median, IQR) with every visit as a jittered point. Collapsed to one mean per
+pond for the §2 balance tests.*
 
 ---
 
@@ -53,8 +56,9 @@ by time of day), before collapsing to one mean per pond for the §2 balance test
 
 ### 2.1 Baseline water quality — mean (SD) per pond
 
-Routine (non-follow-up) visits, averaged to one value per pond. DO is split by
-time of day because morning and evening differ by design.
+Routine (non-follow-up) visits, averaged to one value per pond. Averaging per pond
+ensures ponds visited more often don't count more (i.e., avoids pseudoreplication). 
+DO is split by time of day because morning and evening differ by design.
 
 | Parameter | In-range band | Group D | Group E |
 |---|---|--:|--:|
@@ -66,12 +70,12 @@ time of day because morning and evening differ by design.
 <a href="../plots/Fig2.water_quality_per_pond.png"><img src="../plots/Fig2.water_quality_per_pond.png" width="860" alt="Fig2 — per-pond baseline water quality"></a>
 
 *Fig2 — per-pond baseline water quality: mean ± SD bars (top) and box + strip
-(bottom) for each parameter, with Hedges' g and Levene p in the panel titles
-(§2.2). The visit-level companion — one point per routine visit — is Fig1.*
+(bottom) for each parameter. Hedges' g and Levene p are given in the panel titles,
+and explained below (§2.2).*
 
 ---
 
-### 2.2 Baseline balance — variance and mean gap
+### 2.2 Baseline water quality — do the groups have the same spread and average?
 
 | Parameter | Levene p | Hedges' g |
 |---|--:|--:|
@@ -80,8 +84,11 @@ time of day because morning and evening differ by design.
 | pH | 0.664 | 0.022 |
 | Ammonia | 0.972 | 0.241 |
 
+Both columns use the same per-pond baseline values as §2.1 (one value per pond, 28
+D / 25 E), so the comparison is between ponds, not the 768 individual visits.
+
 **What the two columns mean.** Two groups can match on their average yet differ in
-spread, so baseline balance is checked two ways:
+spread, so both components are checked:
 
 - **Levene's test (p)** — compares the groups' variability (spread). The p is the
   probability of seeing spreads as different as these if the groups truly had
@@ -103,19 +110,18 @@ artifact.
 
 ### 2.3 Baseline-WQ outlier ponds
 
-Ponds whose baseline value sits more than 2 SD from their group mean (internally
-studentized residual). Used only for sensitivity checks — they are not dropped
-from the headline numbers. 5 ponds, 9 flags — some ponds are extreme on more
-than one parameter, so each pond's first appearance is bold to make the 5
-distinct ponds easy to count:
+Ponds whose baseline value sits more than 2 SD from their group mean; 5 ponds, 
+9 flags. Used only for sensitivity checks. Some ponds are extreme on more
+than one parameter, so each pond's first appearance is bold and underlined to make it easy
+to identify the offending ponds.
 
 | Parameter | Group | Pond | Value | Std. residual |
 |---|---|---|--:|--:|
-| DO morning | E | **44f24b9a** | 2.73 | −2.53 |
-| DO morning | E | **917e0459** | 2.78 | −2.30 |
-| DO evening | D | **87edd7c9** | 13.05 | 2.24 |
-| DO evening | D | **9252e874** | 15.26 | 5.00 |
-| pH | D | **6772b310** | 8.48 | 2.13 |
+| DO morning | E | **<u>44f24b9a</u>** | 2.73 | −2.53 |
+| DO morning | E | **<u>917e0459</u>** | 2.78 | −2.30 |
+| DO evening | D | **<u>87edd7c9</u>** | 13.05 | 2.24 |
+| DO evening | D | **<u>9252e874</u>** | 15.26 | 5.00 |
+| pH | D | **<u>6772b310</u>** | 8.48 | 2.13 |
 | pH | D | 9252e874 | 8.57 | 3.09 |
 | pH | E | 917e0459 | 8.47 | 2.07 |
 | Ammonia | D | 6772b310 | 0.049 | 2.71 |
@@ -124,18 +130,21 @@ distinct ponds easy to count:
 <a href="../plots/Fig3.water_quality_outliers.png"><img src="../plots/Fig3.water_quality_outliers.png" width="860" alt="Fig3 — baseline water quality with outlier ponds highlighted"></a>
 
 *Fig3 — the §2.1 per-pond baseline with these 5 outlier ponds excluded from every
-statistic and drawn back as red-ringed points (labelled with their OOR-event
-count), showing how far outside the cleaned spread they sat.*
+statistic and marked as red-ringed points (with their OOR-event count).*
 
 ---
 
 ## 3. Primary outcome — resolution at Day 3
 
 "Resolved" = the pond was back in range at the Day-3 (primary) follow-up. DO
-drives most OOR events, then pH, then ammonia — and a single event can flag
-several parameters (the middle "event drivers" bars below).
+drives most OOR events, then pH, then ammonia. Note that a single event can flag
+several parameters (see the middle "event drivers" bars below).
 
 <table>
+<tr>
+<td align="center"><b>Left: all OOR events</b></td>
+<td align="center"><b>Right: anomalous ponds removed</b></td>
+</tr>
 <tr>
 <td valign="top"><a href="../plots/Fig4.oor_resolution.png"><img src="../plots/Fig4.oor_resolution.png" width="450" alt="Fig4 — Day-3 resolution, all ponds"></a></td>
 <td valign="top"><a href="../plots/Fig5.oor_resolution_outliers_removed.png"><img src="../plots/Fig5.oor_resolution_outliers_removed.png" width="450" alt="Fig5 — Day-3 resolution, outlier ponds removed"></a></td>
