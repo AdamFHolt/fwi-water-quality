@@ -171,8 +171,12 @@ grey = not resolved. Fig5 is the sensitivity check — the picture barely change
 
 Event-level counts each event once; pond-level counts each pond once (mean of
 per-pond rates), which rules out a few repeat-event ponds driving the gap.
-Removing the 5 outlier ponds leaves the gap intact — it widens slightly, if
-anything — so the result isn't an artifact of a few unusual ponds.
+Removing the 5 outlier ponds leaves the gap intact (if anything, it widens slightly)
+so the result is not an artifact of a few unusual ponds.
+
+The summary rates hide how the underlying ponds are distributed, so Fig6 plots each
+pond individually to confirm the gap is a broad shift across ponds, not a few ponds
+pulling the average:
 
 <a href="../plots/Fig6.oor_resolution_by_pond.png"><img src="../plots/Fig6.oor_resolution_by_pond.png" width="520" alt="Fig6 — pond-level resolution"></a>
 
