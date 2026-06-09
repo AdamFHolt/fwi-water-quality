@@ -243,14 +243,22 @@ Events involving each parameter; multi-parameter events count toward each.
 
 ## 4. Comparative test — how much did water quality improve?
 
-Beyond the binary "did it resolve," this asks how much of the out-of-range gap
-each pond closed between Day 0 and Day 3 (the out-of-range gap closed:
-distance outside the band at Day 0 minus at Day 3, in native units). Each pond
-contributes one value (its mean), so ponds aren't double-counted. Tested two ways
-— Welch's t (means) and Mann-Whitney U (ranks) — then re-run with the
-baseline-WQ outlier ponds removed two ways: any-param drops a flagged pond
-from every test (whole-pond); this-param drops it only from the panel for the
-parameter it was extreme on.
+Section 3 asked whether a pond resolved (yes/no); this section asks **how far** it
+moved. The measure is the **out-of-range gap closed**: how far the reading sat
+outside its in-range band at Day 0, minus how far it sat outside at Day 3, in native
+units. A positive value means the pond moved back toward the band; the full Day-0
+distance means it reached it.
+
+Each pond contributes one value (its mean across events), so no pond is
+double-counted. Every parameter is tested two ways: **Welch's t** on the means and
+**Mann-Whitney U** on the ranks.
+
+Each test is then re-run with the baseline-WQ outlier ponds removed, under two
+rules:
+- **any-param** — once a pond is flagged on any parameter, it is dropped from
+  *every* test (whole-pond removal).
+- **this-param** — a flagged pond is dropped only from the parameter it was extreme
+  on, and kept in the others.
 
 Means are all-ponds (descriptive). Each *p* compares D vs E and is Welch's t; the
 rank-based Mann-Whitney test agrees on every call (same significant/not pattern),
@@ -294,20 +302,19 @@ individual events; red dots are the baseline-WQ outlier ponds.*
 Does the follow-up day matter — would we have reached the same conclusion if we
 checked at Day 2 instead of Day 3? Here we're not comparing two groups of ponds;
 we're comparing each event against itself at two points in time (Day 2 vs Day
-3 — the `1st FU` and `2nd FU` of the same events). For that kind of before/after
-comparison the right tool is McNemar's test, which ignores the events that
-stayed the same and looks only at the ones that changed: events that flipped
-from not-resolved to resolved (Gained) versus the reverse (Lost). If a
-group is genuinely improving over that extra day, gains should far outweigh
-losses. This needs both follow-ups recorded, which holds for 57 of the 58 events
+3 — the `1st FU` and `2nd FU` of the same events). We look only at the events that
+changed between the two days: events that flipped from not-resolved to resolved
+(Gained) versus the reverse (Lost). If a group is genuinely improving over that
+extra day, gains should far outweigh losses. This needs both follow-ups recorded,
+which holds for 57 of the 58 events
 (one Group-D event is missing a follow-up), so Group D's count here is 29 rather
 than 30 — which is why its Day-3 rate reads 17.2% (5/29) instead of the 16.7%
 (5/30) in §3.
 
-| Group | n | Day 2 resolved | Day 3 resolved | Gained (No→Yes) | Lost (Yes→No) | McNemar p |
-|---|--:|--:|--:|--:|--:|--:|
-| D | 29 | 20.7% | 17.2% | 1 | 2 | 1.0 |
-| E | 28 | 25.0% | 82.1% | 16 | 0 | 3.05×10⁻⁵ |
+| Group | n | Day 2 resolved | Day 3 resolved | Gained (No→Yes) | Lost (Yes→No) |
+|---|--:|--:|--:|--:|--:|
+| D | 29 | 20.7% | 17.2% | 1 | 2 |
+| E | 28 | 25.0% | 82.1% | 16 | 0 |
 
 <a href="../plots/Fig8.day2_vs_day3.png"><img src="../plots/Fig8.day2_vs_day3.png" width="480" alt="Fig8 — Day-2 vs Day-3 resolution pies"></a>
 
@@ -317,11 +324,6 @@ Group D stays put.*
 
 - **Group D** barely moves — 1 gained, 2 lost (20.7% → 17.2%).
 - **Group E** swings hard — 16 gained, none lost (25.0% → 82.1%).
-- **The p-values** ask how likely each split is by chance if the extra day made no
-  difference (an event as likely to slip back as to improve). D's near-even 1-vs-2
-  is exactly what chance produces → p = 1.0, no evidence of change. E's 16-to-0
-  would essentially never happen by chance → p = 3.05×10⁻⁵ (about 3 in 100,000),
-  so that jump is real.
 
 So at Day 2 the two groups look the same (~20–25%); the entire Group-E effect
 appears in that one extra day, between Day 2 and Day 3. Had the study stopped at
@@ -387,9 +389,6 @@ primary measure.
 - **Mann-Whitney U** — ranks all the values from both groups together and tests
   whether one group's values tend to rank higher. It uses only order, not the raw
   values, so it assumes no particular distribution and resists skew and outliers.
-- **McNemar's test** — the paired counterpart for binary data. It tests whether a
-  before/after proportion (Day 2 → Day 3) changed, using only the discordant pairs
-  (events that flipped one way or the other) and ignoring those that stayed put.
 - **Pseudoreplication** — treating non-independent measurements (e.g. several
   events from the same pond) as if they were independent, which inflates the
   apparent sample size and overstates significance. Avoided by analysing one value
