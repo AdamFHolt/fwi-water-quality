@@ -12,8 +12,6 @@ all methodological details.
 
 **Contents:** [Highlights](#highlights) · [1. Dataset overview](#1-dataset-overview) · [2. Baseline comparability](#2-are-the-groups-comparable-at-baseline) · [3. Primary outcome](#3-primary-outcome--resolution-at-day-3) · [4. Comparative test](#4-comparative-test--how-much-did-water-quality-improve) · [5. Day 2 vs Day 3](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3) · [6. Notes on test choices](#6-notes-on-test-choices) · [Glossary](#glossary)
 
----
-
 <br>
 
 ## Highlights
@@ -29,8 +27,6 @@ all methodological details.
 > - The effect **emerges only by Day 3**: at Day 2 the groups look identical (~20–25%
 >   OOR events resolved); Group E jumps to 82% by Day 3. Day 2 alone would have
 >   missed it, confirming Day 3 as the correct measure.
-
----
 
 <br>
 
@@ -59,8 +55,6 @@ box (median, IQR) with every visit as a jittered point. Collapsed to one mean pe
 pond for the §2 balance tests.*</sub>
 </div>
 
----
-
 <br>
 
 ## 2. Are the groups comparable at baseline?
@@ -85,8 +79,6 @@ DO is split by time of day because morning and evening differ by design.
 (bottom) for each parameter. Hedges' g and Levene p are given in the panel titles,
 and explained below (§2.2).*</sub>
 </div>
-
----
 
 ### 2.2 Baseline water quality — do the groups have the same spread and average?
 
@@ -119,8 +111,6 @@ Levene asks "same spread?", Hedges' g asks "same average?" — both say yes here
 the groups start out comparable and the differences in §§3–5 aren't a baseline
 artifact.
 
----
-
 ### 2.3 Baseline-WQ outlier ponds
 
 Ponds whose baseline value sits more than 2 SD from their group mean; 5 ponds, 
@@ -147,8 +137,6 @@ repeat offenders easy to spot.
 statistic and marked as red-ringed points (with their OOR-event count).*</sub>
 </div>
 
----
-
 <br>
 
 ## 3. Primary outcome — resolution at Day 3
@@ -174,8 +162,6 @@ several parameters (see the middle "event drivers" bars below).
 parameter (middle bars), and per-parameter pies (bottom). Group colour = resolved,
 grey = not resolved. Figure 5 is the sensitivity check — the picture barely changes.*</sub>
 </div>
-
----
 
 ### 3.1 Resolution rate
 
@@ -204,8 +190,6 @@ ponds skewing the mean:
 bar marks each group's mean per-pond rate. Shows the D-vs-E gap holds when every
 pond counts once.*</sub>
 </div>
-
----
 
 ### 3.2 Fisher's exact test (the formal primary test)
 
@@ -247,8 +231,6 @@ in a million), is how often chance alone would produce a gap this large if the g
 were identical — so the difference is real, not noise. Removing the outlier ponds
 barely moves either (0.046; 4.8×10⁻⁵).
 
----
-
 ### 3.3 Resolution by parameter (Day 3)
 
 Events involving each parameter; multi-parameter events count toward each.
@@ -259,8 +241,6 @@ Events involving each parameter; multi-parameter events count toward each.
 | DO | 28 | 5 | 17.9 | 22 | 19 | 86.4 |
 | pH | 13 | 1 | 7.7 | 15 | 10 | 66.7 |
 | Ammonia | 8 | 0 | 0.0 | 4 | 2 | 50.0 |
-
----
 
 <br>
 
@@ -320,8 +300,6 @@ per parameter. The box summarises the pond means (solid dots); faint dots are th
 individual events; red dots are the baseline-WQ outlier ponds.*</sub>
 </div>
 
----
-
 <br>
 
 ## 5. Secondary — does follow-up timing matter? (Day 2 vs Day 3)
@@ -365,8 +343,6 @@ appears in that one extra day, between Day 2 and Day 3. Had the study stopped at
 Day 2 it would have found nothing — which is why the protocol makes Day 3 the
 primary measure.
 
----
-
 <br>
 
 ## 6. Notes on test choices
@@ -393,8 +369,6 @@ primary measure.
   cancels, and any remaining gap is attributable to the treatment.
 
 </details>
-
----
 
 <br>
 
