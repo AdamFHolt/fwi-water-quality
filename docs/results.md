@@ -14,6 +14,8 @@ all methodological details.
 
 ---
 
+<br>
+
 ## Highlights
 
 > [!IMPORTANT]
@@ -30,6 +32,8 @@ all methodological details.
 
 ---
 
+<br>
+
 ## 1. Dataset overview
 
 | | Group D | Group E | Total |
@@ -42,13 +46,12 @@ all methodological details.
 | Ponds with OOR events | 15 | 17 | 32 |
 
 An OOR event is one pond-day on which a water-quality parameter was out of
-range; several events can come from the same pond. The routine (non-follow-up)
-visits are the baseline-WQ sample; follow-ups are conditional on an OOR event, so
-only routine visits (i.e., excluding follow-ups) give an unbiased baseline 
-(collapsed to per-pond means in §2):
+range; several events can come from the same pond. Routine (non-follow-up) visits
+are the baseline-WQ sample. Follow-ups are conditional on an OOR event, so only
+routine visits give an unbiased baseline (collapsed to per-pond means in §2):
 
 <div align="center">
-<a href="../plots/Fig1.water_quality_all_visits.png"><img src="../plots/Fig1.water_quality_all_visits.png" width="860" alt="Fig1 — visit-level baseline water quality"></a>
+<a href="../plots/Fig1.water_quality_all_visits.png"><img src="../plots/Fig1.water_quality_all_visits.png" width="920" alt="Fig1 — visit-level baseline water quality"></a>
 
 <sub>*Fig1 — visit-level baseline water quality: one point per routine visit (DO split
 by time of day). Top panels show the group mean ± SD; bottom panels show the
@@ -57,6 +60,8 @@ pond for the §2 balance tests.*</sub>
 </div>
 
 ---
+
+<br>
 
 ## 2. Are the groups comparable at baseline?
 
@@ -74,7 +79,7 @@ DO is split by time of day because morning and evening differ by design.
 | Ammonia, NH₃ (mg/L) | < 0.05 | 0.018 (0.013) | 0.016 (0.010) |
 
 <div align="center">
-<a href="../plots/Fig2.water_quality_per_pond.png"><img src="../plots/Fig2.water_quality_per_pond.png" width="860" alt="Fig2 — per-pond baseline water quality"></a>
+<a href="../plots/Fig2.water_quality_per_pond.png"><img src="../plots/Fig2.water_quality_per_pond.png" width="920" alt="Fig2 — per-pond baseline water quality"></a>
 
 <sub>*Fig2 — per-pond baseline water quality: mean ± SD bars (top) and box + strip
 (bottom) for each parameter. Hedges' g and Levene p are given in the panel titles,
@@ -119,9 +124,9 @@ artifact.
 ### 2.3 Baseline-WQ outlier ponds
 
 Ponds whose baseline value sits more than 2 SD from their group mean; 5 ponds, 
-9 flags. Used only for sensitivity checks. Some ponds are extreme on more
-than one parameter, so each pond's first appearance is bold and underlined to make it easy
-to identify the offending ponds.
+9 flags. Used only for sensitivity checks. Some ponds are extreme on more than
+one parameter, so each pond's first appearance is bold-underlined to make the
+repeat offenders easy to spot.
 
 | Parameter | Group | Pond | Value | Std. residual |
 |---|---|---|--:|--:|
@@ -136,13 +141,15 @@ to identify the offending ponds.
 | Ammonia | D | 9252e874 | 0.064 | 4.07 |
 
 <div align="center">
-<a href="../plots/Fig3.water_quality_outliers.png"><img src="../plots/Fig3.water_quality_outliers.png" width="860" alt="Fig3 — baseline water quality with outlier ponds highlighted"></a>
+<a href="../plots/Fig3.water_quality_outliers.png"><img src="../plots/Fig3.water_quality_outliers.png" width="920" alt="Fig3 — baseline water quality with outlier ponds highlighted"></a>
 
 <sub>*Fig3 — the §2.1 per-pond baseline with these 5 outlier ponds excluded from every
 statistic and marked as red-ringed points (with their OOR-event count).*</sub>
 </div>
 
 ---
+
+<br>
 
 ## 3. Primary outcome — resolution at Day 3
 
@@ -156,8 +163,8 @@ several parameters (see the middle "event drivers" bars below).
 <td align="center"><b>Right: anomalous ponds removed</b></td>
 </tr>
 <tr>
-<td valign="top"><a href="../plots/Fig4.oor_resolution.png"><img src="../plots/Fig4.oor_resolution.png" width="450" alt="Fig4 — Day-3 resolution, all ponds"></a></td>
-<td valign="top"><a href="../plots/Fig5.oor_resolution_outliers_removed.png"><img src="../plots/Fig5.oor_resolution_outliers_removed.png" width="450" alt="Fig5 — Day-3 resolution, outlier ponds removed"></a></td>
+<td valign="top"><a href="../plots/Fig4.oor_resolution.png"><img src="../plots/Fig4.oor_resolution.png" width="480" alt="Fig4 — Day-3 resolution, all ponds"></a></td>
+<td valign="top"><a href="../plots/Fig5.oor_resolution_outliers_removed.png"><img src="../plots/Fig5.oor_resolution_outliers_removed.png" width="480" alt="Fig5 — Day-3 resolution, outlier ponds removed"></a></td>
 </tr>
 </table>
 
@@ -183,15 +190,15 @@ grey = not resolved. Fig5 is the sensitivity check — the picture barely change
 
 Event-level counts each event once; pond-level counts each pond once (mean of
 per-pond rates), which rules out a few repeat-event ponds driving the gap.
-Removing the 5 outlier ponds leaves the gap intact (if anything, it widens slightly)
-so the result is not an artifact of a few unusual ponds.
+Removing the 5 outlier ponds leaves the gap intact — if anything, it widens
+slightly — so the result isn't an artifact of a handful of unusual ponds.
 
-The summary rates hide how the underlying ponds are distributed, so Fig6 plots each
-pond individually to confirm the gap is a broad shift across ponds, not a few ponds
-pulling the average:
+The summary rates hide how the ponds are distributed, so Fig6 plots each pond
+individually, confirming the gap is a broad shift rather than a few high-event
+ponds skewing the mean:
 
 <div align="center">
-<a href="../plots/Fig6.oor_resolution_by_pond.png"><img src="../plots/Fig6.oor_resolution_by_pond.png" width="520" alt="Fig6 — pond-level resolution"></a>
+<a href="../plots/Fig6.oor_resolution_by_pond.png"><img src="../plots/Fig6.oor_resolution_by_pond.png" width="560" alt="Fig6 — pond-level resolution"></a>
 
 <sub>*Fig6 — the pond-level view: one point per pond (area ∝ its OOR-event count); the
 bar marks each group's mean per-pond rate. Shows the D-vs-E gap holds when every
@@ -235,8 +242,8 @@ in §3.1 (22.7% / 86.4% on the right), not the pond-level rows.
 | p-value | **9.4×10⁻⁷** | **4.8×10⁻⁵** |
 
 **Reading the numbers.** Group E's odds of resolving are roughly **23× Group D's**
-(odds ratio 0.043: D's odds are about 4% of E's). The p-value, 9.4×10⁻⁷ (~1 in a
-million), is how often chance alone would produce a gap this large if the groups
+(odds ratio 0.043: D's odds are about 4% of E's). The p-value, 9.4×10⁻⁷ (about 1
+in a million), is how often chance alone would produce a gap this large if the groups
 were identical — so the difference is real, not noise. Removing the outlier ponds
 barely moves either (0.046; 4.8×10⁻⁵).
 
@@ -254,6 +261,8 @@ Events involving each parameter; multi-parameter events count toward each.
 | Ammonia | 8 | 0 | 0.0 | 4 | 2 | 50.0 |
 
 ---
+
+<br>
 
 ## 4. Comparative test — how much did water quality improve?
 
@@ -286,7 +295,7 @@ so it's omitted from the cells for clarity. **Bold** = p < 0.05.
 | **Pooled** (gap-closed fraction) | 15 / 17 | −0.61 | +0.85 | **0.004** | **0.009** | — |
 
 Positive mean = moved toward range; Group E is higher on every parameter. (A
-negative Group-D mean means D ponds, on average, drifted further out of range.)
+negative Group-D value means D ponds, on average, drifted further out of range.)
 The effect survives outlier removal on all three parameters. (The lone p >
 0.05 — ammonia at 0.066 under the blunt any-param rule — is just lost power: that
 rule also strips a DO/pH outlier's ammonia events, dropping ammonia to n = 3 vs 3.
@@ -304,7 +313,7 @@ Under the targeted this-param rule it's 0.030.)
   agreeing shows the result isn't riding on one odd pond.
 
 <div align="center">
-<a href="../plots/Fig7.oor_improvement.png"><img src="../plots/Fig7.oor_improvement.png" width="900" alt="Fig7 — out-of-range gap closed per pond"></a>
+<a href="../plots/Fig7.oor_improvement.png"><img src="../plots/Fig7.oor_improvement.png" width="960" alt="Fig7 — out-of-range gap closed per pond"></a>
 
 <sub>*Fig7 — the data behind these tests: out-of-range gap closed per pond, one panel
 per parameter. The box summarises the pond means (solid dots); faint dots are the
@@ -312,6 +321,8 @@ individual events; red dots are the baseline-WQ outlier ponds.*</sub>
 </div>
 
 ---
+
+<br>
 
 ## 5. Secondary — does follow-up timing matter? (Day 2 vs Day 3)
 
@@ -334,7 +345,7 @@ than 30 — which is why its Day-3 rate reads 17.2% (5/29) instead of the 16.7%
 | E | 28 | 25.0% | 82.1% | 16 | 0 | **3.05×10⁻⁵** |
 
 <div align="center">
-<a href="../plots/Fig8.day2_vs_day3.png"><img src="../plots/Fig8.day2_vs_day3.png" width="480" alt="Fig8 — Day-2 vs Day-3 resolution pies"></a>
+<a href="../plots/Fig8.day2_vs_day3.png"><img src="../plots/Fig8.day2_vs_day3.png" width="520" alt="Fig8 — Day-2 vs Day-3 resolution pies"></a>
 
 <sub>*Fig8 — the same events scored at Day 2 (top) and Day 3 (bottom). At Day 2 both
 groups sit near 20–25% resolved; only by Day 3 does Group E fill in (82%) while
@@ -355,6 +366,8 @@ Day 2 it would have found nothing — which is why the protocol makes Day 3 the
 primary measure.
 
 ---
+
+<br>
 
 ## 6. Notes on test choices
 
@@ -382,6 +395,8 @@ primary measure.
 </details>
 
 ---
+
+<br>
 
 ## Glossary
 
