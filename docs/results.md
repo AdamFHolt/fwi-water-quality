@@ -92,7 +92,7 @@ spread, so both components are checked:
 - **Levene's test (p)** — compares the groups' variability (spread). The p is the
   probability of seeing spreads as different as these if the groups truly had
   equal spread; p > 0.05 means no evidence they differ. Here every p clears 0.05
-  (smallest 0.088, DO evening), so the spreads match.
+  (smallest 0.088, DO evening), so there is no evidence the spreads differ.
 
 - **Hedges' g** — the difference in means rescaled into pooled-SD units:
   `g = (mean_D − mean_E) / pooled SD`, with a small-sample correction. It is an
@@ -101,9 +101,9 @@ spread, so both components are checked:
   |g| ≈ 0.2 small, 0.5 medium, 0.8 large. The largest here is ammonia at 0.24
   (small); the rest are near zero.
 
-Levene asks "same spread?", Hedges' g asks "same average?" — both say yes here, so
-the groups start out comparable and the differences in §§3–5 aren't a baseline
-artifact.
+Levene asks "same spread?", Hedges' g asks "same average?" — neither shows a
+meaningful difference, so the groups start out comparable and the differences in
+§§3–5 aren't a baseline artifact.
 
 ### 2.3 Baseline-WQ outlier ponds
 
@@ -249,7 +249,9 @@ distance means it reached it.
 
 Each pond contributes one value (its mean across events), so no pond is
 double-counted. Every parameter is tested two ways: Welch's t on the means and
-Mann-Whitney U on the ranks.
+Mann-Whitney U on the ranks. Each parameter keeps its own native units; there is
+no pooled cross-parameter test — the overall D-vs-E comparison is §3's
+resolution rate.
 
 Each test is then re-run with the baseline-WQ outlier ponds removed, under two
 rules:
@@ -267,7 +269,6 @@ so it's omitted from the cells for clarity. **Bold** = p < 0.05.
 | DO (mg/L) | 14 / 16 | +0.05 | +2.10 | **0.020** | **0.006** | **0.003** |
 | pH | 8 / 11 | −0.02 | +0.21 | **0.0017** | **0.003** | **0.004** |
 | Ammonia (mg/L) | 5 / 4 | −0.01 | +0.04 | **0.018** | 0.066 | **0.030** |
-| **Pooled** (gap-closed fraction) | 15 / 17 | −0.61 | +0.85 | **0.004** | **0.009** | — |
 
 Positive mean = moved toward range; Group E is higher on every parameter. (A
 negative Group-D value means D ponds, on average, drifted further out of range.)
@@ -353,10 +354,11 @@ intact (at Day 2 the groups are still level, E even slightly behind D).*</sub>
   would essentially never happen by chance → p = 3.05×10⁻⁵ (about 3 in 100,000),
   so that jump is real.
 
-So at Day 2 the two groups look the same (~20–25%); the entire Group-E effect
-appears in that one extra day, between Day 2 and Day 3. Had the study stopped at
-Day 2 it would have found nothing — which is why the protocol makes Day 3 the
-primary measure.
+So at Day 2 the two groups look the same — 20.7% vs 25.0%, a gap Fisher's exact
+test rates as pure chance (p = 0.76) — and the entire Group-E effect appears in
+that one extra day, between Day 2 and Day 3. Had the study stopped at Day 2 it
+would have found nothing — which is why the protocol makes Day 3 the primary
+measure.
 
 <br>
 
@@ -401,9 +403,6 @@ primary measure.
   0 minus the distance at Day 3 (native units). Positive means it moved toward
   range. It clamps at the band edge, so a reading that overshoots into the range
   earns no extra credit.
-- **Gap-closed fraction** — the gap closed expressed as a fraction of the original
-  Day-0 gap: 1.0 = fully back in range, 0 = no movement, negative = drifted
-  further out. Being unit-free, it lets the three parameters be pooled.
 - **Hedges' g** — the difference between the two group means, rescaled into
   pooled-standard-deviation units, with a correction for small samples. It is an
   effect size rather than a test: it reports how far apart the averages are and

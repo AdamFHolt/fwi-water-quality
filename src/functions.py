@@ -445,12 +445,10 @@ def oor_event_improvements(data: pd.DataFrame) -> pd.DataFrame:
     For every OOR event (Day-0 detection, pond-day) and each parameter out of
     range that day, computes the distance-to-range at Day 0 and at the Day-3
     primary follow-up (same window rule as derive_oor_events: the latest
-    follow-up within 5 days). Two improvement measures:
+    follow-up within 5 days). The improvement measure is
       improvement = dist0 - dist3   native units, +ve = moved toward range
-      gap_closed  = improvement / dist0   unit-free (1.0 = back in range,
-                    <0 = worse), so it can be pooled across parameters.
     One row per (event, OOR parameter) that has a Day-3 follow-up reading.
-    Columns: Pond ID, group, date, parameter, dist0, dist3, improvement, gap_closed.
+    Columns: Pond ID, group, date, parameter, dist0, dist3, improvement.
     """
     data = data.copy()
     data["date"] = pd.to_datetime(data["Date of data collection"])
@@ -479,11 +477,13 @@ def oor_event_improvements(data: pd.DataFrame) -> pd.DataFrame:
         for p in OOR_DRIVERS:
             if pd.isna(d0[p]) or d0[p] <= 0:  # parameter wasn't OOR at Day 0
                 continue
+            if pd.isna(d3[p]):  # parameter not measured at the Day-3 follow-up
+                continue
             imp = d0[p] - d3[p]
             rows.append({
                 "Pond ID": e["Pond ID"], "group": e["group"], "date": e["date"],
                 "parameter": p, "dist0": d0[p], "dist3": d3[p],
-                "improvement": imp, "gap_closed": imp / d0[p],
+                "improvement": imp,
             })
     return pd.DataFrame(rows)
 
@@ -493,36 +493,36 @@ def improvement_tests(data: pd.DataFrame, exclude: set | None = None) -> pd.Data
 
     Each pond contributes one value (the mean over its OOR instances) so ponds
     aren't pseudo-replicated. Per parameter the value is mean improvement in
-    native units (distance-to-range closed); the POOLED row uses the unit-free
-    gap-closed fraction so all parameters share a scale. Runs two tests so the
-    result can be checked for robustness to the small-n normality assumption:
-    Welch's t (parametric, compares means, unequal-variance) and Mann-Whitney U
-    (nonparametric, rank-based). Pass `exclude` (a set of Pond IDs, e.g. the WQ
-    outliers) to drop those ponds first (sensitivity variant). Returns tidy rows:
-    scope, metric, n_D, mean_D, n_E, mean_E, t, t_p, U, u_p.
+    native units (distance-to-range closed); there is no pooled cross-parameter
+    row — the overall D-vs-E comparison is the binary resolution test
+    (resolution_fisher). Runs two tests so the result can be checked for
+    robustness to the small-n normality assumption: Welch's t (parametric,
+    compares means, unequal-variance) and Mann-Whitney U (nonparametric,
+    rank-based). Pass `exclude` (a set of Pond IDs, e.g. the WQ outliers) to
+    drop those ponds first (sensitivity variant). Returns tidy rows:
+    parameter, n_D, mean_D, n_E, mean_E, t, t_p, U, u_p (the n/mean column
+    suffixes follow the group labels in the data).
     """
     imp = oor_event_improvements(data)
     if exclude:
         imp = imp[~imp["Pond ID"].isin(exclude)]
+    groups = sorted(imp["group"].unique())       # ["Group D", "Group E"]
+    ka, kb = (g.split()[-1] for g in groups)     # column suffixes: "D", "E"
     rows = []
 
-    def add(scope, metric, sub, col):
-        pond = sub.groupby(["group", "Pond ID"])[col].mean().reset_index()
-        a = pond.loc[pond["group"] == "Group D", col]
-        b = pond.loc[pond["group"] == "Group E", col]
+    for p in OOR_DRIVERS:
+        pond = (imp[imp["parameter"] == p]
+                .groupby(["group", "Pond ID"])["improvement"].mean().reset_index())
+        a, b = (pond.loc[pond["group"] == g, "improvement"] for g in groups)
         t, t_p = ttest_ind(a, b, equal_var=False)
         u, u_p = mannwhitneyu(a, b, alternative="two-sided")
         rows.append({
-            "scope": scope, "metric": metric,
-            "n_D": len(a), "mean_D": round(a.mean(), 3),
-            "n_E": len(b), "mean_E": round(b.mean(), 3),
-            "t": round(t, 3), "t_p": round(t_p, 4),
-            "U": round(u, 1), "u_p": round(u_p, 4),
+            "parameter": p,
+            f"n_{ka}": len(a), f"mean_{ka}": round(a.mean(), 3),
+            f"n_{kb}": len(b), f"mean_{kb}": round(b.mean(), 3),
+            "t": round(t, 3), "t_p": t_p,
+            "U": round(u, 1), "u_p": u_p,
         })
-
-    for p in OOR_DRIVERS:
-        add(p, "dist closed (units)", imp[imp["parameter"] == p], "improvement")
-    add("POOLED", "gap-closed frac", imp, "gap_closed")
     return pd.DataFrame(rows)
 
 
@@ -531,27 +531,33 @@ def describe_improvement_tests(data: pd.DataFrame, exclude: set | None = None) -
     note = " — baseline-WQ outliers removed" if exclude else ""
     _section(
         f"OOR IMPROVEMENT — INDEPENDENT TESTS (Group D vs E){note}",
-        "(pond-level; per-param = distance-to-range closed, native units;",
-        " POOLED = gap-closed fraction [1.0 = back in range]; +mean = more improvement.",
+        "(pond-level; improvement = distance-to-range closed, native units;",
+        " +mean = more improvement.",
         " t = Welch t [means], t_p its p; U = Mann-Whitney [ranks], u_p its p)",
     )
-    print(improvement_tests(data, exclude=exclude).to_string(index=False))
+    disp = improvement_tests(data, exclude=exclude)
+    for col in ("t_p", "u_p"):
+        disp[col] = disp[col].map(lambda v: f"{v:.3g}")
+    print(disp.to_string(index=False))
     print()
 
 
-def resolution_fisher(events: pd.DataFrame, exclude: set | None = None):
+def resolution_fisher(events: pd.DataFrame, exclude: set | None = None,
+                      col: str = "2nd FU WQ improvement"):
     """Fisher's exact test on Day-3 resolution (resolved vs not), Group D vs E.
 
     Event-level (pond-per-day OOR events), the protocol's primary-outcome unit
     and the basis of its sample-size calc. Resolved = `2nd FU WQ improvement` ==
     "Yes". Pass `exclude` (a set of Pond IDs) to drop those ponds' events first
-    (sensitivity variant). Returns (table, odds_ratio, p): table is the 2x2
-    [group x outcome] with columns ordered resolved, unresolved.
+    (sensitivity variant), or `col` to test a different follow-up (e.g.
+    `1st FU WQ improvement` for the Day-2 secondary). Returns
+    (table, odds_ratio, p): table is the 2x2 [group x outcome] with columns
+    ordered resolved, unresolved.
     """
-    e = events.dropna(subset=["2nd FU WQ improvement"])
+    e = events.dropna(subset=[col])
     if exclude:
         e = e[~e["Pond ID"].isin(exclude)]
-    outcome = e["2nd FU WQ improvement"].map({"Yes": "resolved", "No": "unresolved"})
+    outcome = e[col].map({"Yes": "resolved", "No": "unresolved"})
     table = pd.crosstab(e["Group"], outcome)[["resolved", "unresolved"]]
     odds, p = fisher_exact(table.values)
     return table, odds, p
@@ -618,4 +624,9 @@ def describe_resolution_day2_vs_day3(events: pd.DataFrame, exclude: set | None =
         " McNemar = exact binomial on the discordant pairs; tests if timing matters)",
     )
     print(disp.to_string())
+    print()
+    # Between-group check at Day 2: confirms the groups are still indistinguishable
+    # before the Day-3 divergence.
+    _, odds, p = resolution_fisher(events, exclude=exclude, col="1st FU WQ improvement")
+    print(f"Day-2 between-group Fisher (D vs E): odds ratio = {odds:.3f}   p = {p:.3g}")
     print()

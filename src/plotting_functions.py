@@ -415,8 +415,8 @@ def plot_oor_improvement(data, filename="Fig7.oor_improvement.png"):
     imp = oor_event_improvements(data)
     fl = wq_outliers(data)
     flagged_ponds = set(fl["Pond ID"])  # union across parameters (whole-pond removal)
-    tests = improvement_tests(data).set_index("scope")
-    tests_pond = improvement_tests(data, exclude=flagged_ponds).set_index("scope")  # any-param outlier
+    tests = improvement_tests(data).set_index("parameter")
+    tests_pond = improvement_tests(data, exclude=flagged_ponds).set_index("parameter")  # any-param outlier
     # Per-parameter removal: for each panel drop only ponds extreme on THAT
     # parameter's baseline (DO spans both the AM and PM bands).
     baseline_params = {"DO": ["DO Morning (mg/L)", "DO Evening (mg/L)"],
@@ -424,7 +424,7 @@ def plot_oor_improvement(data, filename="Fig7.oor_improvement.png"):
     tests_param = {
         sc: improvement_tests(
             data, exclude=set(fl.loc[fl["parameter"].isin(ps), "Pond ID"])
-        ).set_index("scope").loc[sc]
+        ).set_index("parameter").loc[sc]
         for sc, ps in baseline_params.items()
     }
     groups = ["Group D", "Group E"]
