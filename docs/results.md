@@ -26,6 +26,9 @@ all methodological details.
 
 ## 1. Dataset overview
 
+The study followed 53 ponds over 998 monitoring visits between February and May
+2026, split between the two cohorts:
+
 | | Group D | Group E | Total |
 |---|--:|--:|--:|
 | Monitoring visits | 532 | 466 | 998 |
@@ -55,9 +58,12 @@ pond for the §2 balance tests.*</sub>
 
 ### 2.1 Baseline water quality — mean (SD) per pond
 
-Routine (non-follow-up) visits, averaged to one value per pond. Averaging per pond
-ensures ponds visited more often don't count more (i.e., avoids pseudoreplication). 
-DO is split by time of day because morning and evening differ systematically.
+The first question is whether the two groups started level — if not, any gap in
+outcomes could reflect a head start rather than anything that happened during
+the study. Baseline water quality uses routine (non-follow-up) visits, averaged
+to one value per pond so that ponds visited more often don't count more (i.e.,
+avoiding pseudoreplication); DO is split by time of day because morning and
+evening differ systematically.
 
 | Parameter | In-range band | Group D | Group E |
 |---|---|--:|--:|
