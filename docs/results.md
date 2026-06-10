@@ -39,9 +39,9 @@ The study followed 53 ponds over 998 monitoring visits between February and May
 | Ponds with OOR events | 15 | 17 | 32 |
 
 An OOR event is one pond-day on which a water-quality parameter was out of
-range; several events can come from the same pond. Routine (non-follow-up) visits
-are the baseline-WQ sample. Follow-ups are conditional on an OOR event, so only
-routine visits give an unbiased baseline (collapsed to per-pond means in §2):
+range; several events can come from the same pond. Follow-up visits are
+conditional on an OOR event, so only the routine visits give an unbiased
+baseline (collapsed to per-pond means in §2):
 
 <div align="center">
 <a href="../plots/Fig1.water_quality_all_visits.png"><img src="../plots/Fig1.water_quality_all_visits.png" width="920" alt="Figure 1 — visit-level baseline water quality"></a>
@@ -106,7 +106,7 @@ meaningful difference, so the groups start out comparable and the differences in
 Five ponds sit more than 2 SD from their group mean on at least one baseline
 parameter, for 9 flags in total; they are used only for sensitivity checks.
 Since some ponds are extreme on more than one parameter, each pond's first
-appearance in the table is bolded-underlined to make the repeat offenders 
+appearance in the table is bolded and underlined to make the repeat offenders
 easy to spot.
 
 | Parameter | Group | Pond | Value | Std. residual |
@@ -168,14 +168,10 @@ grey = not resolved. Figure 5 is the sensitivity check — the picture barely ch
 | &nbsp;&nbsp;event-level | 5 / 22 = 22.7% | 19 / 22 = 86.4% |
 | &nbsp;&nbsp;pond-level | 19.4% (12 ponds) | 86.7% (15 ponds) |
 
-Event-level counts each event once; pond-level counts each pond once (mean of
-per-pond rates), which rules out a few repeat-event ponds driving the gap.
-Removing the 5 outlier ponds leaves the gap intact — if anything, it widens
-slightly — so the result isn't an artifact of a handful of unusual ponds.
-
-The summary rates hide how the ponds are distributed, so Figure 6 plots each pond
-individually, confirming the gap is a broad shift rather than a few high-event
-ponds skewing the mean:
+The pond-level rows count each pond once, which rules out a few repeat-event
+ponds driving the gap; removing the 5 outlier ponds leaves the gap intact — if
+anything, it widens slightly. Figure 6 makes the same point pond by pond — the
+gap is a broad shift, not a few high-event ponds skewing the mean:
 
 <div align="center">
 <a href="../plots/Fig6.oor_resolution_by_pond.png"><img src="../plots/Fig6.oor_resolution_by_pond.png" width="560" alt="Figure 6 — pond-level resolution"></a>
@@ -187,9 +183,9 @@ pond counts once.*</sub>
 
 ### 3.2 Fisher's exact test (the formal primary test)
 
-The binary outcome (resolved vs not) by group is a 2×2 table → Fisher's exact.
-Left: all ponds. Right: with the 5 baseline-WQ outlier ponds removed (shown as
-Figure 5 above). Cells are event counts, so the rates here match the event-level rows
+The binary outcome (resolved vs not) by group forms a 2×2 table, which is
+exactly what Fisher's exact test is for. Left: all ponds. Right: with the 5
+baseline-WQ outlier ponds removed (shown in Figure 5 above). Cells are event counts, so the rates here match the event-level rows
 in §3.1 (22.7% / 86.4% on the right), not the pond-level rows.
 
 <table>
