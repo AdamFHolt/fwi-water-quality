@@ -62,7 +62,7 @@ with a dense, semi-transparent strip of all visits.
 
 Contrast with `Fig2.water_quality_per_pond.png`: this one shows the raw
 visit-to-visit spread, whereas the per-pond figure shows the spread *between
-ponds* (the unit used for the statistics, to avoid pseudoreplication).
+ponds* (the unit used for the statistics).
 
 ---
 
@@ -150,24 +150,24 @@ The pond-level companion to the `Fig4` pies — one point per pond.
   - **Grey dots** down the left edge = the point-size key, each sized like
     the main scatter and aligned to its event-count row.
 
-It shows the D-vs-E gap survives when each pond counts once (so it isn't an
-artifact of repeat-event ponds), and exposes the per-pond spread the pies hide.
-Per-pond rates are lumpy (0, 50, 100 %) because most ponds have very few events.
+It shows the D-vs-E gap survives when each pond counts once, and exposes the
+per-pond spread the pies hide. Most ponds have only one or two events, so the
+per-pond rates cluster at 0, 50, and 100%.
 
 ---
 
 ## `Fig7.oor_improvement.png`
 
 The continuous companion to the resolution pies: instead of "did it resolve,"
-*how much* of the out-of-range gap each pond closed between Day 0 and Day 3. One
+how far each pond closed its out-of-range gap between Day 0 and Day 3. One
 panel per OOR parameter (DO, pH, Ammonia). This is the data behind the Welch-t /
 Mann-Whitney tests in [`results.md`](results.md) §4.
 
 - **Y-axis — out-of-range gap closed**, in the parameter's native units (mg/L for
   DO/ammonia, pH units for pH): the distance outside the band at Day 0 minus at
-  Day 3, direction-folded so improvement is always positive, and clamped at the
-  band edge (no credit for overshooting into range). Positive = moved toward
-  range; the dashed line marks 0 (no change).
+  Day 3, direction-folded so that moving toward the band counts as positive
+  whichever side the reading was out on, and clamped at the band edge (no credit
+  for overshooting into range). The dashed line marks 0 (no change).
 - **Box + points per group.** The box summarises the pond means (the
   inferential unit); solid black-edged dots are those pond means, faint dots
   behind are the individual OOR events — context only, since events within a pond
@@ -200,8 +200,8 @@ Identical to `Fig8`, but with the baseline-WQ outlier ponds removed (the same
 pond set dropped in `Fig5`). The sensitivity check for the timing story: at
 Day 2 the groups are still indistinguishable (if anything E sits slightly
 *behind* D, 18% vs 29%), and the Day-3 divergence is intact (E 86% vs D 24%). So
-the "all the separation appears on the last day" pattern isn't an artifact of a
-few atypical ponds.
+the pattern — all the separation appearing on the last day — isn't an artifact
+of a few atypical ponds.
 
 ---
 
@@ -231,7 +231,7 @@ few atypical ponds.
   sits from its group mean, scaled by the model's residual spread. A pond is an
   outlier if its absolute studentized residual exceeds 2 (i.e. >2 SD from
   its group mean). These flagged ponds are what gets removed in the
-  `Fig3` / `Fig5` variants.
+  `Fig3` / `Fig5` / `Fig9` variants.
   - *Why not Cook's distance?* It's the usual influence companion to the
     residual, but a two-group factor has constant within-group leverage, so
     Cook's distance is just a monotone function of the residual (rank correlation
