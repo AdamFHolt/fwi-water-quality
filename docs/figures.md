@@ -207,10 +207,6 @@ of a few atypical ponds.
 
 ## Glossary
 
-- **Group D / Group E.** The blinded cohort labels: the dataset withheld which
-  cohort was Control and which Treatment so the analysis couldn't favour either.
-  All comparisons are D vs E.
-
 - **mean ± SD.** Standard deviation is a measure of spread around the mean. The
   error bars span one SD either side. (Note: for the *pond-level resolution*
   figure SD is deliberately *not* used — those rates are bounded [0, 100] and
