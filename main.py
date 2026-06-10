@@ -24,8 +24,8 @@ from src.plotting_functions import (
     plot_day2_vs_day3,
 )
 
-DATA_PATH = "data/Outcome Evaluation Phase 2 Data_Cleaned And Anonymized.xlsx"
-DATA_PATH_REORD = "data/Outcome Evaluation Phase 2 Data_Cleaned And Anonymized.reordered.xlsx"
+DATA_PATH = "inputs/data/Outcome Evaluation Phase 2 Data_Cleaned And Anonymized.xlsx"
+DATA_PATH_REORD = "outputs/Outcome Evaluation Phase 2 Data_Cleaned And Anonymized.reordered.xlsx"
 
 def main():
 
