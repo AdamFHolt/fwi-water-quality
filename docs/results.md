@@ -87,17 +87,13 @@ Both columns use the same per-pond baseline values as §2.1 (one value per pond,
 D / 25 E), so the comparison is between ponds, not the 768 individual visits.
 
 **What the two columns mean.** Two groups can match on their average yet differ
-in spread, so both are checked (full definitions in the glossary):
-
-- **Levene's test (p)** — compares spread; p > 0.05 means no evidence the
-  spreads differ. Every p here clears 0.05 (smallest 0.088, DO evening).
-
-- **Hedges' g** — the gap between the means in pooled-SD units; an effect size,
-  not a test (|g| ≈ 0.2 is small). The largest here is ammonia at 0.24; the
-  rest are near zero.
-
-Neither shows a meaningful difference, so the groups start out comparable and
-the differences in §§3–5 aren't a baseline artifact.
+in spread, so both are checked (full definitions in the glossary). Levene's test
+compares spread, and p > 0.05 means no evidence the spreads differ — every p
+here clears it (smallest 0.088, DO evening). Hedges' g is the gap between the
+means in pooled-SD units, an effect size rather than a test (|g| ≈ 0.2 is small)
+— the largest here is ammonia at 0.24, the rest near zero. Neither shows a
+meaningful difference, so the groups start out comparable and the differences in
+§§3–5 aren't a baseline artifact.
 
 ### 2.3 Baseline-WQ outlier ponds
 
