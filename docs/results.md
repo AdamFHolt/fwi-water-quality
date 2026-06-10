@@ -86,24 +86,18 @@ and explained below (§2.2).*</sub>
 Both columns use the same per-pond baseline values as §2.1 (one value per pond, 28
 D / 25 E), so the comparison is between ponds, not the 768 individual visits.
 
-**What the two columns mean.** Two groups can match on their average yet differ in
-spread, so both components are checked:
+**What the two columns mean.** Two groups can match on their average yet differ
+in spread, so both are checked (full definitions in the glossary):
 
-- **Levene's test (p)** — compares the groups' variability (spread). The p is the
-  probability of seeing spreads as different as these if the groups truly had
-  equal spread; p > 0.05 means no evidence they differ. Here every p clears 0.05
-  (smallest 0.088, DO evening), so there is no evidence the spreads differ.
+- **Levene's test (p)** — compares spread; p > 0.05 means no evidence the
+  spreads differ. Every p here clears 0.05 (smallest 0.088, DO evening).
 
-- **Hedges' g** — the difference in means rescaled into pooled-SD units:
-  `g = (mean_D − mean_E) / pooled SD`, with a small-sample correction. It is an
-  effect size, not a test (no p-value): a significance test on a baseline
-  difference mostly reflects sample size, not the size of the gap. Rough scale:
-  |g| ≈ 0.2 small, 0.5 medium, 0.8 large. The largest here is ammonia at 0.24
-  (small); the rest are near zero.
+- **Hedges' g** — the gap between the means in pooled-SD units; an effect size,
+  not a test (|g| ≈ 0.2 is small). The largest here is ammonia at 0.24; the
+  rest are near zero.
 
-Levene asks "same spread?", Hedges' g asks "same average?" — neither shows a
-meaningful difference, so the groups start out comparable and the differences in
-§§3–5 aren't a baseline artifact.
+Neither shows a meaningful difference, so the groups start out comparable and
+the differences in §§3–5 aren't a baseline artifact.
 
 ### 2.3 Baseline-WQ outlier ponds
 
