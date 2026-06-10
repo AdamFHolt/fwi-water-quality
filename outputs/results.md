@@ -44,7 +44,7 @@ conditional on an OOR event, so only the routine visits give an unbiased
 baseline (collapsed to per-pond means in §2):
 
 <div align="center">
-<a href="../plots/Fig1.water_quality_all_visits.png"><img src="../plots/Fig1.water_quality_all_visits.png" width="920" alt="Figure 1 — visit-level baseline water quality"></a>
+<a href="plots/Fig1.water_quality_all_visits.png"><img src="plots/Fig1.water_quality_all_visits.png" width="920" alt="Figure 1 — visit-level baseline water quality"></a>
 
 <sub>*Figure 1 — visit-level baseline water quality: one point per routine visit (DO split
 by time of day). Top panels show the group mean ± SD; bottom panels show the
@@ -73,7 +73,7 @@ evening differ systematically.
 | Ammonia, NH₃ (mg/L) | < 0.05 | 0.018 (0.013) | 0.016 (0.010) |
 
 <div align="center">
-<a href="../plots/Fig2.water_quality_per_pond.png"><img src="../plots/Fig2.water_quality_per_pond.png" width="920" alt="Figure 2 — per-pond baseline water quality"></a>
+<a href="plots/Fig2.water_quality_per_pond.png"><img src="plots/Fig2.water_quality_per_pond.png" width="920" alt="Figure 2 — per-pond baseline water quality"></a>
 
 <sub>*Figure 2 — per-pond baseline water quality: mean ± SD bars (top) and box + strip
 (bottom) for each parameter. Hedges' g and Levene p are given in the panel titles,
@@ -122,7 +122,7 @@ easy to spot.
 | Ammonia | D | 9252e874 | 0.064 | 4.07 |
 
 <div align="center">
-<a href="../plots/Fig3.water_quality_outliers.png"><img src="../plots/Fig3.water_quality_outliers.png" width="920" alt="Figure 3 — baseline water quality with outlier ponds highlighted"></a>
+<a href="plots/Fig3.water_quality_outliers.png"><img src="plots/Fig3.water_quality_outliers.png" width="920" alt="Figure 3 — baseline water quality with outlier ponds highlighted"></a>
 
 <sub>*Figure 3 — the §2.1 per-pond baseline with these 5 outlier ponds excluded from every
 statistic and marked as red-ringed points (with their OOR-event count).*</sub>
@@ -144,8 +144,8 @@ by pH and then ammonia, and a single event can flag several parameters at once
 <td align="center"><b>Right: anomalous ponds removed</b></td>
 </tr>
 <tr>
-<td valign="top"><a href="../plots/Fig4.oor_resolution.png"><img src="../plots/Fig4.oor_resolution.png" width="480" alt="Figure 4 — Day-3 resolution, all ponds"></a></td>
-<td valign="top"><a href="../plots/Fig5.oor_resolution_outliers_removed.png"><img src="../plots/Fig5.oor_resolution_outliers_removed.png" width="480" alt="Figure 5 — Day-3 resolution, outlier ponds removed"></a></td>
+<td valign="top"><a href="plots/Fig4.oor_resolution.png"><img src="plots/Fig4.oor_resolution.png" width="480" alt="Figure 4 — Day-3 resolution, all ponds"></a></td>
+<td valign="top"><a href="plots/Fig5.oor_resolution_outliers_removed.png"><img src="plots/Fig5.oor_resolution_outliers_removed.png" width="480" alt="Figure 5 — Day-3 resolution, outlier ponds removed"></a></td>
 </tr>
 </table>
 
@@ -174,7 +174,7 @@ anything, it widens slightly. Figure 6 makes the same point pond by pond — the
 gap is a broad shift, not a few high-event ponds skewing the mean:
 
 <div align="center">
-<a href="../plots/Fig6.oor_resolution_by_pond.png"><img src="../plots/Fig6.oor_resolution_by_pond.png" width="560" alt="Figure 6 — pond-level resolution"></a>
+<a href="plots/Fig6.oor_resolution_by_pond.png"><img src="plots/Fig6.oor_resolution_by_pond.png" width="560" alt="Figure 6 — pond-level resolution"></a>
 
 <sub>*Figure 6 — the pond-level view: one point per pond (area ∝ its OOR-event count); the
 bar marks each group's mean per-pond rate. Shows the D-vs-E gap holds when every
@@ -264,7 +264,7 @@ which cuts it to n = 3 vs 3 — comes back to 0.030 under the targeted this-para
 rule.
 
 <div align="center">
-<a href="../plots/Fig7.oor_improvement.png"><img src="../plots/Fig7.oor_improvement.png" width="960" alt="Figure 7 — out-of-range gap closed per pond"></a>
+<a href="plots/Fig7.oor_improvement.png"><img src="plots/Fig7.oor_improvement.png" width="960" alt="Figure 7 — out-of-range gap closed per pond"></a>
 
 <sub>*Figure 7 — the data behind these tests: out-of-range gap closed per pond, one panel
 per parameter. The box summarises the pond means (solid dots); faint dots are the
@@ -297,8 +297,8 @@ D's, so D's Day-3 rate reads 17.2% (5/29) here rather than §3's 16.7% (5/30).
 <td align="center"><b>Right: anomalous ponds removed</b></td>
 </tr>
 <tr>
-<td valign="top"><a href="../plots/Fig8.day2_vs_day3.png"><img src="../plots/Fig8.day2_vs_day3.png" width="480" alt="Figure 8 — Day-2 vs Day-3 resolution, all ponds"></a></td>
-<td valign="top"><a href="../plots/Fig9.day2_vs_day3_outliers_removed.png"><img src="../plots/Fig9.day2_vs_day3_outliers_removed.png" width="480" alt="Figure 9 — Day-2 vs Day-3 resolution, outlier ponds removed"></a></td>
+<td valign="top"><a href="plots/Fig8.day2_vs_day3.png"><img src="plots/Fig8.day2_vs_day3.png" width="480" alt="Figure 8 — Day-2 vs Day-3 resolution, all ponds"></a></td>
+<td valign="top"><a href="plots/Fig9.day2_vs_day3_outliers_removed.png"><img src="plots/Fig9.day2_vs_day3_outliers_removed.png" width="480" alt="Figure 9 — Day-2 vs Day-3 resolution, outlier ponds removed"></a></td>
 </tr>
 </table>
 

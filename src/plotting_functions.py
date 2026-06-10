@@ -41,7 +41,7 @@ from src.functions import (
     resolution_day2_vs_day3,
 )
 
-PLOTS_DIR = Path("plots")
+PLOTS_DIR = Path("outputs/plots")
 
 # One consistent palette: each group has a single identity colour used
 # everywhere, and grey always means "not resolved".
@@ -53,7 +53,7 @@ OUTLIER_LABEL = "baseline-WQ outlier (>2 SD)"  # one legend wording everywhere
 
 
 def _save(fig, filename):
-    PLOTS_DIR.mkdir(exist_ok=True)
+    PLOTS_DIR.mkdir(parents=True, exist_ok=True)
     path = PLOTS_DIR / filename
     fig.savefig(path, dpi=400, bbox_inches="tight")
     plt.close(fig)
