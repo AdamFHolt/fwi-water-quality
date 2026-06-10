@@ -100,8 +100,8 @@ meaningful difference, so the groups start out comparable and the differences in
 Five ponds sit more than 2 SD from their group mean on at least one baseline
 parameter, for 9 flags in total; they are used only for sensitivity checks.
 Since some ponds are extreme on more than one parameter, each pond's first
-appearance in the table is bold-underlined to make the repeat offenders easy
-to spot.
+appearance in the table is bolded-underlined to make the repeat offenders 
+easy to spot.
 
 | Parameter | Group | Pond | Value | Std. residual |
 |---|---|---|--:|--:|
@@ -126,9 +126,11 @@ statistic and marked as red-ringed points (with their OOR-event count).*</sub>
 
 ## 3. Primary outcome — resolution at Day 3
 
-"Resolved" = the pond was back in range at the Day-3 (primary) follow-up. DO
-drives most OOR events, then pH, then ammonia. Note that a single event can flag
-several parameters (see the middle "event drivers" bars below).
+With the groups comparable at baseline, we now turn to the primary outcome: how
+many OOR events each group resolved, where "resolved" means the pond was back in
+range at the Day-3 (primary) follow-up. Most events are driven by DO, followed
+by pH and then ammonia, and a single event can flag several parameters at once
+(the middle "event drivers" bars below).
 
 <table>
 <tr>
