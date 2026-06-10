@@ -235,27 +235,19 @@ Events involving each parameter; multi-parameter events count toward each.
 ## 4. Comparative test — how much did water quality improve?
 
 Section 3 asked whether a pond resolved (yes/no); this section asks how far it
-moved. The measure is the out-of-range gap closed: how far the reading sat
-outside its in-range band at Day 0, minus how far it sat outside at Day 3, in native
-units. A positive value means the pond moved back toward the band; the full Day-0
-distance means it reached it.
-
-Each pond contributes one value (its mean across events), so no pond is
-double-counted. Every parameter is tested two ways: Welch's t on the means and
-Mann-Whitney U on the ranks. Each parameter keeps its own native units; there is
-no pooled cross-parameter test — the overall D-vs-E comparison is §3's
+moved. The measure is the out-of-range gap closed: the distance outside the
+in-range band at Day 0 minus the distance at Day 3, in native units — positive
+means the pond moved back toward the band, and the full Day-0 distance means it
+got there. Each pond contributes one value (its mean across events), and each
+parameter keeps its own units; the overall D-vs-E comparison stays with §3's
 resolution rate.
 
-Each test is then re-run with the baseline-WQ outlier ponds removed, under two
-rules:
-- **any-param** — once a pond is flagged on any parameter, it is dropped from
-  *every* test (whole-pond removal).
-- **this-param** — a flagged pond is dropped only from the parameter it was extreme
-  on, and kept in the others.
-
-Means are all-ponds (descriptive). Each p compares D vs E and is Welch's t; the
-rank-based Mann-Whitney test agrees on every call (same significant/not pattern),
-so it's omitted from the cells for clarity. **Bold** = p < 0.05.
+Means are over all ponds; each p compares D vs E by Welch's t. The rank-based
+Mann-Whitney U was run alongside and agrees on every call, which matters at
+these small n: a mean-based and a rank-based test agreeing shows the result
+isn't riding on one extreme pond. The two outlier columns re-run the test with
+the flagged ponds dropped from every parameter (any) or only from the parameter
+they were extreme on (this). **Bold** = p < 0.05.
 
 | Parameter | n (D / E) | Mean D | Mean E | p (all) | p (−out, any) | p (−out, this) |
 |---|:--:|--:|--:|--:|--:|--:|
@@ -263,23 +255,11 @@ so it's omitted from the cells for clarity. **Bold** = p < 0.05.
 | pH | 8 / 11 | −0.02 | +0.21 | **0.0017** | **0.003** | **0.004** |
 | Ammonia (mg/L) | 5 / 4 | −0.01 | +0.04 | **0.018** | 0.066 | **0.030** |
 
-Positive mean = moved toward range; Group E is higher on every parameter. (A
-negative Group-D value means D ponds, on average, drifted further out of range.)
-The effect survives outlier removal on all three parameters. (The lone p >
-0.05 — ammonia at 0.066 under the blunt any-param rule — is just lost power: that
-rule also strips a DO/pH outlier's ammonia events, dropping ammonia to n = 3 vs 3.
-Under the targeted this-param rule it's 0.030.)
-
-**Why two tests.**
-
-- **Welch's t** compares the means and allows the two groups to have unequal
-  spread.
-
-- **Mann-Whitney U** compares ranks — whether an E pond tends to out-improve a D
-  pond — so it's unbothered by skew or a lone extreme pond.
-
-- With small n and the baseline outliers, a mean-based and a rank-based test
-  agreeing shows the result isn't riding on one odd pond.
+Group E improves more on every parameter, while Group D's mean pH and ammonia
+drift slightly further out of range. The effect survives outlier removal
+throughout: the lone p > 0.05 — ammonia at 0.066 under the blunt any-param rule,
+which cuts it to n = 3 vs 3 — comes back to 0.030 under the targeted this-param
+rule.
 
 <div align="center">
 <a href="../plots/Fig7.oor_improvement.png"><img src="../plots/Fig7.oor_improvement.png" width="960" alt="Figure 7 — out-of-range gap closed per pond"></a>
