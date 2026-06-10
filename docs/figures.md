@@ -5,7 +5,7 @@ across them. All analysis is **blind**: cohorts are labelled **Group D** and
 **Group E**, never Control/Treatment. Throughout, **blue = Group D**,
 **orange = Group E**, and **grey = "not resolved"**.
 
-Figures are numbered `Fig1`–`Fig8` in reading order (baseline water quality
+Figures are numbered `Fig1`–`Fig9` in reading order (baseline water quality
 first, then the OOR outcomes). They are produced by `main.py` (functions in
 `src/plotting_functions.py`, which call the analysis functions in
 `src/functions.py`). For the numeric results and statistical tests in table form,
@@ -191,6 +191,17 @@ At **Day 2** both groups are near-identical (~20–25% resolved); only by **Day 
 does Group E fill in (82%) while Group D is unchanged. The entire effect appears
 in that one extra day — which is why the protocol fixes Day 3 as the primary
 measure, and the McNemar test (§5) quantifies it.
+
+---
+
+## `Fig9.day2_vs_day3_outliers_removed.png`
+
+Identical to `Fig8`, but with the **baseline-WQ outlier ponds removed** (the same
+pond set dropped in `Fig5`). The sensitivity check for the timing story: at
+**Day 2** the groups are still indistinguishable (if anything E sits slightly
+*behind* D, 18% vs 29%), and the Day-3 divergence is intact (E 86% vs D 24%). So
+the "all the separation appears on the last day" pattern isn't an artifact of a
+few atypical ponds.
 
 ---
 

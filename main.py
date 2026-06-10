@@ -62,6 +62,8 @@ def main():
     describe_improvement_tests(data, exclude=flagged_ponds)
     # Secondary: does resolution timing (Day 2 vs Day 3) matter? (McNemar)
     describe_resolution_day2_vs_day3(events)
+    # Same, with the baseline-WQ outlier ponds removed (sensitivity).
+    describe_resolution_day2_vs_day3(events, exclude=flagged_ponds)
 
     # Make plots
     print(f"Saved plots:")
@@ -73,6 +75,7 @@ def main():
     print(f"  {plot_oor_resolution_by_pond(data)}")                              # Fig6: pond-level resolution (one point per pond)
     print(f"  {plot_oor_improvement(data)}")                                     # Fig7: per-pond improvement (the t / U test inputs)
     print(f"  {plot_day2_vs_day3(events)}")                                      # Fig8: Day-2 vs Day-3 resolution pies
+    print(f"  {plot_day2_vs_day3(events_clean, 'Fig9.day2_vs_day3_outliers_removed.png')}")  # Fig9: same, outlier ponds removed
 
 
 if __name__ == "__main__":

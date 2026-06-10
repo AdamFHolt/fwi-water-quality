@@ -573,18 +573,22 @@ def describe_resolution_fisher(events: pd.DataFrame, exclude: set | None = None)
     print()
 
 
-def resolution_day2_vs_day3(events: pd.DataFrame) -> pd.DataFrame:
+def resolution_day2_vs_day3(events: pd.DataFrame, exclude: set | None = None) -> pd.DataFrame:
     """Secondary analysis: does resolution differ between Day 2 and Day 3?
 
     Protocol §4.4 "Day 2 vs Day 3 Comparison". Day 2 (`1st FU WQ improvement`)
     and Day 3 (`2nd FU WQ improvement`) are the SAME events measured twice, so
     this is matched/paired binary data -> McNemar's test (the binary analog of
     the paired/Wilcoxon test). Restricted to events with both follow-ups recorded.
-    Per group: resolved counts/% at each day, plus the discordant pairs
-    `gained` (No@Day2 -> Yes@Day3) and `lost` (Yes@Day2 -> No@Day3). `mcnemar_p`
-    is the exact two-sided binomial test on the discordant pairs. One row per group.
+    Pass `exclude` (a set of Pond IDs) to drop those ponds' events first
+    (sensitivity variant). Per group: resolved counts/% at each day, plus the
+    discordant pairs `gained` (No@Day2 -> Yes@Day3) and `lost` (Yes@Day2 -> No@Day3).
+    `mcnemar_p` is the exact two-sided binomial test on the discordant pairs. One
+    row per group.
     """
     e = events.dropna(subset=["1st FU WQ improvement", "2nd FU WQ improvement"])
+    if exclude:
+        e = e[~e["Pond ID"].isin(exclude)]
     rows = []
     for g, sub in e.groupby("Group"):
         d2 = sub["1st FU WQ improvement"].eq("Yes")
@@ -602,13 +606,14 @@ def resolution_day2_vs_day3(events: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(rows).set_index("group")
 
 
-def describe_resolution_day2_vs_day3(events: pd.DataFrame) -> None:
+def describe_resolution_day2_vs_day3(events: pd.DataFrame, exclude: set | None = None) -> None:
     """Print the Day-2 vs Day-3 resolution comparison (McNemar, per group)."""
-    res = resolution_day2_vs_day3(events)
+    res = resolution_day2_vs_day3(events, exclude=exclude)
     disp = res.copy()
     disp["mcnemar_p"] = disp["mcnemar_p"].map(lambda v: f"{v:.3g}")
+    note = " — baseline-WQ outliers removed" if exclude else ""
     _section(
-        "DAY 2 vs DAY 3 RESOLUTION — McNEMAR (within-event, secondary analysis)",
+        f"DAY 2 vs DAY 3 RESOLUTION — McNEMAR (within-event, secondary analysis){note}",
         "(events with both follow-ups; gained = No@Day2->Yes@Day3, lost = reverse;",
         " McNemar = exact binomial on the discordant pairs; tests if timing matters)",
     )

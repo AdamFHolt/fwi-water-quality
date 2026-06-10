@@ -314,15 +314,35 @@ than 30 — which is why its Day-3 rate reads 17.2% (5/29) instead of the 16.7%
 
 | Group | n | Day 2 resolved | Day 3 resolved | Gained (No→Yes) | Lost (Yes→No) | McNemar p |
 |---|--:|--:|--:|--:|--:|--:|
-| D | 29 | 20.7% | 17.2% | 1 | 2 | 1.0 |
-| E | 28 | 25.0% | 82.1% | 16 | 0 | **3.05×10⁻⁵** |
+| **All ponds** | | | | | | |
+| &nbsp;&nbsp;D | 29 | 20.7% | 17.2% | 1 | 2 | 1.0 |
+| &nbsp;&nbsp;E | 28 | 25.0% | 82.1% | 16 | 0 | **3.05×10⁻⁵** |
+| **Outlier ponds removed** | | | | | | |
+| &nbsp;&nbsp;D | 21 | 28.6% | 23.8% | 1 | 2 | 1.0 |
+| &nbsp;&nbsp;E | 22 | 18.2% | 86.4% | 15 | 0 | **6.1×10⁻⁵** |
+
+Removing the 5 baseline-WQ outlier ponds (the Figure 9 set) leaves the timing
+story unchanged: Group D still flat (1 gained, 2 lost), Group E still swinging
+from ~18% at Day 2 to 86% at Day 3 (15 gained, none lost, McNemar p = 6.1×10⁻⁵).
+
+<table>
+<tr>
+<td align="center"><b>Left: all events</b></td>
+<td align="center"><b>Right: anomalous ponds removed</b></td>
+</tr>
+<tr>
+<td valign="top"><a href="../plots/Fig8.day2_vs_day3.png"><img src="../plots/Fig8.day2_vs_day3.png" width="480" alt="Figure 8 — Day-2 vs Day-3 resolution, all ponds"></a></td>
+<td valign="top"><a href="../plots/Fig9.day2_vs_day3_outliers_removed.png"><img src="../plots/Fig9.day2_vs_day3_outliers_removed.png" width="480" alt="Figure 9 — Day-2 vs Day-3 resolution, outlier ponds removed"></a></td>
+</tr>
+</table>
 
 <div align="center">
-<a href="../plots/Fig8.day2_vs_day3.png"><img src="../plots/Fig8.day2_vs_day3.png" width="520" alt="Figure 8 — Day-2 vs Day-3 resolution pies"></a>
 
-<sub>*Figure 8 — the same events scored at Day 2 (top) and Day 3 (bottom). At Day 2 both
-groups sit near 20–25% resolved; only by Day 3 does Group E fill in (82%) while
-Group D stays put.*</sub>
+<sub>*Figure 8 (left, all ponds) and Figure 9 (right, the 5 baseline-WQ outlier ponds removed)
+— the same events scored at Day 2 (top) and Day 3 (bottom). At Day 2 both groups sit
+near 20–25% resolved; only by Day 3 does Group E fill in (82%) while Group D stays put.
+Figure 9 is the sensitivity check — dropping the outlier ponds leaves the timing story
+intact (at Day 2 the groups are still level, E even slightly behind D).*</sub>
 </div>
 
 - **Group D** barely moves — 1 gained, 2 lost (20.7% → 17.2%).
