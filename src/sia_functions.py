@@ -24,6 +24,10 @@ DAY0_COL = "\nDate Initial OOR\n(Day 0)"
 DAY2_COL = "Date 1st FU (day 2)"
 DAY3_COL = "Date 2nd FU (day 3)"
 
+# Unblinding map to the labels used throughout the blind analysis (the visit
+# counts pin it: Control 532 = Group D, Treatment 466 = Group E).
+BLIND_LABEL = {"Control": "Group D", "Treatment": "Group E"}
+
 
 def sia_actions(data: pd.DataFrame) -> pd.DataFrame:
     """One row per visit-recorded self-initiated action, with the window
@@ -93,14 +97,20 @@ def event_sia_exposure(events: pd.DataFrame, actions: pd.DataFrame) -> pd.DataFr
 
 
 def describe_sia_exposure(events: pd.DataFrame, actions: pd.DataFrame) -> None:
-    """Print the per-event SIA exposure summary, by group."""
+    """Print the per-event SIA exposure summary, by group (with blind labels)."""
     ev = event_sia_exposure(events, actions)
     table = pd.crosstab(ev["group"], ev["sia"]).reindex(
         columns=[c for c in ["exact", "possible", "none"] if c in ev["sia"].values]
     )
+    table["events"] = table.sum(axis=1)
+    exposed = table["events"] - table["none"]
+    table["exposed"] = exposed
+    table["pct_exposed"] = (exposed / table["events"] * 100).round(1)
+    table.index = [f"{g} ({BLIND_LABEL[g]})" for g in table.index]
+
     _section("SELF-INITIATED ACTIONS — EVENT EXPOSURE (Day 0 .. Day-3 follow-up)",
              "(exact = action date inside the window; possible = only a",
-             " range-dated action overlaps; none = no overlap)")
+             " range-dated action overlaps; exposed = exact + possible)")
     print(f"SIA records: {len(actions)} "
           f"(exact-dated {int((actions['basis'] == 'exact').sum())}, "
           f"range-dated {int((actions['basis'] == 'range').sum())}) "
