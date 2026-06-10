@@ -6,9 +6,9 @@ summary, with the key figures embedded inline; see
 all methodological details.
 
 > [!NOTE]
-> Cohorts are labelled Group D and Group E (not Control/Treatment) to
-> reduce analyst bias. All tests are run two-sided as D vs E. Significance
-> threshold throughout is p < 0.05.
+> The analysis was run blind: cohorts are labelled Group D and Group E (not
+> Control/Treatment) to reduce analyst bias. All tests are run two-sided as
+> D vs E. Significance threshold throughout is p < 0.05.
 
 **Contents:** [Highlights](#highlights) · [1. Dataset overview](#1-dataset-overview) · [2. Baseline comparability](#2-are-the-groups-comparable-at-baseline) · [3. Primary outcome](#3-primary-outcome--resolution-at-day-3) · [4. Comparative test](#4-comparative-test--how-much-did-water-quality-improve) · [5. Day 2 vs Day 3](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3) · [6. Notes on test choices](#6-notes-on-test-choices) · [Glossary](#glossary)
 
@@ -347,7 +347,7 @@ intact (at Day 2 the groups are still level, E even slightly behind D).*</sub>
 </div>
 
 - **Group D** barely moves — 1 gained, 2 lost (20.7% → 17.2%).
-- **Group E** swings hard — 16 gained, none lost (25.0% → 82.1%).
+- **Group E** moves in one direction only — 16 gained, none lost (25.0% → 82.1%).
 - **The p-values** ask how likely each split is by chance if the extra day made no
   difference (an event as likely to slip back as to improve). D's near-even 1-vs-2
   is exactly what chance produces → p = 1.0, no evidence of change. E's 16-to-0
@@ -368,8 +368,8 @@ measure.
 <summary><b>Expand methodology notes</b></summary>
 <br>
 
-- **Two-sided tests.** The analysis is blind (D vs E), so we don't assume in
-  advance which group should do better. Every test is therefore two-sided, which
+- **Two-sided tests.** The analysis was run blind (D vs E), so we couldn't
+  assume in advance which group should do better. Every test is therefore two-sided, which
   is the more conservative choice: it splits the 0.05 significance budget across
   both tails rather than spending it all on one expected direction.
 - **Pond-level vs event-level.** The continuous tests (§4) use one value

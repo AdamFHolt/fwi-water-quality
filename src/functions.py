@@ -211,8 +211,8 @@ def derive_oor_events(data: pd.DataFrame) -> pd.DataFrame:
     Returns one row per event with columns: Pond ID, date, group, resolved (bool).
     """
     data = data.copy()
-    data["date"] = pd.to_datetime(data["Date of data collection"])              # convert dates to pd timestamps
-    day0 = (data["Is WQ in range?"] == "No") & (data["Is follow up"] == "No")   # identify Day-0 OOR detections (boolean mask)
+    data["date"] = pd.to_datetime(data["Date of data collection"])
+    day0 = (data["Is WQ in range?"] == "No") & (data["Is follow up"] == "No")
 
     # Build the event list from the Day-0 OOR detections: one row per event,
     # collapsing each pond-day's Morning+Evening rows into (Pond ID, date, group).
@@ -247,7 +247,6 @@ def derive_oor_events(data: pd.DataFrame) -> pd.DataFrame:
         # most recent follow-up = Day-3 measure (not Day-2)
         return bool(cand.sort_values("date").iloc[-1]["inrange"])
 
-    # run resolve() on each event row. Gives True/False/None per event
     events["resolved"] = events.apply(resolve, axis=1)
     return events
 
