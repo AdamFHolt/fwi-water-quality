@@ -20,7 +20,7 @@ all methodological details.
 > - **The groups are well matched at baseline — same water-quality means and spreads.**
 > - **Group E resolves far more OOR events: 82.1% vs 16.7% at Day 3 (Fisher's p = 9.4×10⁻⁷).**
 > - **Group E improves more on every parameter (DO, pH, ammonia), and the gap holds after dropping outlier ponds.**
-> - **The effect appears only by Day 3: the groups look alike at Day 2 (~20–25%), then E jumps to 82%.**
+> - **The effect appears only by Day 3: the groups look alike at Day 2 (~20–25% resolution), then E jumps to 82%.**
 
 <br>
 
@@ -57,7 +57,7 @@ pond for the §2 balance tests.*</sub>
 
 Routine (non-follow-up) visits, averaged to one value per pond. Averaging per pond
 ensures ponds visited more often don't count more (i.e., avoids pseudoreplication). 
-DO is split by time of day because morning and evening differ by design.
+DO is split by time of day because morning and evening differ systematically.
 
 | Parameter | In-range band | Group D | Group E |
 |---|---|--:|--:|
@@ -86,10 +86,10 @@ and explained below (§2.2).*</sub>
 Both columns use the same per-pond baseline values as §2.1 (one value per pond, 28
 D / 25 E), so the comparison is between ponds, not the 768 individual visits.
 
-**What the two columns mean.** Two groups can match on their average yet differ
-in spread, so both are checked (full definitions in the glossary). Levene's test
+What the two columns mean: Two groups can match on their average yet differ
+in spread, so both are checked (full definitions in the glossary). **Levene's test**
 compares spread, and p > 0.05 means no evidence the spreads differ — every p
-here clears it (smallest 0.088, DO evening). Hedges' g is the gap between the
+here clears it (smallest 0.088, DO evening). **Hedges' g** is the gap between the
 means in pooled-SD units, an effect size rather than a test (|g| ≈ 0.2 is small)
 — the largest here is ammonia at 0.24, the rest near zero. Neither shows a
 meaningful difference, so the groups start out comparable and the differences in
@@ -97,10 +97,11 @@ meaningful difference, so the groups start out comparable and the differences in
 
 ### 2.3 Baseline-WQ outlier ponds
 
-Ponds whose baseline value sits more than 2 SD from their group mean; 5 ponds, 
-9 flags. Used only for sensitivity checks. Some ponds are extreme on more than
-one parameter, so each pond's first appearance is bold-underlined to make the
-repeat offenders easy to spot.
+Five ponds sit more than 2 SD from their group mean on at least one baseline
+parameter, for 9 flags in total; they are used only for sensitivity checks.
+Since some ponds are extreme on more than one parameter, each pond's first
+appearance in the table is bold-underlined to make the repeat offenders easy
+to spot.
 
 | Parameter | Group | Pond | Value | Std. residual |
 |---|---|---|--:|--:|
