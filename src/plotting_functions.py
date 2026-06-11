@@ -6,7 +6,7 @@ import matplotlib
 matplotlib.use("Agg")  # non-interactive: render straight to file
 import matplotlib.pyplot as plt
 
-# Clean, consistent typography across the figures.
+# House style for all the figures.
 plt.rcParams.update({
     "font.family": "DejaVu Sans",
     "font.size": 11,
@@ -43,8 +43,7 @@ from src.functions import (
 
 PLOTS_DIR = Path("outputs/plots")
 
-# One consistent palette: each group has a single identity colour used
-# everywhere, and grey always means "not resolved".
+# Each group keeps one identity colour everywhere; grey always means "not resolved".
 GROUP_COLORS = {"Group D": "#4c72b0", "Group E": "#dd8452"}
 NOT_RESOLVED = "#cccccc"
 INSET_GREY = "#666666"  # subdued axes for the events-per-pond inset
@@ -61,7 +60,7 @@ def _save(fig, filename):
 
 
 def _ygrid(ax):
-    """Faint horizontal gridlines for easier value reading, kept behind the data."""
+    """Faint horizontal gridlines, kept behind the data."""
     ax.grid(axis="y", zorder=0)
     ax.set_axisbelow(True)
 
@@ -74,8 +73,7 @@ def _resolution_pie(ax, resolved, not_resolved, color, title):
         ax.set_title(title, pad=10)
         ax.axis("off")
         return
-    # Show the exact count alongside the percentage (iterate the slice values so
-    # the displayed count is the true integer, not one back-computed from pct).
+    # autopct only receives the percentage, so feed the true counts in via an iterator.
     counts = iter([resolved, not_resolved])
     _, _, autotexts = ax.pie(
         [resolved, not_resolved],
@@ -87,7 +85,7 @@ def _resolution_pie(ax, resolved, not_resolved, color, title):
         textprops={"fontsize": 11},
         pctdistance=0.6,
     )
-    for t in autotexts:  # percentage labels: bold for readability on the wedges
+    for t in autotexts:
         t.set_fontweight("bold")
     ax.set_title(title, pad=10)
 
@@ -145,7 +143,7 @@ def plot_oor_events(events, filename="Fig4.oor_resolution.png"):
 
     fig.tight_layout()
     # One shared key for the whole figure: group colour = resolved slice / bar
-    # identity, grey = not resolved. Replaces the labels that used to crowd each pie.
+    # identity, grey = not resolved.
     fig.legend(
         handles=[Patch(facecolor=GROUP_COLORS["Group D"], label="Group D"),
                  Patch(facecolor=GROUP_COLORS["Group E"], label="Group E"),
@@ -268,8 +266,7 @@ def plot_water_quality(data, filename="Fig2.water_quality_per_pond.png", highlig
         )
         ax.set_xticks(range(len(groups)))
         ax.set_xticklabels([f"{g.split()[-1]}\n(n={n_ponds[g]})" for g in groups])
-        # Parameter name bold (title); the stat below it in normal weight.
-        ax.set_title(param, pad=24)
+        ax.set_title(param, pad=24)  # pad leaves room for the stat line below
         ax.text(0.5, 1.0, f"Hedges' g = {bal.loc[param, 'g']}", transform=ax.transAxes,
                 ha="center", va="bottom", fontsize=10, fontweight="normal")  # standardized D-E mean gap
         ax.margins(y=0.15)
@@ -465,8 +462,7 @@ def plot_oor_improvement(data, filename="Fig7.oor_improvement.png"):
         ax.set_xticks([1, 2])
         ax.set_xticklabels([f"{g.split()[-1]}\n(n={len(d)})" for g, d in zip(groups, by_g)])
         ax.set_ylabel(f"out-of-range gap closed ({units[scope]})")
-        # Parameter name bold (title); below it, a compact monospace table of the
-        # Welch-t and Mann-Whitney p-values under each outlier rule (aligned cols).
+        # Under the title: monospace p-value table, one row per outlier rule.
         ax.set_title(scope, fontsize=13, fontweight="bold", pad=52)
         rows = [
             ("",               "Welch", "MWU"),

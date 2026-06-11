@@ -45,7 +45,7 @@ def _section(*lines: str) -> None:
 
 def reorder_by_pond(src: str, dst: str) -> None:
     """Sort the Data sheet by Pond ID then chronologically, copying other sheets verbatim."""
-    # Other sheets in one read; header=None keeps every cell exactly as-is.
+    # header=None: these two sheets are copied verbatim, no header parsing.
     others = pd.read_excel(src, sheet_name=["Overview", "OOR Events"], header=None)
     overview, oor = others["Overview"], others["OOR Events"]
 
@@ -214,8 +214,7 @@ def derive_oor_events(data: pd.DataFrame) -> pd.DataFrame:
     data["date"] = pd.to_datetime(data["Date of data collection"])
     day0 = (data["Is WQ in range?"] == "No") & (data["Is follow up"] == "No")
 
-    # Build the event list from the Day-0 OOR detections: one row per event,
-    # collapsing each pond-day's Morning+Evening rows into (Pond ID, date, group).
+    # Same-day Morning+Evening detections collapse to one (Pond ID, date) row.
     events = (
         data[day0]
         .groupby(["Pond ID", "date"])
@@ -223,8 +222,8 @@ def derive_oor_events(data: pd.DataFrame) -> pd.DataFrame:
         .reset_index()
     )
 
-    # Per-day resolution lookup from follow-up visits: for each (pond, date),
-    # inrange is True only if EVERY reading that day is in range (strict .all()).
+    # Per-day lookup over follow-up visits: a pond-day is in range only if
+    # every reading that day is.
     fu = data[data["Is follow up"] == "Yes"]
     fu_day = (
         fu.groupby(["Pond ID", "date"])
@@ -232,10 +231,9 @@ def derive_oor_events(data: pd.DataFrame) -> pd.DataFrame:
         .reset_index()
     )
 
-    # Resolve one event: take the latest follow-up in (Day0, Day0+5] (the Day-3
-    # primary measure) and return whether it was in range. Safe because a pond's
-    # events are >5 days apart (min same-pond gap is 12 days), so the window can't
-    # capture a later event's follow-ups.
+    # Latest follow-up in (Day0, Day0+5] is the Day-3 primary measure. The window
+    # can't bleed into a later event's follow-ups: same-pond events are at least
+    # 12 days apart in this dataset.
     def resolve(row):
         cand = fu_day[
             (fu_day["Pond ID"] == row["Pond ID"])
@@ -351,8 +349,7 @@ def analyze_oor_events(data: pd.DataFrame, events: pd.DataFrame) -> None:
 
     _section("OOR EVENTS — DERIVED FROM DATA SHEET")
 
-    # Resolution rate excludes no-follow-up events (resolved is None); a clean
-    # bool subset also keeps mean()/sum() well-defined.
+    # Events that never got a follow-up (resolved is None) drop out of the rate.
     followed = derived.dropna(subset=["resolved"]).copy()
     followed["resolved"] = followed["resolved"].astype(bool)
     g = followed.groupby("group")["resolved"]
@@ -369,8 +366,6 @@ def analyze_oor_events(data: pd.DataFrame, events: pd.DataFrame) -> None:
     print(summary.to_string())
     print()
 
-    # Pond-level: one proportion per pond, then averaged — guards against
-    # repeat-event ponds dominating the event-level rate (pseudoreplication).
     print("Pond-level (each pond counts once; mean_pct = mean of per-pond rates):")
     print(oor_resolution_by_pond(derived).to_string())
     print()

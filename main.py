@@ -29,17 +29,15 @@ DATA_PATH_REORD = "outputs/Outcome Evaluation Phase 2 Data_Cleaned And Anonymize
 
 def main():
 
-    # Write a Pond-ID-sorted copy of the workbook, then analyse that.
     print(f"Reordering {DATA_PATH} by Pond ID\n")
     reorder_by_pond(DATA_PATH, DATA_PATH_REORD)
 
-    # Load the per-visit Data sheet and the one-row-per-OOR-event sheet.
     print(f"Loading data from: {DATA_PATH_REORD}\n")
     data = load_data(DATA_PATH_REORD)
     events = load_events(DATA_PATH_REORD)
 
     # Descriptive statistics (printed to console).
-    print(f"Doing basic descriptive data analysis:")
+    print("Doing basic descriptive data analysis:")
     describe_data(data, events)                 # overview: counts by group
     describe_water_quality(data)                # baseline WQ mean/SD per pond
     describe_baseline_balance(data)             # Levene variance + Hedges' g, groups D vs E
@@ -54,7 +52,7 @@ def main():
     events_clean = events[~events["Pond ID"].isin(flagged_ponds)]
 
     # Comparative tests (protocol §4.4): does the intervention improve WQ?
-    print(f"Doing comparative statistical tests:")
+    print("Doing comparative statistical tests:")
     describe_resolution_fisher(events)          # Fisher's exact on binary Day-3 outcome, D vs E
     describe_improvement_tests(data)            # Welch t + Mann-Whitney U on distance-to-range improvement, D vs E
     # Same two tests with the baseline-WQ outlier ponds removed (sensitivity).
@@ -66,7 +64,7 @@ def main():
     describe_resolution_day2_vs_day3(events, exclude=flagged_ponds)
 
     # Make plots
-    print(f"Saved plots:")
+    print("Saved plots:")
     print(f"  {plot_water_quality_visits(data)}")                                # Fig1: WQ, all visits
     print(f"  {plot_water_quality(data)}")                                       # Fig2: WQ per-pond bars + distributions
     print(f"  {plot_water_quality(data, 'Fig3.water_quality_outliers.png', highlight_anoms=True)}")  # Fig3: WQ with outliers ringed
