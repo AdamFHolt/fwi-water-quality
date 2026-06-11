@@ -9,10 +9,10 @@ all methodological details.
 > The analysis was run blind: cohorts are labelled Group D and Group E (not
 > Control/Treatment) to reduce analyst bias. All tests are run two-sided as
 > D vs E. Significance threshold throughout is p < 0.05. The study has since
-> been unblinded — §7 adds a post-hoc analysis on the unblinded data — but
+> been unblinded — §6 adds a post-hoc analysis on the unblinded data — but
 > §§1–5 keep the blind labels as run.
 
-**Contents:** [Highlights](#highlights) · [1. Dataset overview](#1-dataset-overview) · [2. Baseline comparability](#2-are-the-groups-comparable-at-baseline) · [3. Primary outcome](#3-primary-outcome--resolution-at-day-3) · [4. Comparative test](#4-comparative-test--how-much-did-water-quality-improve) · [5. Day 2 vs Day 3](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3) · [6. Notes on test choices](#6-notes-on-test-choices) · [7. Post-hoc: self-initiated actions](#7-post-hoc--do-farmers-own-actions-explain-the-gap) · [Glossary](#glossary)
+**Contents:** [Highlights](#highlights) · [1. Dataset overview](#1-dataset-overview) · [2. Baseline comparability](#2-are-the-groups-comparable-at-baseline) · [3. Primary outcome](#3-primary-outcome--resolution-at-day-3) · [4. Comparative test](#4-comparative-test--how-much-did-water-quality-improve) · [5. Day 2 vs Day 3](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3) · [6. Post-hoc: self-initiated actions](#6-post-hoc--do-farmers-own-actions-explain-the-gap) · [7. Notes on test choices](#7-notes-on-test-choices) · [Glossary](#glossary)
 
 <br>
 
@@ -23,7 +23,7 @@ all methodological details.
 > - **Group E resolves far more OOR events: 82.1% vs 16.7% at Day 3 (Fisher's p = 9.4×10⁻⁷).**
 > - **Group E improves more on every parameter (DO, pH, ammonia), and the gap holds after dropping outlier ponds.**
 > - **The effect appears only by Day 3: the groups look alike at Day 2 (~20–25% resolution), then E jumps to 82%.**
-> - **Post-hoc (§7): farmers' own actions don't explain the gap — Group E's advantage holds where no action occurred (75.0% vs 23.5%, p = 0.0095).**
+> - **Post-hoc (§6): farmers' own actions don't explain the gap — Group E's advantage holds where no action occurred (75.0% vs 23.5%, p = 0.0095).**
 
 <br>
 
@@ -324,34 +324,7 @@ outlier ponds changes none of this (bottom half of the table; Figure 9).
 
 <br>
 
-## 6. Notes on test choices
-
-<details>
-<summary><b>Expand methodology notes</b></summary>
-<br>
-
-- **Two-sided tests.** The analysis was run blind (D vs E), so we couldn't
-  assume in advance which group should do better. Every test is therefore two-sided, which
-  is the more conservative choice: it splits the 0.05 significance budget across
-  both tails rather than spending it all on one expected direction.
-- **Pond-level vs event-level.** The continuous tests (§4) use one value
-  per pond, because repeated events from the same pond are not independent and
-  counting each separately would overstate the sample size (pseudoreplication).
-  The binary resolution tests (Fisher, §3) and the Day-2/3 test (§5) are
-  event-level, since a resolved/not-resolved event is the unit the protocol
-  defines for the primary outcome.
-- **No within-cohort before/after test.** Day-0 readings are picked precisely
-  because they are out of range, so on re-measurement they tend to drift back
-  toward normal on their own — regression to the mean. A before/after test within
-  one group would credit that drift to the intervention. The between-cohort
-  comparison sidesteps it: regression to the mean acts on both groups, so it
-  cancels, and any remaining gap is attributable to the treatment.
-
-</details>
-
-<br>
-
-## 7. Post-hoc — do farmers' own actions explain the gap?
+## 6. Post-hoc — do farmers' own actions explain the gap?
 
 > [!NOTE]
 > Post-hoc, added after unblinding; labels here resolve as **Group D = Control,
@@ -388,6 +361,33 @@ is why no causal reading is attempted. A stricter exposure definition
 (exact-dated actions only) tells the same story, and at 12–17 events per cell
 the within-cohort nulls mean "no signal", not "no effect"; the robust finding
 is table (b).
+
+<br>
+
+## 7. Notes on test choices
+
+<details>
+<summary><b>Expand methodology notes</b></summary>
+<br>
+
+- **Two-sided tests.** The analysis was run blind (D vs E), so we couldn't
+  assume in advance which group should do better. Every test is therefore two-sided, which
+  is the more conservative choice: it splits the 0.05 significance budget across
+  both tails rather than spending it all on one expected direction.
+- **Pond-level vs event-level.** The continuous tests (§4) use one value
+  per pond, because repeated events from the same pond are not independent and
+  counting each separately would overstate the sample size (pseudoreplication).
+  The binary resolution tests (Fisher, §3) and the Day-2/3 test (§5) are
+  event-level, since a resolved/not-resolved event is the unit the protocol
+  defines for the primary outcome.
+- **No within-cohort before/after test.** Day-0 readings are picked precisely
+  because they are out of range, so on re-measurement they tend to drift back
+  toward normal on their own — regression to the mean. A before/after test within
+  one group would credit that drift to the intervention. The between-cohort
+  comparison sidesteps it: regression to the mean acts on both groups, so it
+  cancels, and any remaining gap is attributable to the treatment.
+
+</details>
 
 <br>
 
