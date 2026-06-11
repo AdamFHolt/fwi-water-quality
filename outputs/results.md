@@ -336,26 +336,23 @@ the unblinded workbook as self-initiated actions (SIA; 167 records, 93 with an
 exact date, 74 dated only by a range). If effective, these could blur the §3
 comparison. An OOR event counts as *exposed* when an action's implementation
 window overlaps its Day-0-to-Day-3 span; exposure was common in both groups
-(Control 13/30 events, Treatment 16/28). Both tests below are Fisher's exact
-on the Day-3 outcome.
+(Control 13/30 events, Treatment 16/28). All tests below are Fisher's exact.
 
-**(a) Within each cohort** — no significant exposure effect in either group
-(Treatment's exposed events do numerically better, Control's worse — both
-well within chance):
+One table answers both questions about the Day-3 outcome. Reading **across**:
+does the D-vs-E gap survive within each exposure stratum (right-hand p)? It
+does, including among the events with no SIA at all. Reading **down**: do a
+cohort's exposed events resolve more often than its unexposed ones
+(bottom-row p)? Neither cohort comes close — Treatment's exposed events do
+numerically better, Control's worse, both well within chance. Cells are
+resolved / events:
 
-| Group | Exposed resolved | Unexposed resolved | Fisher p |
+| | Group D (Control) | Group E (Treatment) | p (D vs E) |
 |---|--:|--:|--:|
-| Group D (Control) | 1 / 13 = 7.7% | 4 / 17 = 23.5% | 0.355 |
-| Group E (Treatment) | 14 / 16 = 87.5% | 9 / 12 = 75.0% | 0.624 |
+| Exposed | 1 / 13 = 7.7% | 14 / 16 = 87.5% | **2.2×10⁻⁵** |
+| Unexposed | 4 / 17 = 23.5% | 9 / 12 = 75.0% | **0.0095** |
+| p (exposed vs unexposed) | 0.355 | 0.624 | |
 
-**(b) D vs E within each stratum** — the gap survives, with and without SIA:
-
-| Stratum | Group D (Control) | Group E (Treatment) | Odds ratio | Fisher p |
-|---|--:|--:|--:|--:|
-| Exposed | 1 / 13 = 7.7% | 14 / 16 = 87.5% | 0.012 | **2.2×10⁻⁵** |
-| Unexposed | 4 / 17 = 23.5% | 9 / 12 = 75.0% | 0.103 | **0.0095** |
-
-**(c) Were the Day-2→Day-3 gains action-driven?** §5 put the entire Treatment
+**Were the Day-2→Day-3 gains action-driven?** §5 put the entire Treatment
 effect in the one day between the two follow-ups (16 events "gained":
 unresolved at Day 2, resolved at Day 3). If farmers' actions caused those
 flips, the actions should land in that window. They don't — among the events
@@ -376,8 +373,8 @@ confounding by indication — farmers act when a problem looks serious — which
 is why no causal reading is attempted. A stricter exposure definition
 (exact-dated actions only) tells the same story throughout, and at these cell
 sizes the nulls mean "no signal", not "no effect"; the robust findings are
-tables (b) and (c) — neither the gap nor its Day-3 timing is an artifact of
-farmers' own actions.
+the stratified row p's above and the timing table — neither the gap nor its
+Day-3 timing is an artifact of farmers' own actions.
 
 <br>
 
