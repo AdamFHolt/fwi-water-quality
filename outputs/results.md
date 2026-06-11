@@ -354,61 +354,40 @@ outlier ponds changes none of this (bottom half of the table; Figure 9).
 ## 7. Post-hoc — do farmers' own actions explain the gap?
 
 > [!NOTE]
-> This section was added after unblinding and drops the blind labels:
-> **Group D = Control, Group E = Treatment**. Self-initiated actions are
-> self-selected — farmers chose when to act — so unlike §§3–5 this analysis is
+> Post-hoc, added after unblinding; labels here resolve as **Group D = Control,
+> Group E = Treatment**. Self-initiated actions are self-selected, so this is
 > descriptive, not causal. Numbers are produced by `python main_sia.py`.
 
-Besides following (or not following) the recommendations under test, farmers
-sometimes took corrective steps entirely on their own. These self-initiated
-actions (SIA) are recorded in the unblinded workbook: 167 records across 48
-ponds, 93 with an exact implementation date and 74 dated only as a range such
-as "2–5 days ago". If common and effective, they could blur the §3 comparison
-— perhaps Group D's few resolutions came from farmer initiative, or Group E's
-82% owed something to its farmers acting beyond the intervention.
+Farmers sometimes took corrective steps on their own initiative — recorded in
+the unblinded workbook as self-initiated actions (SIA; 167 records, 93 with an
+exact date, 74 dated only by a range). If effective, these could blur the §3
+comparison. An OOR event counts as **exposed** when an action's implementation
+window overlaps its Day-0-to-Day-3 span; exposure was common in both groups
+(Control 13/30 events, Treatment 16/28). Both tests below are Fisher's exact
+on the Day-3 outcome.
 
-Each OOR event counts as **exposed** when an action's implementation window
-overlaps the event's Day-0-to-Day-3 span: *exact* if an exact-dated action
-lands inside it, *possible* if only a range-dated action's window overlaps.
-Both groups acted at similar rates:
-
-| | Exact | Possible | None | Events | % exposed |
-|---|--:|--:|--:|--:|--:|
-| Group D (Control) | 8 | 5 | 17 | 30 | 43.3 |
-| Group E (Treatment) | 10 | 6 | 12 | 28 | 57.1 |
-
-With exposed = exact + possible, two cuts of the Day-3 outcome answer the
-question, both by Fisher's exact test.
-
-**(a) Within each cohort, do exposed events resolve more often?** No — neither
-group shows a benefit from exposure:
+**(a) Within each cohort** — exposed events resolve no more often:
 
 | Group | Exposed resolved | Unexposed resolved | Fisher p |
 |---|--:|--:|--:|
 | Group D (Control) | 1 / 13 = 7.7% | 4 / 17 = 23.5% | 0.355 |
 | Group E (Treatment) | 14 / 16 = 87.5% | 9 / 12 = 75.0% | 0.624 |
 
-**(b) Does the D-vs-E gap survive within each stratum?** Yes — including among
-the events with no farmer action at all:
+**(b) D vs E within each stratum** — the gap survives, with and without SIA:
 
 | Stratum | Group D (Control) | Group E (Treatment) | Odds ratio | Fisher p |
 |---|--:|--:|--:|--:|
 | Exposed | 1 / 13 = 7.7% | 14 / 16 = 87.5% | 0.012 | **2.2×10⁻⁵** |
 | Unexposed | 4 / 17 = 23.5% | 9 / 12 = 75.0% | 0.103 | **0.0095** |
 
-**Reading the numbers.** The treatment effect stands on its own: where no SIA
-occurred, Group E still resolves 75.0% of events to Group D's 23.5%. Farmer
-initiative shows no benefit within either cohort, and Control's exposed events
-resolving *less* often (7.7% vs 23.5%) carries the signature of confounding by
-indication — farmers presumably act when a problem looks serious, so the
-acted-on events were the harder ones to begin with. That self-selection is
-exactly why this section makes no causal claims. Counting only exact-dated
-actions as exposure (and dropping the 11 "possible" events as ambiguous)
-changes nothing: the stratified gap stays (p = 0.015 exposed, 0.0095
-unexposed) and the within-cohort contrasts stay null (both p = 1.0). One
-caveat: at 12–17 events per cell the within-cohort tests are underpowered, so
-their nulls read "no signal", not "no effect" — the robust finding is table
-(b): the §3 gap is not an artifact of farmers' own actions.
+**Reading the numbers.** The treatment effect stands on its own: with no
+farmer action in play, Group E still resolves 75.0% of events to Group D's
+23.5%. Control's exposed events doing *worse* (7.7% vs 23.5%) looks like
+confounding by indication — farmers act when a problem looks serious — which
+is why no causal reading is attempted. A stricter exposure definition
+(exact-dated actions only) tells the same story, and at 12–17 events per cell
+the within-cohort nulls mean "no signal", not "no effect"; the robust finding
+is table (b).
 
 <br>
 
