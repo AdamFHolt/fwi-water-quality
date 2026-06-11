@@ -11,11 +11,15 @@ self-selected, so everything here is exploratory/descriptive, not causal.
   event_sia_exposure    flag each OOR event with SIA exposure in its
                         Day-0..Day-3 window (exact / possible / none)
   describe_sia_exposure print the exposure summary by group
+  resolution_by_exposure        Day-3 resolution, exposed vs unexposed, within group
+  resolution_groups_by_stratum  the D-vs-E comparison within each exposure stratum
+  describe_resolution_by_exposure  print both, under both exposure splits
 """
 
 import re
 
 import pandas as pd
+from scipy.stats import fisher_exact
 
 from src.functions import _section
 
@@ -118,3 +122,90 @@ def describe_sia_exposure(events: pd.DataFrame, actions: pd.DataFrame) -> None:
     print()
     print(table.to_string())
     print()
+
+
+# sia levels counted as exposed under each split; unexposed is always "none",
+# so the exact-only split drops "possible" events as ambiguous.
+EXPOSURE_SPLITS = {
+    "MAIN SPLIT: exposed = exact + possible": ("exact", "possible"),
+    "SENSITIVITY: exposed = exact only ('possible' events dropped)": ("exact",),
+}
+
+
+def resolution_by_exposure(ev: pd.DataFrame, exposed: tuple) -> pd.DataFrame:
+    """Day-3 resolution, SIA-exposed vs unexposed events, within each group.
+
+    Fisher's exact per group on the 2x2 [exposure x resolved]. `exposed` names
+    the sia levels counted as exposed; unexposed is always "none", so any level
+    left out (e.g. "possible" in the exact-only split) is excluded entirely.
+    Returns one row per group: n/resolved/% for each arm, odds ratio, p.
+    """
+    rows = []
+    for g, sub in ev.groupby("group"):
+        e = sub[sub["sia"].isin(exposed)]
+        u = sub[sub["sia"] == "none"]
+        table = [[int(e["res3"].sum()), int((~e["res3"]).sum())],
+                 [int(u["res3"].sum()), int((~u["res3"]).sum())]]
+        odds, p = fisher_exact(table)
+        rows.append({
+            "group": f"{g} ({BLIND_LABEL[g]})",
+            "exp_n": len(e), "exp_res": table[0][0],
+            "exp_pct": round(table[0][0] / len(e) * 100, 1) if len(e) else float("nan"),
+            "none_n": len(u), "none_res": table[1][0],
+            "none_pct": round(table[1][0] / len(u) * 100, 1) if len(u) else float("nan"),
+            "odds": round(odds, 3), "fisher_p": p,
+        })
+    return pd.DataFrame(rows).set_index("group")
+
+
+def resolution_groups_by_stratum(ev: pd.DataFrame, exposed: tuple) -> pd.DataFrame:
+    """The primary D-vs-E Day-3 resolution comparison, within each exposure stratum.
+
+    Fisher's exact (Group D vs E) run separately on the SIA-exposed events and
+    the unexposed ones. If the Treatment advantage holds in the unexposed
+    stratum, it isn't explained by farmers' own actions. Returns one row per
+    stratum: per-group n/resolved/%, odds ratio, p.
+    """
+    groups = sorted(ev["group"].unique())            # ["Control", "Treatment"]
+    rows = []
+    for stratum, levels in (("exposed", exposed), ("unexposed", ("none",))):
+        sub = ev[ev["sia"].isin(levels)]
+        row = {"stratum": stratum}
+        table = []
+        for g in groups:
+            r = sub[sub["group"] == g]["res3"]
+            table.append([int(r.sum()), int((~r).sum())])
+            k = BLIND_LABEL[g].split()[-1]           # "D" / "E"
+            row[f"n_{k}"] = len(r)
+            row[f"res_{k}"] = int(r.sum())
+            row[f"pct_{k}"] = round(r.mean() * 100, 1) if len(r) else float("nan")
+        odds, p = fisher_exact(table)
+        row["odds"], row["fisher_p"] = round(odds, 3), p
+        rows.append(row)
+    return pd.DataFrame(rows).set_index("stratum")
+
+
+def describe_resolution_by_exposure(events: pd.DataFrame, actions: pd.DataFrame) -> None:
+    """Print Day-3 resolution by SIA exposure: within-group, then D vs E by stratum,
+    under the main exposure split and the exact-only sensitivity."""
+    ev = event_sia_exposure(events, actions)
+
+    def show(df):
+        disp = df.copy()
+        disp["fisher_p"] = disp["fisher_p"].map(lambda v: f"{v:.3g}")
+        print(disp.to_string())
+        print()
+
+    _section("SIA STEP 2 — DAY-3 RESOLUTION BY SIA EXPOSURE",
+             "(post-hoc, descriptive: SIA is self-selected, not assigned;",
+             " all tests Fisher's exact, event-level, Day-3 primary outcome)")
+    for split_name, exposed in EXPOSURE_SPLITS.items():
+        print(f"------------ {split_name} ------------")
+        print()
+        print("(a) Within each cohort: do SIA-exposed events resolve more often?")
+        print("    (exp_* = exposed events, none_* = unexposed; Fisher compares the two)")
+        show(resolution_by_exposure(ev, exposed))
+        print("(b) Control vs Treatment within each stratum: does the cohort gap")
+        print("    survive where no SIA occurred? (the primary D-vs-E test, stratified;")
+        print("    D = Control, E = Treatment)")
+        show(resolution_groups_by_stratum(ev, exposed))
