@@ -353,14 +353,29 @@ on the Day-3 outcome.
 | Exposed | 1 / 13 = 7.7% | 14 / 16 = 87.5% | 0.012 | **2.2×10⁻⁵** |
 | Unexposed | 4 / 17 = 23.5% | 9 / 12 = 75.0% | 0.103 | **0.0095** |
 
+**(c) Were the Day-2→Day-3 gains action-driven?** §5 put the entire Treatment
+effect in the one day between the two follow-ups (16 events "gained":
+unresolved at Day 2, resolved at Day 3). If farmers' actions caused those
+flips, the actions should land in that window. They don't — among the events
+still unresolved at Day 2, gains arrive at much the same rate whatever the
+action timing, and only 2 of Treatment's 16 gains had any action after Day 2
+(the 6 gains with only an earlier action were still out of range at Day 2
+after it). Cells are gained / at risk:
+
+| Group | Action after Day 2 | Action by Day 2 only | No action | Fisher p (late vs rest) |
+|---|--:|--:|--:|--:|
+| Group D (Control) | 0 / 3 | 0 / 6 | 1 / 14 | 1.0 |
+| Group E (Treatment) | 2 / 3 | 6 / 7 | 8 / 11 | 1.0 |
+
 **Reading the numbers.** The treatment effect stands on its own: with no
 farmer action in play, Group E still resolves 75.0% of events to Group D's
 23.5%. Control's exposed events doing *worse* (7.7% vs 23.5%) looks like
 confounding by indication — farmers act when a problem looks serious — which
 is why no causal reading is attempted. A stricter exposure definition
-(exact-dated actions only) tells the same story, and at 12–17 events per cell
-the within-cohort nulls mean "no signal", not "no effect"; the robust finding
-is table (b).
+(exact-dated actions only) tells the same story throughout, and at these cell
+sizes the nulls mean "no signal", not "no effect"; the robust findings are
+tables (b) and (c) — neither the gap nor its Day-3 timing is an artifact of
+farmers' own actions.
 
 <br>
 

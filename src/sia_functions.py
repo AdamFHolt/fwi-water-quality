@@ -14,6 +14,9 @@ self-selected, so everything here is exploratory/descriptive, not causal.
   resolution_by_exposure        Day-3 resolution, exposed vs unexposed, within group
   resolution_groups_by_stratum  the D-vs-E comparison within each exposure stratum
   describe_resolution_by_exposure  print both, under both exposure splits
+  timing_by_exposure            the §5 gained/lost split by full-window exposure
+  gains_by_action_timing        do late actions (Day 2 -> Day 3) predict the gains?
+  describe_timing_by_exposure   print both timing cuts + exact-only sensitivity
 """
 
 import re
@@ -68,15 +71,29 @@ def sia_actions(data: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def event_sia_exposure(events: pd.DataFrame, actions: pd.DataFrame) -> pd.DataFrame:
-    """Flag each OOR event with its SIA exposure over [Day 0, Day-3 follow-up].
+def _classify_overlap(a: pd.DataFrame, lo, hi) -> str:
+    """Grade one pond's actions against the window [lo, hi]:
+    exact if an exact-dated action lands inside, possible if only a
+    range-dated action's window overlaps, none otherwise."""
+    hit = a[(a["start"] <= hi) & (a["end"] >= lo)]
+    if (hit["basis"] == "exact").any():
+        return "exact"
+    return "possible" if len(hit) else "none"
 
-    Exposure is graded by how certain the timing is:
-      exact    — an action with an exact implementation date inside the window
-      possible — only range-dated actions whose window overlaps the event's
-      none     — no action window overlaps
-    Returns one row per event: Pond ID, group, day0, day2, day3,
-    res2/res3 (the Day-2/Day-3 outcomes as booleans), sia.
+
+def event_sia_exposure(events: pd.DataFrame, actions: pd.DataFrame) -> pd.DataFrame:
+    """Flag each OOR event with its SIA exposure (exact / possible / none).
+
+    Three windows per event, all graded by `_classify_overlap`:
+      sia        — the full [Day 0, Day-3 follow-up] span (the step-2 flag)
+      sia_early  — [Day 0, Day 2]
+      sia_late   — [Day 2 + 1, Day 3], i.e. strictly after the Day-2 visit date
+    An action dated exactly on Day 2 counts as early only: daily dating can't
+    order it against the Day-2 measure, and "early" is the conservative side
+    for the late-actions-explain-the-gains question. sia_early/sia_late are NA
+    for the one event with no Day-2 follow-up. Returns one row per event:
+    Pond ID, group, day0, day2, day3, res2/res3 (the Day-2/Day-3 outcomes as
+    booleans), sia, sia_early, sia_late.
     """
     ev = pd.DataFrame({
         "Pond ID": events["Pond ID"],
@@ -89,14 +106,17 @@ def event_sia_exposure(events: pd.DataFrame, actions: pd.DataFrame) -> pd.DataFr
     })
 
     def classify(e):
-        a = actions[(actions["Pond ID"] == e["Pond ID"])
-                    & (actions["start"] <= e["day3"])
-                    & (actions["end"] >= e["day0"])]
-        if (a["basis"] == "exact").any():
-            return "exact"
-        return "possible" if len(a) else "none"
+        a = actions[actions["Pond ID"] == e["Pond ID"]]
+        full = _classify_overlap(a, e["day0"], e["day3"])
+        if pd.isna(e["day2"]):
+            return pd.Series([full, pd.NA, pd.NA])
+        return pd.Series([
+            full,
+            _classify_overlap(a, e["day0"], e["day2"]),
+            _classify_overlap(a, e["day2"] + pd.Timedelta(days=1), e["day3"]),
+        ])
 
-    ev["sia"] = ev.apply(classify, axis=1)
+    ev[["sia", "sia_early", "sia_late"]] = ev.apply(classify, axis=1)
     return ev
 
 
@@ -206,3 +226,96 @@ def describe_resolution_by_exposure(events: pd.DataFrame, actions: pd.DataFrame)
         show(resolution_by_exposure(ev, exposed))
         print("(b) D vs E, within each exposure stratum:")
         show(resolution_groups_by_stratum(ev, exposed))
+
+
+def timing_by_exposure(ev: pd.DataFrame, exposed: tuple) -> pd.DataFrame:
+    """The §5 Day-2 vs Day-3 gained/lost split, by full-window SIA exposure.
+
+    Events with both follow-ups only (57 of 58). gained = unresolved at Day 2,
+    resolved at Day 3; lost = the reverse. Returns one row per group x stratum:
+    n, day2_res, day3_res, gained, lost. Counts only — the inferential cut is
+    gains_by_action_timing, which conditions on being unresolved at Day 2.
+    """
+    sub = ev.dropna(subset=["day2", "day3"])
+    rows = []
+    for g, gsub in sub.groupby("group"):
+        for stratum, ssub in (("exposed", gsub[gsub["sia"].isin(exposed)]),
+                              ("unexposed", gsub[gsub["sia"] == "none"])):
+            d2, d3 = ssub["res2"], ssub["res3"]
+            rows.append({
+                "group": f"{g} ({BLIND_LABEL[g]})", "stratum": stratum,
+                "n": len(ssub),
+                "day2_res": int(d2.sum()), "day3_res": int(d3.sum()),
+                "gained": int((~d2 & d3).sum()), "lost": int((d2 & ~d3).sum()),
+            })
+    return pd.DataFrame(rows).set_index(["group", "stratum"])
+
+
+def gains_by_action_timing(ev: pd.DataFrame, exposed: tuple) -> pd.DataFrame:
+    """Among events unresolved at Day 2: does a LATE action predict gaining?
+
+    Only events still out of range at Day 2 can gain, so the analysis
+    conditions on them ("at risk"). Each is classed by action timing:
+      late        — an action window overlaps (Day 2, Day 3] (sia_late)
+      early only  — actions overlap [Day 0, Day 2] but none late
+      no action   — neither sub-window hit
+    `exposed` sets which grades count (as in the step-2 splits). Fisher's
+    exact tests gained vs not, late vs the rest. Returns one row per group:
+    at_risk, n/gained per timing class, odds, fisher_p.
+    """
+    atrisk = ev.dropna(subset=["day2", "day3"])
+    atrisk = atrisk[~atrisk["res2"]]
+    rows = []
+    for g, gsub in atrisk.groupby("group"):
+        late = gsub["sia_late"].isin(exposed)
+        early_only = ~late & gsub["sia_early"].isin(exposed)
+        none = ~late & ~early_only
+        gained = gsub["res3"]
+        table = [[int((late & gained).sum()), int((late & ~gained).sum())],
+                 [int((~late & gained).sum()), int((~late & ~gained).sum())]]
+        odds, p = fisher_exact(table)
+        rows.append({
+            "group": f"{g} ({BLIND_LABEL[g]})", "at_risk": len(gsub),
+            "late_n": int(late.sum()), "late_gain": table[0][0],
+            "early_n": int(early_only.sum()),
+            "early_gain": int((early_only & gained).sum()),
+            "none_n": int(none.sum()), "none_gain": int((none & gained).sum()),
+            "odds": round(odds, 3), "fisher_p": p,
+        })
+    return pd.DataFrame(rows).set_index("group")
+
+
+def describe_timing_by_exposure(events: pd.DataFrame, actions: pd.DataFrame) -> None:
+    """Print step 3: the Day-2->Day-3 gained/lost split by SIA exposure, and
+    whether late actions (between the two follow-ups) predict the gains."""
+    ev = event_sia_exposure(events, actions)
+    exposed = EXPOSURE_SPLITS["MAIN SPLIT: exposed = exact + possible"]
+
+    _section("SIA STEP 3 — ARE THE DAY-3 GAINS ACTION-DRIVEN?",
+             "(post-hoc, descriptive; D = Control, E = Treatment)")
+    print("Background: the main analysis found the whole Treatment effect appears")
+    print("between the Day-2 and Day-3 follow-ups — events 'gain' (unresolved at")
+    print("Day 2 -> resolved at Day 3) almost only in Treatment. If farmers' own")
+    print("actions caused those flips, the actions should fall in that window.")
+    print("Events with both follow-ups only; exposed = exact + possible.")
+    print()
+
+    print("(a) gained/lost, split by SIA exposure anywhere in Day 0 .. Day 3:")
+    print(timing_by_exposure(ev, exposed).to_string())
+    print()
+
+    print("(b) only the events that could gain (unresolved at Day 2), by when")
+    print("    the action happened: late = after the Day-2 visit date,")
+    print("    early = on/before Day 2 only. Fisher: gained x [late vs rest].")
+    disp = gains_by_action_timing(ev, exposed)
+    disp["fisher_p"] = disp["fisher_p"].map(lambda v: f"{v:.3g}")
+    print(disp.to_string())
+    print()
+
+    sens = gains_by_action_timing(ev, ("exact",))
+    print("Sensitivity (exact-dated actions only):")
+    for g, r in sens.iterrows():
+        print(f"  {g}: late {int(r['late_gain'])}/{int(r['late_n'])} gained vs "
+              f"rest {int(r['early_gain'] + r['none_gain'])}/"
+              f"{int(r['early_n'] + r['none_n'])}, Fisher p = {r['fisher_p']:.3g}")
+    print()

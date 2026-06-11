@@ -10,6 +10,7 @@ from src.sia_functions import (
     sia_actions,
     describe_sia_exposure,
     describe_resolution_by_exposure,
+    describe_timing_by_exposure,
 )
 
 DATA_PATH = "inputs/data/Outcome Evaluation Phase 2 Data_Cleaned.xlsx"
@@ -23,6 +24,7 @@ def main():
 
     describe_sia_exposure(events, actions)
     describe_resolution_by_exposure(events, actions)
+    describe_timing_by_exposure(events, actions)
 
 
 if __name__ == "__main__":
