@@ -198,14 +198,11 @@ def describe_resolution_by_exposure(events: pd.DataFrame, actions: pd.DataFrame)
 
     _section("SIA STEP 2 — DAY-3 RESOLUTION BY SIA EXPOSURE",
              "(post-hoc, descriptive: SIA is self-selected, not assigned;",
-             " all tests Fisher's exact, event-level, Day-3 primary outcome)")
+             " Fisher's exact throughout; D = Control, E = Treatment)")
     for split_name, exposed in EXPOSURE_SPLITS.items():
         print(f"------------ {split_name} ------------")
         print()
-        print("(a) Within each cohort: do SIA-exposed events resolve more often?")
-        print("    (exp_* = exposed events, none_* = unexposed; Fisher compares the two)")
+        print("(a) exposed vs unexposed events, within each cohort:")
         show(resolution_by_exposure(ev, exposed))
-        print("(b) Control vs Treatment within each stratum: does the cohort gap")
-        print("    survive where no SIA occurred? (the primary D-vs-E test, stratified;")
-        print("    D = Control, E = Treatment)")
+        print("(b) D vs E, within each exposure stratum:")
         show(resolution_groups_by_stratum(ev, exposed))

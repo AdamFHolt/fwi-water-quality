@@ -8,9 +8,11 @@ all methodological details.
 > [!NOTE]
 > The analysis was run blind: cohorts are labelled Group D and Group E (not
 > Control/Treatment) to reduce analyst bias. All tests are run two-sided as
-> D vs E. Significance threshold throughout is p < 0.05.
+> D vs E. Significance threshold throughout is p < 0.05. The study has since
+> been unblinded — §7 adds a post-hoc analysis on the unblinded data — but
+> §§1–5 keep the blind labels as run.
 
-**Contents:** [Highlights](#highlights) · [1. Dataset overview](#1-dataset-overview) · [2. Baseline comparability](#2-are-the-groups-comparable-at-baseline) · [3. Primary outcome](#3-primary-outcome--resolution-at-day-3) · [4. Comparative test](#4-comparative-test--how-much-did-water-quality-improve) · [5. Day 2 vs Day 3](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3) · [6. Notes on test choices](#6-notes-on-test-choices) · [Glossary](#glossary)
+**Contents:** [Highlights](#highlights) · [1. Dataset overview](#1-dataset-overview) · [2. Baseline comparability](#2-are-the-groups-comparable-at-baseline) · [3. Primary outcome](#3-primary-outcome--resolution-at-day-3) · [4. Comparative test](#4-comparative-test--how-much-did-water-quality-improve) · [5. Day 2 vs Day 3](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3) · [6. Notes on test choices](#6-notes-on-test-choices) · [7. Post-hoc: self-initiated actions](#7-post-hoc--do-farmers-own-actions-explain-the-gap) · [Glossary](#glossary)
 
 <br>
 
@@ -21,6 +23,7 @@ all methodological details.
 > - **Group E resolves far more OOR events: 82.1% vs 16.7% at Day 3 (Fisher's p = 9.4×10⁻⁷).**
 > - **Group E improves more on every parameter (DO, pH, ammonia), and the gap holds after dropping outlier ponds.**
 > - **The effect appears only by Day 3: the groups look alike at Day 2 (~20–25% resolution), then E jumps to 82%.**
+> - **Post-hoc (§7): farmers' own actions don't explain the gap — Group E's advantage holds where no action occurred (75.0% vs 23.5%, p = 0.0095).**
 
 <br>
 
@@ -345,6 +348,67 @@ outlier ponds changes none of this (bottom half of the table; Figure 9).
   cancels, and any remaining gap is attributable to the treatment.
 
 </details>
+
+<br>
+
+## 7. Post-hoc — do farmers' own actions explain the gap?
+
+> [!NOTE]
+> This section was added after unblinding and drops the blind labels:
+> **Group D = Control, Group E = Treatment**. Self-initiated actions are
+> self-selected — farmers chose when to act — so unlike §§3–5 this analysis is
+> descriptive, not causal. Numbers are produced by `python main_sia.py`.
+
+Besides following (or not following) the recommendations under test, farmers
+sometimes took corrective steps entirely on their own. These self-initiated
+actions (SIA) are recorded in the unblinded workbook: 167 records across 48
+ponds, 93 with an exact implementation date and 74 dated only as a range such
+as "2–5 days ago". If common and effective, they could blur the §3 comparison
+— perhaps Group D's few resolutions came from farmer initiative, or Group E's
+82% owed something to its farmers acting beyond the intervention.
+
+Each OOR event counts as **exposed** when an action's implementation window
+overlaps the event's Day-0-to-Day-3 span: *exact* if an exact-dated action
+lands inside it, *possible* if only a range-dated action's window overlaps.
+Both groups acted at similar rates:
+
+| | Exact | Possible | None | Events | % exposed |
+|---|--:|--:|--:|--:|--:|
+| Group D (Control) | 8 | 5 | 17 | 30 | 43.3 |
+| Group E (Treatment) | 10 | 6 | 12 | 28 | 57.1 |
+
+With exposed = exact + possible, two cuts of the Day-3 outcome answer the
+question, both by Fisher's exact test.
+
+**(a) Within each cohort, do exposed events resolve more often?** No — neither
+group shows a benefit from exposure:
+
+| Group | Exposed resolved | Unexposed resolved | Fisher p |
+|---|--:|--:|--:|
+| Group D (Control) | 1 / 13 = 7.7% | 4 / 17 = 23.5% | 0.355 |
+| Group E (Treatment) | 14 / 16 = 87.5% | 9 / 12 = 75.0% | 0.624 |
+
+**(b) Does the D-vs-E gap survive within each stratum?** Yes — including among
+the events with no farmer action at all:
+
+| Stratum | Group D (Control) | Group E (Treatment) | Odds ratio | Fisher p |
+|---|--:|--:|--:|--:|
+| Exposed | 1 / 13 = 7.7% | 14 / 16 = 87.5% | 0.012 | **2.2×10⁻⁵** |
+| Unexposed | 4 / 17 = 23.5% | 9 / 12 = 75.0% | 0.103 | **0.0095** |
+
+**Reading the numbers.** The treatment effect stands on its own: where no SIA
+occurred, Group E still resolves 75.0% of events to Group D's 23.5%. Farmer
+initiative shows no benefit within either cohort, and Control's exposed events
+resolving *less* often (7.7% vs 23.5%) carries the signature of confounding by
+indication — farmers presumably act when a problem looks serious, so the
+acted-on events were the harder ones to begin with. That self-selection is
+exactly why this section makes no causal claims. Counting only exact-dated
+actions as exposure (and dropping the 11 "possible" events as ambiguous)
+changes nothing: the stratified gap stays (p = 0.015 exposed, 0.0095
+unexposed) and the within-cohort contrasts stay null (both p = 1.0). One
+caveat: at 12–17 events per cell the within-cohort tests are underpowered, so
+their nulls read "no signal", not "no effect" — the robust finding is table
+(b): the §3 gap is not an artifact of farmers' own actions.
 
 <br>
 
