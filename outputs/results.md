@@ -334,12 +334,14 @@ outlier ponds changes none of this (bottom half of the table; Figure 9).
 Farmers sometimes took corrective steps on their own initiative — recorded in
 the unblinded workbook as self-initiated actions (SIA; 167 records, 93 with an
 exact date, 74 dated only by a range). If effective, these could blur the §3
-comparison. An OOR event counts as **exposed** when an action's implementation
+comparison. An OOR event counts as *exposed* when an action's implementation
 window overlaps its Day-0-to-Day-3 span; exposure was common in both groups
 (Control 13/30 events, Treatment 16/28). Both tests below are Fisher's exact
 on the Day-3 outcome.
 
-**(a) Within each cohort** — exposed events resolve no more often:
+**(a) Within each cohort** — no significant exposure effect in either group
+(Treatment's exposed events do numerically better, Control's worse — both
+well within chance):
 
 | Group | Exposed resolved | Unexposed resolved | Fisher p |
 |---|--:|--:|--:|
