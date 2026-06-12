@@ -18,7 +18,6 @@ all methodological details.
 
 ## Highlights
 
-> [!IMPORTANT]
 > - **The groups are well matched at baseline — same water quality means and spreads.**
 > - **Group E resolves far more OOR events: 82.1% vs 16.7% at Day 3 (Fisher's p = 9.4×10⁻⁷).**
 > - **Group E improves more on every parameter (DO, pH, ammonia), and the gap holds after dropping outlier ponds.**
