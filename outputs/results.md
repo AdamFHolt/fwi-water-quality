@@ -366,7 +366,7 @@ gains had any action after Day 2, and gains arrived at much the same rate
 whatever the action timing (the 6 gains with only an earlier action were
 still out of range at Day 2, after the action). Cells are gained / at risk:
 
-| Group | Action after Day 2 | Action by Day 2 only | No action | Fisher p (late vs rest) |
+| Group | Action after Day 2 | Action by Day 2 only | No action | p (late vs rest) |
 |---|--:|--:|--:|--:|
 | Group D (Control) | 0 / 3 | 0 / 6 | 1 / 14 | 1.0 |
 | Group E (Treatment) | 2 / 3 | 6 / 7 | 8 / 11 | 1.0 |
