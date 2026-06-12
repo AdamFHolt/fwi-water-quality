@@ -13,7 +13,7 @@ self-selected, so everything here is exploratory/descriptive, not causal.
   describe_sia_exposure print the exposure summary by group
   resolution_by_exposure        Day-3 resolution, exposed vs unexposed, within group
   resolution_groups_by_stratum  the D-vs-E comparison within each exposure stratum
-  describe_resolution_by_exposure  print both, under both exposure splits
+  describe_resolution_by_exposure  print both + the exact-only sensitivity line
   timing_by_exposure            the §5 gained/lost split by full-window exposure
   gains_by_action_timing        do late actions (Day 2 -> Day 3) predict the gains?
   describe_timing_by_exposure   print both timing cuts + exact-only sensitivity
@@ -144,12 +144,9 @@ def describe_sia_exposure(events: pd.DataFrame, actions: pd.DataFrame) -> None:
     print()
 
 
-# sia levels counted as exposed under each split; unexposed is always "none",
-# so the exact-only split drops "possible" events as ambiguous.
-EXPOSURE_SPLITS = {
-    "MAIN SPLIT: exposed = exact + possible": ("exact", "possible"),
-    "SENSITIVITY: exposed = exact only ('possible' events dropped)": ("exact",),
-}
+# sia levels counted as exposed; the sensitivity variants pass ("exact",),
+# dropping "possible" events as ambiguous (unexposed is always "none").
+EXPOSED = ("exact", "possible")
 
 
 def resolution_by_exposure(ev: pd.DataFrame, exposed: tuple) -> pd.DataFrame:
@@ -206,8 +203,8 @@ def resolution_groups_by_stratum(ev: pd.DataFrame, exposed: tuple) -> pd.DataFra
 
 
 def describe_resolution_by_exposure(events: pd.DataFrame, actions: pd.DataFrame) -> None:
-    """Print Day-3 resolution by SIA exposure: within-group, then D vs E by stratum,
-    under the main exposure split and the exact-only sensitivity."""
+    """Print Day-3 resolution by SIA exposure: within-group, then D vs E by
+    stratum, with the exact-only sensitivity condensed to one line."""
     ev = event_sia_exposure(events, actions)
 
     def show(df):
@@ -218,14 +215,20 @@ def describe_resolution_by_exposure(events: pd.DataFrame, actions: pd.DataFrame)
 
     _section("SIA STEP 2 — DAY-3 RESOLUTION BY SIA EXPOSURE",
              "(post-hoc, descriptive: SIA is self-selected, not assigned;",
-             " Fisher's exact throughout; D = Control, E = Treatment)")
-    for split_name, exposed in EXPOSURE_SPLITS.items():
-        print(f"------------ {split_name} ------------")
-        print()
-        print("(a) exposed vs unexposed events, within each cohort:")
-        show(resolution_by_exposure(ev, exposed))
-        print("(b) D vs E, within each exposure stratum:")
-        show(resolution_groups_by_stratum(ev, exposed))
+             " Fisher's exact throughout; exposed = exact + possible)")
+    print("(a) exposed vs unexposed events, within each cohort:")
+    show(resolution_by_exposure(ev, EXPOSED))
+    print("(b) D vs E, within each exposure stratum:")
+    show(resolution_groups_by_stratum(ev, EXPOSED))
+
+    sens_a = resolution_by_exposure(ev, ("exact",))
+    sens_b = resolution_groups_by_stratum(ev, ("exact",))
+    print("Sensitivity (exact-dated exposure only, 'possible' events dropped):")
+    print(f"  within-cohort p = {sens_a['fisher_p'].iloc[0]:.3g} (D) / "
+          f"{sens_a['fisher_p'].iloc[1]:.3g} (E); D-vs-E p = "
+          f"{sens_b.loc['exposed', 'fisher_p']:.3g} (exposed) / "
+          f"{sens_b.loc['unexposed', 'fisher_p']:.3g} (unexposed)")
+    print()
 
 
 def timing_by_exposure(ev: pd.DataFrame, exposed: tuple) -> pd.DataFrame:
@@ -289,25 +292,18 @@ def describe_timing_by_exposure(events: pd.DataFrame, actions: pd.DataFrame) -> 
     """Print step 3: the Day-2->Day-3 gained/lost split by SIA exposure, and
     whether late actions (between the two follow-ups) predict the gains."""
     ev = event_sia_exposure(events, actions)
-    exposed = EXPOSURE_SPLITS["MAIN SPLIT: exposed = exact + possible"]
 
     _section("SIA STEP 3 — ARE THE DAY-3 GAINS ACTION-DRIVEN?",
-             "(post-hoc, descriptive; D = Control, E = Treatment)")
-    print("Background: the main analysis found the whole Treatment effect appears")
-    print("between the Day-2 and Day-3 follow-ups — events 'gain' (unresolved at")
-    print("Day 2 -> resolved at Day 3) almost only in Treatment. If farmers' own")
-    print("actions caused those flips, the actions should fall in that window.")
-    print("Events with both follow-ups only; exposed = exact + possible.")
+             "(the Treatment effect appears between the Day-2 and Day-3",
+             " follow-ups; if farmers' actions caused those gains, the actions",
+             " should fall in that window. Events with both follow-ups only)")
+    print("(a) gained/lost, by SIA exposure anywhere in Day 0 .. Day 3:")
+    print(timing_by_exposure(ev, EXPOSED).to_string())
     print()
 
-    print("(a) gained/lost, split by SIA exposure anywhere in Day 0 .. Day 3:")
-    print(timing_by_exposure(ev, exposed).to_string())
-    print()
-
-    print("(b) only the events that could gain (unresolved at Day 2), by when")
-    print("    the action happened: late = after the Day-2 visit date,")
-    print("    early = on/before Day 2 only. Fisher: gained x [late vs rest].")
-    disp = gains_by_action_timing(ev, exposed)
+    print("(b) events still unresolved at Day 2, by action timing (late = after")
+    print("    the Day-2 visit date; Fisher: gained x [late vs rest]):")
+    disp = gains_by_action_timing(ev, EXPOSED)
     disp["fisher_p"] = disp["fisher_p"].map(lambda v: f"{v:.3g}")
     print(disp.to_string())
     print()

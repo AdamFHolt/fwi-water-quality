@@ -189,7 +189,6 @@ def plot_oor_resolution_by_pond(data, filename="Fig6.oor_resolution_by_pond.png"
     ax.spines["bottom"].set_bounds(-0.6, len(groups) - 1 + 0.4)  # stop the axis before the key panel
     ax.set_ylim(-8, 108)
     ax.set_ylabel("pond resolution rate\n(% of its OOR events resolved at Day 3)")
-    ax.set_title("Pond-level OOR resolution")
     _ygrid(ax)
 
     # Combined right-hand panel: the events-per-pond distribution (horizontal
