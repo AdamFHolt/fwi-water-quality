@@ -364,19 +364,25 @@ unresolved at Day 2, resolved at Day 3). If farmers' actions caused those
 flips, the actions should land in that window. They don't: only 2 of the 16
 gains had any action after Day 2, and gains arrived at much the same rate
 whatever the action timing (the 6 gains with only an earlier action were
-still out of range at Day 2, after the action). Cells are gained / at risk:
+still out of range at Day 2, after the action). Each cell is the number of events
+that resolved by Day 3 out of those still out of range at Day 2 (the only ones able to gain):
 
 | Group | Action after Day 2 | Action by Day 2 only | No action | p (late vs rest) |
 |---|--:|--:|--:|--:|
-| Group D (Control) | 0 / 3 | 0 / 6 | 1 / 14 | 1.0 |
-| Group E (Treatment) | 2 / 3 | 6 / 7 | 8 / 11 | 1.0 |
+| Group D (Control) | 0 / 3 (0.0%) | 0 / 6 (0.0%) | 1 / 14 (7.1%) | 1.0 |
+| Group E (Treatment) | 2 / 3 (66.7%) | 6 / 7 (85.7%) | 8 / 11 (72.7%) | 1.0 |
 
-**Caveats.** Control's exposed events doing *worse* (7.7% vs 23.5%) is a
-reminder of why no causal reading is attempted: farmers act when a problem
-looks serious, so exposure marks the harder events (confounding by
-indication). A stricter exposure definition (exact-dated actions only) tells
-the same story throughout, and at these cell sizes the nulls mean "no
-signal", not "no effect". The robust findings are the two tables: neither the
+**Caveats.** Why not read these numbers causally? Because Control's exposed events
+actually resolved *worse* than its unexposed ones (7.7% vs 23.5%). Taken at face
+value that says acting hurt — which is backwards. The real explanation is that
+farmers act when a pond already looks bad, so the exposed events were the harder
+ones to begin with; the action is a marker of trouble, not its cause. That makes
+SIA exposure unsafe to interpret as a treatment.
+
+Two things keep the conclusions solid despite this. A stricter definition of
+exposure (exact-dated actions only) gives the same picture throughout. And the
+non-significant results here mean "no signal at these small counts", not "proven
+no effect". The findings we do stand behind are the two tables: neither the D-vs-E
 gap nor its Day-3 timing is an artifact of farmers' own actions.
 
 <br>
