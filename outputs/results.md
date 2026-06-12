@@ -63,7 +63,7 @@ The first question is whether the two groups started level; if not, any gap in
 outcomes could reflect pre-existing differences rather than anything that happened 
 during the study. Baseline water quality uses routine (non-follow-up) visits, averaged
 to one value per pond so that ponds visited more often do not count more; DO is split 
-by time of day because AM and PM differ systematically.
+by time of day because morning and evening differ systematically.
 
 | Parameter | In-range band | Group D | Group E |
 |---|---|--:|--:|
