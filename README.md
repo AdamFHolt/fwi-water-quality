@@ -5,9 +5,10 @@ The full write-up is [`outputs/results.md`](outputs/results.md), with a panel-by
 ## Running
 
 ```bash
-python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
-.venv/bin/python main.py       # primary analysis
-.venv/bin/python main_sia.py   # post-hoc SIA analysis
+python3 -m venv .venv                      # create virtual environment
+.venv/bin/pip install -r requirements.txt  # install packages needed
+.venv/bin/python main.py                   # primary analysis
+.venv/bin/python main_sia.py               # post-hoc SIA analysis
 ```
 
 `main.py` runs the primary (blind) analysis: baseline balance, the Day-3 OOR resolution rates with Fisher's exact test, the per-parameter improvement tests, the Day-2 vs Day-3 comparison, and regenerates Fig1–Fig9 in `outputs/plots/` (results.md §1-5).
