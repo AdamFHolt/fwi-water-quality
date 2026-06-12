@@ -81,6 +81,11 @@ by time of day because morning and evening differ systematically.
 
 ### 2.2 Baseline water quality — do the groups have the same spread and average?
 
+We now use two tests to evaluate whether difference in group spread and mean are
+statistically significant: see the below table. Both columns use the same per-pond, 
+mean-averaged baseline values as §2.1 (one value per pond, 28 in Group D; 25 in E), 
+so the comparison is between ponds, not the 768 individual visits.
+
 | Parameter | Levene p | Hedges' g |
 |---|--:|--:|
 | DO morning | 0.697 | −0.005 |
@@ -88,8 +93,6 @@ by time of day because morning and evening differ systematically.
 | pH | 0.664 | 0.022 |
 | Ammonia | 0.972 | 0.241 |
 
-Both columns use the same per-pond, mean-averaged baseline values as §2.1 (one value per pond, 
-28 in Group D; 25 in E), so the comparison is between ponds, not the 768 individual visits.
 
 Two groups can match on their average yet differ in spread, so both are checked 
 (full definitions in the glossary). **Levene's test** compares spread, and p > 0.05 
