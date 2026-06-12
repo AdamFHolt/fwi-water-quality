@@ -96,8 +96,8 @@ between ponds, not the 768 individual visits.
 
 Two groups can match on their average yet differ in spread, so both are checked 
 (full definitions in the glossary). **Levene's test** compares spread, and p > 0.05 
-means no evidence the spreads differ. It asks: If the two groups truly had equal 
-spread, how often would I see a spread difference this big just by chance. 
+means no evidence the spreads differ. It asks: if the two groups truly had equal 
+spread, how often would a spread difference this big appear just by chance? 
 p clears this threshold for every water quality parameter (smallest 0.088, DO evening). 
 **Hedges' g** measures how far apart the two group averages sit, in units of the 
 pond-to-pond spread: the largest value here, ammonia's 0.24, means those group means
