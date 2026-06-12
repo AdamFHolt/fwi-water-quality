@@ -335,7 +335,7 @@ nothing, and dropping the outlier ponds does not change this.
 > [!NOTE]
 > Post-hoc, added after unblinding; labels here resolve as **Group D = Control,
 > Group E = Treatment**. Self-initiated actions are self-selected, so this is
-> descriptive, not causal. Numbers are produced by `python main_sia.py`.
+> descriptive not causal. Numbers are produced by `python main_sia.py`.
 
 Farmers sometimes took corrective steps on their own initiative, recorded in the 
 unblinded workbook as self-initiated actions (SIA; 167 records, 93 with an
