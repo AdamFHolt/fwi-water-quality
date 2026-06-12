@@ -65,7 +65,7 @@ during the study. Baseline water quality uses routine (non-follow-up) visits, av
 to one value per pond so that ponds visited more often do not count more; DO is split 
 by time of day because morning and evening differ systematically.
 
-| Parameter | In-range band | Group D | Group E |
+| Parameter | In-range band | Group D (n = 28) | Group E (n = 25) |
 |---|---|--:|--:|
 | DO morning (mg/L) | 3–5 | 3.28 (0.21) | 3.28 (0.24) |
 | DO evening (mg/L) | 8–12 | 11.26 (1.01) | 11.40 (0.52) |
@@ -81,10 +81,10 @@ by time of day because morning and evening differ systematically.
 
 ### 2.2 Baseline water quality — do the groups have the same spread and average?
 
-We now use two tests to evaluate whether difference in group spread and mean are
-statistically significant: see the below table. Both columns use the same per-pond, 
-mean-averaged baseline values as §2.1 (one value per pond, 28 in Group D; 25 in E), 
-so the comparison is between ponds, not the 768 individual visits.
+We now use two complementary checks — one for spread, one for the mean gap — to
+see whether the groups differ on either: see the below table. Both columns use the same per-pond, 
+mean-averaged baseline values as §2.1 (one value per pond), so the comparison is 
+between ponds, not the 768 individual visits.
 
 | Parameter | Levene p | Hedges' g |
 |---|--:|--:|
