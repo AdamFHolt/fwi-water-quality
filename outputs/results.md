@@ -46,8 +46,7 @@ The study followed 53 ponds over 998 monitoring visits between February and May
 | OOR events | 30 | 28 | 58 |
 | Ponds with OOR events | 15 | 17 | 32 |
 
-An out-of-range (OOR) event is one pond-day on which a water quality parameter was out of
-range; several events can come from the same pond. Follow-up visits are
+An out-of-range (OOR) event is one pond-day on which a water quality parameter (dissolved oxygen [DO], ammonia, or pH) was out of range; several events can come from the same pond. Follow-up visits are
 conditional on an OOR event, so only routine visits, as shown in Figure 1, give an 
 unbiased baseline for the water quality parameters:
 
