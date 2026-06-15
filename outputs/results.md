@@ -21,7 +21,7 @@ blind labels as run.
 
 ## Highlights
 
-> - **Two cohorts, Groups D (control) and E (treatment), analysed blind for §1–5 and unblinded only for §6.**
+> - **Two cohorts: a treatment group (E) given water quality readings plus recommended corrective actions, and a control group (D) given neither.**
 > - **The groups are well matched at baseline: same water quality means and spreads.**
 > - **Group E resolves far more OOR events: 82.1% vs 16.7% at Day 3 (Fisher's p = 9.4×10⁻⁷).**
 > - **Group E improves more on every parameter (DO, pH, ammonia), and this holds after dropping outlier ponds.**
