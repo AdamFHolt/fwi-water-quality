@@ -1,13 +1,13 @@
 # Analysis Results
 
-This is a summary of the primary results that evaluate the following **Hypothesis: 
-Giving farmers water quality readings plus recommended corrective actions 
-improves pond water quality**. This is measured as the share of out-of-range (OOR) 
-events resolved at follow-up and compared between the two
-cohorts... relative to a control without corrective action recommendations. 
-The numbers and figures ** in this summart document ** 
-are produced by `python main.py`. See [`figures.md`](figures.md) for a
-panel-by-panel walkthrough of every figure and all methodological details.
+This document summarises the primary results, which evaluate the following
+**hypothesis: giving farmers water quality readings plus recommended corrective
+actions improves pond water quality**. The outcome is measured as the share of
+out-of-range (OOR) events resolved at follow-up, compared between a treatment
+cohort and a control cohort that received no corrective-action recommendations.
+The numbers and figures in this summary are produced by `python main.py`; see
+[`figures.md`](figures.md) for a panel-by-panel walkthrough of every figure and
+all methodological details.
 
 The analysis was run blind to reduce analyst bias: cohorts are labelled Group D
 and Group E (not Control/Treatment), and all tests are run two-sided as D vs E
