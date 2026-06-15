@@ -107,8 +107,8 @@ p clears this threshold for every water quality parameter (smallest 0.088, DO ev
 **Hedges' g** measures how far apart the two group averages sit, in units of the 
 pond-to-pond spread: the largest value here, ammonia's 0.24, means those group means
 differ by about a quarter of a standard deviation; the other parameters are near zero. 
-It is an effect size, not a test — no p-value, just a rough scale on which 0.2 counts
-as small. 
+It is an effect size, not a test — no p-value, just a rough scale on which 0.2 is
+generally considered small. 
 
 So neither column shows a meaningful difference: the groups start
 out comparable, and the differences in later sections are not a baseline
