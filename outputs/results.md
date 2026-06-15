@@ -86,10 +86,10 @@ by time of day because morning and evening differ systematically.
 
 ### 2.2 Baseline water quality — do the groups have the same spread and average?
 
-We now use two complementary checks — one for spread, one for the mean gap — to
+We now use two complementary checks — one for differences in spread, one for gap between means — to
 see whether the groups differ on either: see the below table. Both columns use the same per-pond, 
 mean-averaged baseline values as §2.1 (one value per pond), so the comparison is 
-between ponds, not the 768 individual visits.
+between ponds, not the individual visits.
 
 | Parameter | Levene p | Hedges' g |
 |---|--:|--:|
