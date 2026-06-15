@@ -1,10 +1,11 @@
 # Analysis Results
 
-**Hypothesis:** giving farmers water quality readings plus recommended
-corrective actions improves pond water quality, measured as the share of
-out-of-range (OOR) events resolved at follow-up and compared between the two
-cohorts. Headline numbers are produced by `python main.py`; this file is the
-summary, with the key figures embedded. See [`figures.md`](figures.md) for a
+This is a summary of the primary results that evaluate the following hypothesis: 
+**Giving farmers water quality readings plus recommended corrective actions 
+improves pond water quality**. This is measured as the share of out-of-range (OOR) 
+events resolved at follow-up and compared between the two
+cohorts... relative to a control. The numbers and figures ** in this summart document ** 
+are produced by `python main.py`. See [`figures.md`](figures.md) for a
 panel-by-panel walkthrough of every figure and all methodological details.
 
 The analysis was run blind to reduce analyst bias: cohorts are labelled Group D
