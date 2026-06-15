@@ -385,6 +385,12 @@ farmers act when a pond already looks bad, so the exposed events were the harder
 ones to begin with; the action is a marker of trouble, not its cause. That makes
 SIA exposure unsafe to interpret as a treatment.
 
+Two things keep the conclusions solid despite this. A stricter definition of
+exposure (exact-dated actions only) gives the same picture throughout. And the
+non-significant results here mean "no signal at these small counts", not "proven
+no effect". The findings we do stand behind are the two tables: neither the D-vs-E
+gap nor its Day-3 timing is an artifact of farmers' own actions.
+
 <br>
 
 ## 7. Notes on test choices
