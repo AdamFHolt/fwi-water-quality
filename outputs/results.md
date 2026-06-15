@@ -4,19 +4,19 @@ This document summarises the primary results, which test the following hypothesi
 
 > **Giving farmers water quality readings plus recommended corrective actions improves pond water quality.**
 
-The outcome is measured as the share of out-of-range (OOR) events resolved at
-follow-up, compared between a treatment cohort and a control cohort that received
+The outcome is measured as the share of out-of-range (OOR) water quality events resolved 
+at  follow-up, compared between a treatment cohort and a control cohort that received
 no corrective-action recommendations. The numbers and figures in this summary are
 produced by `python main.py`; see [`figures.md`](figures.md) for a panel-by-panel
 walkthrough of every figure and all methodological details.
 
 The analysis was run blind to reduce analyst bias: cohorts are labelled Group D
-and Group E (not Control/Treatment), and all tests are run two-sided as D vs E
+and Group E (i.e., not Control/Treatment), and all tests are run two-sided as D vs E
 with a significance threshold throughout of p < 0.05. The study has since been
 unblinded; §6 adds a post-hoc analysis on the unblinded data, but §1–5 keep the
 blind labels as run.
 
-**Contents:** [Highlights](#highlights) · [1. Dataset overview](#1-dataset-overview) · [2. Baseline comparability](#2-are-the-groups-comparable-at-baseline) · [3. Primary outcome](#3-primary-outcome--resolution-at-day-3) · [4. Comparative test](#4-comparative-test--how-much-did-water-quality-improve) · [5. Day 2 vs Day 3](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3) · [6. Post-hoc: self-initiated actions](#6-post-hoc--do-farmers-own-actions-explain-the-gap) · [7. Notes on test choices](#7-notes-on-test-choices) · [Glossary](#glossary)
+**Contents:** [Highlights](#highlights) · [1. Dataset overview](#1-dataset-overview) · [2. Baseline comparability](#2-are-the-groups-comparable-at-baseline) · [3. Primary outcome](#3-primary-outcome--resolution-at-day-3) · [4. Comparative test](#4-comparative-test--how-much-did-water-quality-improve) · [5. Day 2 vs Day 3](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3) · [6. Self-initiated actions](#6-post-hoc--do-farmers-own-actions-explain-the-gap) · [7. Notes on test choices](#7-notes-on-test-choices) · [Glossary](#glossary)
 
 <br>
 
@@ -27,7 +27,7 @@ blind labels as run.
 > - **Group E resolves far more OOR events: 82.1% vs 16.7% at Day 3 (Fisher's p = 9.4×10⁻⁷).**
 > - **Group E improves more on every parameter (DO, pH, ammonia), and this holds after dropping outlier ponds.**
 > - **The effect appears only by Day 3: the groups look alike at Day 2 (~20–25% resolution), then E jumps to 82%.**
-> - **Farmers' own actions are unable to explain the gap between groups (D vs. E) or days (Day 2 vs. 3).**
+> - **Farmers' own actions are unable to explain the difference between groups (D vs. E) or days (Day 2 vs. 3).**
 > - **Overall: the evidence strongly supports the hypothesis that FWI's intervention (water quality readings plus recommended actions) improves pond water quality.**
 
 <br>
