@@ -4,7 +4,8 @@ This is a summary of the primary results that evaluate the following **Hypothesi
 Giving farmers water quality readings plus recommended corrective actions 
 improves pond water quality**. This is measured as the share of out-of-range (OOR) 
 events resolved at follow-up and compared between the two
-cohorts... relative to a control. The numbers and figures ** in this summart document ** 
+cohorts... relative to a control without corrective action recommendations. 
+The numbers and figures ** in this summart document ** 
 are produced by `python main.py`. See [`figures.md`](figures.md) for a
 panel-by-panel walkthrough of every figure and all methodological details.
 
