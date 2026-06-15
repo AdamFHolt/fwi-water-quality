@@ -22,13 +22,12 @@ blind labels as run.
 
 ## Highlights
 
-> - **Two cohorts: treatment (E) got water quality readings plus corrective-action advice; control (D) got neither.**
-> - **The groups are well matched at baseline: same water quality means and spreads.**
-> - **Group E resolves far more OOR events: 82.1% vs 16.7% at Day 3 (Fisher's p = 9.4×10⁻⁷).**
-> - **Group E improves more on every parameter (DO, pH, ammonia), and this holds after dropping outlier ponds.**
-> - **The effect appears only by Day 3: the groups look alike at Day 2 (~20–25% resolution), then E jumps to 82%.**
-> - **Farmers' own actions are unable to explain the difference between groups (D vs. E) or days (Day 2 vs. 3).**
-
+- **Two cohorts: treatment (E) got water quality readings plus corrective-action advice; control (D) got neither.**
+- **The groups are well matched at baseline: same water quality means and spreads.**
+- **Group E resolves far more OOR events: 82.1% vs 16.7% at Day 3 (Fisher's p = 9.4×10⁻⁷).**
+- **Group E improves more on every parameter (DO, pH, ammonia), and this holds after dropping outlier ponds.**
+- **The effect appears only by Day 3: the groups look alike at Day 2 (~20–25% resolution), then E jumps to 82%.**
+- **Farmers' own actions are unable to explain the difference between groups (D vs. E) or days (Day 2 vs. 3).**
 - **Overall: the evidence strongly supports the hypothesis that FWI's intervention (water quality readings plus recommended actions) improves pond water quality.**
 
 <br>
