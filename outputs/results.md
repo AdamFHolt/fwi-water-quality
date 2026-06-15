@@ -1,7 +1,7 @@
 # Analysis Results
 
-This is a summary of the primary results that evaluate the following hypothesis: 
-**Giving farmers water quality readings plus recommended corrective actions 
+This is a summary of the primary results that evaluate the following **Hypothesis: 
+Giving farmers water quality readings plus recommended corrective actions 
 improves pond water quality**. This is measured as the share of out-of-range (OOR) 
 events resolved at follow-up and compared between the two
 cohorts... relative to a control. The numbers and figures ** in this summart document ** 
