@@ -1,13 +1,14 @@
 # Analysis Results
 
-This document summarises the primary results, which evaluate the following
-**hypothesis: giving farmers water quality readings plus recommended corrective
-actions improves pond water quality**. The outcome is measured as the share of
-out-of-range (OOR) events resolved at follow-up, compared between a treatment
-cohort and a control cohort that received no corrective-action recommendations.
-The numbers and figures in this summary are produced by `python main.py`; see
-[`figures.md`](figures.md) for a panel-by-panel walkthrough of every figure and
-all methodological details.
+This document summarises the primary results, which test the following hypothesis:
+
+> **Giving farmers water quality readings plus recommended corrective actions improves pond water quality.**
+
+The outcome is measured as the share of out-of-range (OOR) events resolved at
+follow-up, compared between a treatment cohort and a control cohort that received
+no corrective-action recommendations. The numbers and figures in this summary are
+produced by `python main.py`; see [`figures.md`](figures.md) for a panel-by-panel
+walkthrough of every figure and all methodological details.
 
 The analysis was run blind to reduce analyst bias: cohorts are labelled Group D
 and Group E (not Control/Treatment), and all tests are run two-sided as D vs E
@@ -21,7 +22,7 @@ blind labels as run.
 
 ## Highlights
 
-> - **Two cohorts: a treatment group (E) given water quality readings plus recommended corrective actions, and a control group (D) given neither.**
+> - **Two cohorts: treatment (E) got WQ readings plus corrective-action advice; control (D) got neither.**
 > - **The groups are well matched at baseline: same water quality means and spreads.**
 > - **Group E resolves far more OOR events: 82.1% vs 16.7% at Day 3 (Fisher's p = 9.4×10⁻⁷).**
 > - **Group E improves more on every parameter (DO, pH, ammonia), and this holds after dropping outlier ponds.**
