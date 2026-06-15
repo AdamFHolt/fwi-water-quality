@@ -120,16 +120,16 @@ Before moving on to the main analysis, we check for any ponds that are
 outliers with respect to their baseline water quality parameters. Five 
 ponds sit more than 2 SD from their group mean on at least one baseline
 parameter, for 9 flags in total. Since some ponds are extreme on more than 
-one parameter, each pond's first appearance in the table is bolded and 
-underlined to make the repeat offenders clearer. 
+one parameter, each pond's first appearance in the table is bolded to clearly
+identify these potentially anomalous pools. 
 
 | Parameter | Group | Pond | Value | Std. residual |
 |---|---|---|--:|--:|
-| DO morning | E | **<u>44f24b9a</u>** | 2.73 | −2.53 |
-| DO morning | E | **<u>917e0459</u>** | 2.78 | −2.30 |
-| DO evening | D | **<u>87edd7c9</u>** | 13.05 | 2.24 |
-| DO evening | D | **<u>9252e874</u>** | 15.26 | 5.00 |
-| pH | D | **<u>6772b310</u>** | 8.48 | 2.13 |
+| DO morning | E | **44f24b9a** | 2.73 | −2.53 |
+| DO morning | E | **917e0459** | 2.78 | −2.30 |
+| DO evening | D | **87edd7c9** | 13.05 | 2.24 |
+| DO evening | D | **9252e874** | 15.26 | 5.00 |
+| pH | D | **6772b310** | 8.48 | 2.13 |
 | pH | D | 9252e874 | 8.57 | 3.09 |
 | pH | E | 917e0459 | 8.47 | 2.07 |
 | Ammonia | D | 6772b310 | 0.049 | 2.71 |
