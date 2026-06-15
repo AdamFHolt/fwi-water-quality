@@ -28,7 +28,7 @@ blind labels as run.
 - Group E improves more on every parameter (DO, pH, ammonia), and this holds after dropping outlier ponds.
 - The effect appears only by Day 3: the groups look alike at Day 2 (~20–25% resolution), then E jumps to 82%.
 - Farmers' own actions are unable to explain the difference between groups (D vs. E) or days (Day 2 vs. 3).
-- **Overall: the evidence strongly supports that the interventions (water quality readings plus recommended actions) improve pond water quality.**
+- **The evidence strongly supports that the interventions (water quality readings plus recommended actions) improve pond water quality.**
 
 <br>
 
