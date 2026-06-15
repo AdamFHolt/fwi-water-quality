@@ -147,12 +147,13 @@ statistic and marked as red-ringed points (with their OOR-event count).*</sub>
 ## 3. Primary outcome — resolution at Day 3
 
 With the groups comparable at baseline, we now turn to the primary outcome: how
-many OOR events were resolved within each group. An event ... any water quality parameter
-causes to go..out of range.; an event is "resolved" if... the pond was back in
-range on every WQ parameter (DO, pH, and ammonia) at the Day-3 (primary) follow-up. 
+many OOR events were resolved within each group. An event is recorded whenever
+any one of the water quality parameters goes out of range, and it counts as
+"resolved" only if the pond is back in range on every WQ parameter (DO, pH, and
+ammonia), not just the one that triggered it, at the Day-3 (primary) follow-up.
 Most events are driven by DO, followed by pH and then ammonia, and a single event
-can flag several parameters at once (the middle "event drivers" bars below). 
-We conduct this analysis both for all OOR events (below, left) and with the 
+can flag several parameters at once (the middle "event drivers" bars below).
+We conduct this analysis both for all OOR events (below, left) and with the
 outlier ponds completely removed from the dataset (below, right).
 
 <table>
