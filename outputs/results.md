@@ -1,16 +1,17 @@
 # Analysis Results
 
-Headline numbers are produced by `python main.py`. This file is the
-summary, with the key figures embedded; see
-[`figures.md`](figures.md) for a panel-by-panel walkthrough of every figure and
-all methodological details.
+**Hypothesis:** giving farmers water quality readings plus recommended
+corrective actions improves pond water quality, measured as the share of
+out-of-range (OOR) events resolved at follow-up and compared between the two
+cohorts. Headline numbers are produced by `python main.py`; this file is the
+summary, with the key figures embedded. See [`figures.md`](figures.md) for a
+panel-by-panel walkthrough of every figure and all methodological details.
 
-> [!NOTE]
-> The analysis was run blind: cohorts are labelled Group D and Group E (not
-> Control/Treatment) to reduce analyst bias. All tests are run two-sided as
-> D vs E, with a significance threshold throughout of p < 0.05. The study has since
-> been unblinded — §6 adds a post-hoc analysis on the unblinded data, but
-> §1–5 keep the blind labels as run.
+The analysis was run blind to reduce analyst bias: cohorts are labelled Group D
+and Group E (not Control/Treatment), and all tests are run two-sided as D vs E
+with a significance threshold throughout of p < 0.05. The study has since been
+unblinded; §6 adds a post-hoc analysis on the unblinded data, but §1–5 keep the
+blind labels as run.
 
 **Contents:** [Highlights](#highlights) · [1. Dataset overview](#1-dataset-overview) · [2. Baseline comparability](#2-are-the-groups-comparable-at-baseline) · [3. Primary outcome](#3-primary-outcome--resolution-at-day-3) · [4. Comparative test](#4-comparative-test--how-much-did-water-quality-improve) · [5. Day 2 vs Day 3](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3) · [6. Post-hoc: self-initiated actions](#6-post-hoc--do-farmers-own-actions-explain-the-gap) · [7. Notes on test choices](#7-notes-on-test-choices) · [Glossary](#glossary)
 
