@@ -22,7 +22,7 @@ blind labels as run.
 
 ## Highlights
 
-> - **Two cohorts: treatment (E) got WQ readings plus corrective-action advice; control (D) got neither.**
+> - **Two cohorts: treatment (E) got water quality readings plus corrective-action advice; control (D) got neither.**
 > - **The groups are well matched at baseline: same water quality means and spreads.**
 > - **Group E resolves far more OOR events: 82.1% vs 16.7% at Day 3 (Fisher's p = 9.4×10⁻⁷).**
 > - **Group E improves more on every parameter (DO, pH, ammonia), and this holds after dropping outlier ponds.**
