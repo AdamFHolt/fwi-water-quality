@@ -148,7 +148,8 @@ statistic and marked as red-ringed points (with their OOR-event count).*</sub>
 
 With the groups comparable at baseline, we now turn to the primary outcome: how
 many OOR events each group resolved, where "resolved" means the pond was back in
-range at the Day-3 (primary) follow-up. Most events are driven by DO, followed
+range on every WQ parameter (DO, pH, and ammonia), not just the one that
+triggered the event, at the Day-3 (primary) follow-up. Most events are driven by DO, followed
 by pH and then ammonia, and a single event can flag several parameters at once
 (the middle "event drivers" bars below). We conduct this analysis both for all 
 OOR events (below, left) and with the outlier ponds completely removed from the 
