@@ -176,9 +176,9 @@ grey = not resolved. Note the picture is consistent with vs. without the outlier
 
 ### 3.1 Resolution rate
 
-The pie charts above counted every OOR event once; here we add a pond-level view that
-instead averages each pond's own resolution rate, so that ponds with many events do not
-dominate. The table reports both, with and without the outlier ponds.
+The pie charts above counted every OOR event once; here we also add a pond-level view that
+averages each pond's own resolution rate, so that ponds with more events do not
+contribute more. The table reports both, with and without the outlier ponds.
 
 | Resolution rate | Group D | Group E |
 |---|--:|--:|
@@ -189,12 +189,12 @@ dominate. The table reports both, with and without the outlier ponds.
 | &nbsp;&nbsp;event-level | 5 / 22 = 22.7% | 19 / 22 = 86.4% |
 | &nbsp;&nbsp;pond-level | 19.4% (12 ponds) | 86.7% (15 ponds) |
 
-The pond-level rows tell the same story as the event-level ones, which rules out a
+The pond-level analysis is consistent with that at the event-level, which rules out a
 few repeat-event ponds driving the gap. Removing the 5 outlier ponds leaves the gap
 intact (it actually widens slightly). Figure 6 makes the same point pond by pond, but shows 
-the distribution itself: one point per pond at its own resolution rate, sized by 
-event count. Most Group D ponds resolved nothing, most Group E ponds resolved everything, 
-and resolution shows no relation to event count.
+the distribution itself: one point per pond at its own resolution rate (average over its 
+events) and sized by event count. Most Group D ponds resolved nothing, most Group E ponds resolved 
+everything, and resolution rate shows no correlation with event count.
 
 <div align="center">
 <a href="plots/Fig6.oor_resolution_by_pond.png"><img src="plots/Fig6.oor_resolution_by_pond.png" width="560" alt="Figure 6 — pond-level resolution"></a>
