@@ -244,8 +244,10 @@ were identical. So the difference is real, not noise. Removing the outlier ponds
 keeps both metrics very small (0.046; 4.8×10⁻⁵).
 
 ### 3.3 Resolution by parameter (Day 3)
-The same Day-3 outcome, broken down by which parameter was out of range. Rows count 
-the events involving each parameter, so an event flagging two (e.g. DO and pH) appears in both rows.
+We now check whether the overall gap rides on a single parameter — say, Group E only does
+better at fixing DO — by splitting the same Day-3 outcome by which parameter was out
+of range. Rows count the events involving each parameter, so an event flagging two (e.g.
+DO and pH) appears in both rows.
   
 | Parameter | D events | D resolved | D % | E events | E resolved | E % |
 |---|--:|--:|--:|--:|--:|--:|
@@ -253,7 +255,7 @@ the events involving each parameter, so an event flagging two (e.g. DO and pH) a
 | pH | 13 | 1 | 7.7 | 15 | 10 | 66.7 |
 | Ammonia | 8 | 0 | 0.0 | 4 | 2 | 50.0 |
 
-Group E leads on every parameter, so the overall gap is not carried by any single one; 
+Group E leads on every parameter, so the overall gap is not a function of any single WQ parameter; 
 DO simply dominates the event counts in both groups.
 
 <br>
