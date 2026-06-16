@@ -245,7 +245,7 @@ keeps both metrics very small (0.046; 4.8×10⁻⁵).
 
 ### 3.3 Resolution by parameter (Day 3)
 We now check whether the overall gap rides on a single parameter — say, Group E only does
-better at fixing DO — by splitting the same Day-3 outcome by which parameter was out
+better at fixing DO — by splitting the Day-3 outcome by which parameter was out
 of range. Rows count the events involving each parameter, so an event flagging two (e.g.
 DO and pH) appears in both rows.
   
@@ -255,8 +255,8 @@ DO and pH) appears in both rows.
 | pH | 13 | 1 | 7.7 | 15 | 10 | 66.7 |
 | Ammonia | 8 | 0 | 0.0 | 4 | 2 | 50.0 |
 
-Group E leads on every parameter, so the overall gap is not a function of any single WQ parameter; 
-DO simply dominates the event counts in both groups.
+Group E leads on every parameter, so the overall gap is not a function of any single WQ parameter 
+(DO simply dominates the event counts in both groups).
 
 <br>
 
