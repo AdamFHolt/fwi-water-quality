@@ -206,9 +206,9 @@ the horizontal line marks each group's mean. Inset: how many ponds had each even
 ### 3.2 Fisher's exact test (the formal test)
 
 The formal test returns to the event level. Resolved vs not, by group, forms a 2×2 count
-table, as is the input for Fisher's exact test. Left: all ponds (as shown in Figure 4 above). 
-Right: with the 5 outlier ponds removed (as shown in Figure 5). The rates match the event-level 
-rows in §3.1, not the pond-level rows.
+table, which is the input for Fisher's exact test. Left: all ponds (as shown in Figure 4 above). 
+Right: with the 5 outlier ponds removed (as shown in Figure 5). The cells are raw counts, so the
+rates match §3.1's event-level rows, not the pond-level ones.
 
 <table>
 <tr><td>
