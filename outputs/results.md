@@ -356,14 +356,16 @@ Treatment, could be an artifact of farmer's taking their own, self-initiated act
 In other words, farmers might simply have taken more corrective steps on their own within one 
 group — so what looks like an effect of the intervention could really be the effect of those SIAs. 
 
-SIA are corrective steps farmers took on their own initiative, recorded only in the
-unblinded workbook. There are 167 such records, each dated by when the action was taken —
-though with varying precision: 93 carry an exact day, while the other 74 are dated only
-relative to the visit (almost all "0–7 days ago"), placing the action in a window up to a
-week wide rather than on a single day. Each record becomes an implementation window on that basis. An OOR event is
-*exposed* if an SIA's window overlaps its Day-0-to-Day-3 span — i.e. a farmer acted while the
-event was still open. Exposure was common and similar across cohorts (Control 13/30
-events, Treatment 16/28), making it a plausible confounder worth checking.
+SIA are corrective steps farmers took on their own initiative, separate from the study's 
+recommendations and recorded only in the unblinded workbook. There are 167 such records, 
+each dated by when the action was taken — though with varying precision: 93 carry an exact day, 
+while the other 74 are dated only relative to the visit (almost all "0–7 days ago"), 
+placing the action in a window up to a week wide rather than on a single day. 
+We therefore search for whether these SIA records overlap, and hence possibly influence,
+the timing window between, and including, Day-0 (OOR event detection) to Day-3 (primary outcome). 
+We consider an OOR event to *exposed* if an SIA's window overlaps this Day-0-to-Day-3 span — 
+i.e. a farmer acted while the event was still open. Exposure was common across both cohorts 
+(Control 13/30 events, Treatment 16/28), making it a plausible confounder worth checking.
 
 **Does SIA explain the resolution gap?** If it did, two things would follow. First, the
 gap would shrink once we compare like with like — events where *nobody* acted; instead,
