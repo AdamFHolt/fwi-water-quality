@@ -270,7 +270,7 @@ a mean gap at least this large if the groups had really improved equally, so a s
 *against* their being alike (see glossary for more detail). The rank-based **Mann-Whitney** U is the 
 second check, and it is based on the ranks of the values rather than their magnitudes — it tests
 whether one group's values tend to rank higher, ignoring how large the gaps are. It provides reassurance
-at these small n, since ranks cannot be dragged by extreme  ponds the way a mean can. The −out columns
+at these small n, since ranks cannot be dragged by extreme ponds the way a mean can. The −out columns
 re-run each test with the 5 outlier ponds completely dropped from every parameter. **Bold** = p < 0.05.
 
 | Parameter | n (D / E) | Mean D | Mean E | Welch p (all) | Welch p (−out) | MWU p (all) | MWU p (−out) |
@@ -282,7 +282,7 @@ re-run each test with the 5 outlier ponds completely dropped from every paramete
 The two tests agree for every WQ parameter. Group E improves more on every parameter, 
 while Group D's mean pH and ammonia drift slightly further out of range. DO and pH stay
 significant after outlier removal; only ammonia slips above 0.05 (Welch 0.066, MWU
-0.077), because dropping outlier ponds cuts it to n = 3 vs 3 (from 5 vs. 4).  
+0.077), because dropping outlier ponds cuts it to n = 3 vs 3 (from 5 vs 4).
 
 <div align="center">
 <a href="plots/Fig7.oor_improvement.png"><img src="plots/Fig7.oor_improvement.png" width="960" alt="Figure 7 — out-of-range gap closed per pond"></a>
@@ -341,7 +341,7 @@ nothing, and dropping the outlier ponds does not change this.
 
 <br>
 
-## 6. Secondary — do farmers' own actions explain the gap?
+## 6. Post-hoc — do farmers' own actions explain the gap?
 
 > [!NOTE]
 > Post-hoc, added after unblinding; labels here resolve as **Group D = Control,
