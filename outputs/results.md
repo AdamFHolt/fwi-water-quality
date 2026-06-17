@@ -378,34 +378,25 @@ across each row: D vs E; down each column: exposed vs unexposed (each cell reads
 | p (exposed vs unexposed) | 0.355 | 0.624 | |
 
 **Did the SIAs cause the Day-2 to Day-3 gains?** §5 showed that Treatment's entire effect resides in the
-one day between the two follow-ups: Of the ??? events that resolved on Day 3, 16 of those were "gained" 
-(i.e., still out of range at Day 2, but back in range by Day 3; §5's "Gained" column). 
-If an SIA caused one of those gains, it had to fall in that Day-2-to-Day-3 window. 
-Almost none did: only 2 of these 16 gains had any SIAs <text here>. That is the
-table's "late vs rest" test: the first column against the other two, p = 1.0 in both cohorts —
-no difference. The 6 gains whose only action came earlier were
-still out of range at Day 2, so that action had not fixed them. Only events still out of range
-at Day 2 were eligible to gain — an event already back in range by Day 2 cannot gain — so the
-table counts just those; each cell reads "resolved by Day 3 / still out of range at Day 2 (percent)", e.g.
-"2 / 3 (66.7%)":
+one day between the two follow-ups: of the 23 events that resolved by Day 3, 16 were "gained"
+(i.e., still out of range at Day 2, but back in range by Day 3; §5's "Gained" column).
+If an SIA caused one of those gains, it had to fall in that Day-2-to-Day-3 window — a "late"
+SIA. Almost none did: only 2 of the 16 gains had one. And a late SIA gave no advantage: among
+the events that could still gain (those out of range at Day 2), the ones with a late action
+resolved no more often than the ones without (p = 1.0 in both cohorts). Each cell below reads
+"gained / still out of range at Day 2 (percent)", e.g. "2 / 3 (67%)":
 
-| Group | Action after Day 2 | Action by Day 2 only | No action | p (late vs rest) |
-|---|--:|--:|--:|--:|
-| Group D (Control) | 0 / 3 (0.0%) | 0 / 6 (0.0%) | 1 / 14 (7.1%) | 1.0 |
-| Group E (Treatment) | 2 / 3 (66.7%) | 6 / 7 (85.7%) | 8 / 11 (72.7%) | 1.0 |
+| Group | Late action (after Day 2) | No late action | p |
+|---|--:|--:|--:|
+| Group D (Control) | 0 / 3 (0%) | 1 / 20 (5%) | 1.0 |
+| Group E (Treatment) | 2 / 3 (67%) | 14 / 18 (78%) | 1.0 |
 
-**Caveats.** Why not read these numbers causally? Because Control's exposed events
-actually resolved *worse* than its unexposed ones (7.7% vs 23.5%). Taken at face
-value that says acting hurt — which is backwards. The real explanation is that
-farmers act when a pond already looks bad, so the exposed events were the harder
-ones to begin with; the action is a marker of trouble, not its cause. That makes
-SIA exposure unsafe to interpret as a treatment.
-
-Two things keep the conclusions solid despite this. A stricter definition of
-exposure (exact-dated actions only) gives the same picture throughout. And the
-non-significant results here mean "no signal at these small counts", not "proven
-no effect". The findings we do stand behind are the two tables: neither the D-vs-E
-gap nor its Day-3 timing is an artifact of farmers' own actions.
+**Caveats.** These exposure comparisons are descriptive, not causal: farmers act when a pond
+already looks bad, so a cohort's exposed events are its troubled ones. That is why Control's
+exposed events resolve *worse* than its unexposed (7.7% vs 23.5%) — not because acting hurts.
+So we don't claim SIA has no effect; we claim only what the two tables show — that the
+Control-vs-Treatment gap, and its Day-3 timing, are not artifacts of farmers' own actions.
+That holds under a stricter, exact-dated definition of exposure as well.
 
 <br>
 
