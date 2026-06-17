@@ -270,21 +270,22 @@ points cannot be pooled into one score without an arbitrary conversion, paramete
   
 Means are group averages of the per-pond values; each p compares D vs E by Welch's t. As throughout, that p is the
 chance of a mean gap at least this large if the groups had really improved equally, so a small p is evidence *against*
-their being alike (see glossary for more detail). Another diagnostic, the rank-based Mann-Whitney U,
-agrees on every call — valuable reassurance at these small n, since ranks cannot be dragged by one
-extreme pond the way a mean can. The outlier columns re-run the test with outlier ponds dropped from every parameter (any) or only the
-parameter they were extreme on (this). **Bold** = p < 0.05.
+their being alike (see glossary for more detail). Alongside it we report a second diagnostic, the
+rank-based Mann-Whitney U: valuable reassurance at these small n, since ranks cannot be dragged by one
+extreme pond the way a mean can. The −out columns re-run each test with outlier ponds dropped from
+every parameter. **Bold** = p < 0.05.
 
-| Parameter | n (D / E) | Mean D | Mean E | p (all) | p (−out, any) | p (−out, this) |
-|---|:--:|--:|--:|--:|--:|--:|
-| DO (mg/L) | 14 / 16 | +0.05 | +2.10 | **0.020** | **0.006** | **0.003** |
-| pH | 8 / 11 | −0.02 | +0.21 | **0.0017** | **0.003** | **0.004** |
-| Ammonia (mg/L) | 5 / 4 | −0.01 | +0.04 | **0.018** | 0.066 | **0.030** |
+| Parameter | n (D / E) | Mean D | Mean E | Welch p (all) | Welch p (−out) | MWU p (all) | MWU p (−out) |
+|---|:--:|--:|--:|--:|--:|--:|--:|
+| DO (mg/L) | 14 / 16 | +0.05 | +2.10 | **0.020** | **0.006** | **0.021** | **0.008** |
+| pH | 8 / 11 | −0.02 | +0.21 | **0.0017** | **0.003** | **0.0034** | **0.008** |
+| Ammonia (mg/L) | 5 / 4 | −0.01 | +0.04 | **0.018** | 0.066 | **0.019** | 0.077 |
 
-Group E improves more on every parameter, while Group D's mean pH and ammonia
-drift slightly further out of range. The effect survives outlier removal
-throughout: the lone p > 0.05 (ammonia at 0.066 under the blunt any-param rule,
-which cuts it to n = 3 vs 3) comes back to 0.030 under the this-param rule.
+The two tests agree on every call. Group E improves more on every parameter, while
+Group D's mean pH and ammonia drift slightly further out of range. DO and pH stay
+significant after outlier removal; only ammonia slips above 0.05 (Welch 0.066, MWU
+0.077), because dropping outlier ponds cuts it to n = 3 vs 3 — on all ponds it is
+clearly significant (0.018).
 
 <div align="center">
 <a href="plots/Fig7.oor_improvement.png"><img src="plots/Fig7.oor_improvement.png" width="960" alt="Figure 7 — out-of-range gap closed per pond"></a>
