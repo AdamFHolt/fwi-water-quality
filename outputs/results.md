@@ -262,15 +262,17 @@ Group E leads on every parameter, so the overall gap is not a function of any si
 
 ## 4. Comparative test — how much did water quality improve?
 
-Section 3 asked whether a pond resolved (i.e., a binary outcome); this section asks how far it moved (a continous outcome). 
-The continuous measure is the out-of-range gap closed: this is distance outside the in-range water quality region (or "band"
-as is bound by a minimum and a maximum) at Day 0 minus distance at Day 3 (positive = moved back toward the band).
+Section 3 asked whether a pond resolved (i.e., a binary outcome); this section asks how far it moved (a continuous outcome). 
+The continuous measure is the out-of-range gap closed: this is distance outside the in-range water quality region (the "band",
+bound by a minimum and a maximum) at Day 0 minus distance at Day 3 (positive = moved back toward the band).
 Each pond contributes one value (its mean across events), and each WQ parameter keeps its own units. Since mg/L and pH
 points cannot be pooled into one score without an arbitrary conversion, parameters are tested separately.
   
 Means are group averages of the per-pond values; each p compares D vs E by Welch's t. As throughout, that p is the
 chance of a mean gap at least this large if the groups had really improved equally, so a small p is evidence *against*
-their being alike (see glossary for more detail). Another diagnostic, the Mann-Whitney .., which measures ... valuable reassurance at these small n since ranks can not be dragged by one extreme pond the way a mean can. The outlier columns re-run the test with outlier ponds dropped from every parameter (any) or only the
+their being alike (see glossary for more detail). Another diagnostic, the rank-based Mann-Whitney U,
+agrees on every call — valuable reassurance at these small n, since ranks cannot be dragged by one
+extreme pond the way a mean can. The outlier columns re-run the test with outlier ponds dropped from every parameter (any) or only the
 parameter they were extreme on (this). **Bold** = p < 0.05.
 
 | Parameter | n (D / E) | Mean D | Mean E | p (all) | p (−out, any) | p (−out, this) |
@@ -462,6 +464,10 @@ gap nor its Day-3 timing is an artifact of farmers' own actions.
 - **Mann-Whitney U** — ranks all the values from both groups together and tests
   whether one group's values tend to rank higher. It uses only order, not the raw
   values, so it assumes no particular distribution and resists skew and outliers.
+  U is the test statistic (as t is for the t-test): across every pairing of a D
+  value with an E value, it counts how often one outranks the other (ties count
+  ½), so a U far from its midpoint means one group sits consistently higher. Also
+  known as the Wilcoxon rank-sum test.
 - **McNemar's test** — the paired counterpart for binary data. It tests whether a
   before/after proportion (Day 2 → Day 3) changed, using only the discordant pairs
   (events that flipped one way or the other) and ignoring those that stayed put.
