@@ -347,25 +347,24 @@ nothing, and dropping the outlier ponds does not change this.
 ## 6. Post-hoc — do farmers' own actions explain the gap?
 
 > [!NOTE]
-> This is the only part of the analysis conducted added after unblinding; i.e.,
-> the reveal that **Group D = Control** and **Group E = Treatment**.
-> Numbers are produced by `python main_sia.py`.
+> This is the only part of the analysis added after unblinding — i.e., after the
+> reveal that **Group D = Control** and **Group E = Treatment**. Numbers are
+> produced by `python main_sia.py`.
 
-Here we ask whether the difference in resolution of OOR events, between Control and
-Treatment, could be an artifact of farmer's taking their own, self-initiated actions (SIA).
-In other words, farmers might simply have taken more corrective steps on their own within one 
-group — so what looks like an effect of the intervention could really be the effect of those SIAs. 
+Here we ask whether the resolution gap between Control and Treatment could be an artifact
+of farmers taking their own, self-initiated actions (SIA). In other words, one group's
+farmers might simply have taken more corrective steps on their own — so what looks like an
+effect of the intervention could really be the effect of those SIAs.
 
-SIA are corrective steps farmers took on their own initiative, separate from the study's 
-recommendations and recorded only in the unblinded workbook. There are 167 such records, 
-each dated by when the action was taken — though with varying precision: 93 carry an exact day, 
-while the other 74 are dated only relative to the visit (almost all "0–7 days ago"), 
-placing the action in a window up to a week wide rather than on a single day. 
-We therefore search for whether these SIA records overlap, and hence possibly influence,
-the timing window between, and including, Day-0 (OOR event detection) to Day-3 (primary outcome). 
-We consider an OOR event to *exposed* if an SIA's window overlaps this Day-0-to-Day-3 span — 
-i.e. a farmer acted while the event was still open. Exposure was common across both cohorts 
-(Control 13/30 events, Treatment 16/28), making it a plausible confounder worth checking.
+SIA are corrective steps farmers took on their own initiative, separate from the study's
+recommendations and recorded only in the unblinded workbook. There are 167 such records,
+each dated by when the action was taken, though with varying precision: 93 carry an exact
+day, while the other 74 are dated only relative to the visit (almost all "0–7 days ago"),
+placing the action in a window up to a week wide rather than on a single day. We call an
+OOR event *exposed* if an SIA's window overlaps its Day-0-to-Day-3 span (Day 0 = OOR
+detected, Day 3 = primary outcome) — i.e. a farmer acted while the event was still open, so
+the action could plausibly have influenced the result. Exposure was common in both cohorts
+(Control 13/30 events, Treatment 16/28), making it a confounder worth checking.
 
 **Does SIA explain the resolution gap?** If it did, two things would follow. First, the
 gap would shrink once we compare like with like — events where *nobody* acted; instead,
