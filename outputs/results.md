@@ -357,8 +357,11 @@ In other words, farmers might simply have taken more corrective steps on their o
 group — so what looks like an effect of the intervention could really be the effect of those SIAs. 
 
 SIA are corrective steps farmers took on their own initiative, recorded only in the
-unblinded workbook. There are ... 167 records: 93 exact-dated, 74 dated by a range (flesh this sentence out). 
-An OOR event is *exposed* if an SIA overlaps its Day-0-to-Day-3 window — i.e. a farmer acted while the
+unblinded workbook. There are 167 such records, each dated by when the action was taken —
+though with varying precision: 93 carry an exact day, while the other 74 are dated only
+relative to the visit (almost all "0–7 days ago"), placing the action in a window up to a
+week wide rather than on a single day. Each record becomes an implementation window on that basis. An OOR event is
+*exposed* if an SIA's window overlaps its Day-0-to-Day-3 span — i.e. a farmer acted while the
 event was still open. Exposure was common and similar across cohorts (Control 13/30
 events, Treatment 16/28), making it a plausible confounder worth checking.
 
