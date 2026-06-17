@@ -351,20 +351,23 @@ nothing, and dropping the outlier ponds does not change this.
 > Group E = Treatment**. Self-initiated actions are self-selected, so this is
 > descriptive not causal. Numbers are produced by `python main_sia.py`.
 
-Farmers sometimes took corrective steps on their own initiative, recorded in the 
-unblinded workbook as self-initiated actions (SIA; 167 records, 93 with an
-exact date, 74 dated only by a range). If effective, these could blur the §3
-comparison. An OOR event counts as *exposed* when an SIA's implementation
-window overlaps its Day-0-to-Day-3 span; exposure was common in both groups
-(Control 13/30 events, Treatment 16/28). 
+Could the §3 gap be an artifact? Treatment farmers might simply have taken more
+corrective steps on their own — so what looks like an effect of the intervention could
+really be the effect of those self-initiated actions (SIA). This section rules that out.
 
-**Does SIA explain the resolution gap?** One table answers two questions
-about the Day-3 outcome (cells are resolved / events; p is again Fisher's
-exact). Reading across: does the D-vs-E gap survive when only exposed, or
-only unexposed, events are compared (right-hand p)? It does, including among
-the events with no SIA at all. Reading down: do a cohort's exposed events
-resolve more often than its unexposed ones (bottom-row p)? Neither does: both
-differences are well within chance. 
+SIA are corrective steps farmers took on their own initiative, recorded only in the
+unblinded workbook (167 records: 93 exact-dated, 74 dated by a range). An OOR event is
+*exposed* if an SIA overlaps its Day-0-to-Day-3 window — i.e. a farmer acted while the
+event was still open. Exposure was common and similar across cohorts (Control 13/30
+events, Treatment 16/28), making it a plausible confounder worth checking.
+
+**Does SIA explain the resolution gap?** If it did, two things would follow. First, the
+gap would shrink once we compare like with like — events where *nobody* acted; instead,
+among unexposed events it is as wide as ever (23.5% vs 75.0%, p = 0.0095), and it holds
+among exposed events too. Second, within a cohort, exposed events would resolve more
+often than unexposed ones; neither shows that (Control p = 0.355, Treatment p = 0.624).
+The table gives both readings — across each row, D vs E; down each column, exposed vs
+unexposed (cells are resolved / events; p is Fisher's exact): 
 
 | | Group D (Control) | Group E (Treatment) | p (D vs E) |
 |---|--:|--:|--:|
