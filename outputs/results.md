@@ -279,11 +279,10 @@ re-run each test with the 5 outlier ponds completely dropped from every paramete
 | pH | 8 / 11 | −0.02 | +0.21 | **0.0017** | **0.003** | **0.0034** | **0.008** |
 | Ammonia (mg/L) | 5 / 4 | −0.01 | +0.04 | **0.018** | 0.066 | **0.019** | 0.077 |
 
-The two tests agree on every call. Group E improves more on every parameter, while
-Group D's mean pH and ammonia drift slightly further out of range. DO and pH stay
+The two tests agree for every WQ parameter. Group E improves more on every parameter, 
+while Group D's mean pH and ammonia drift slightly further out of range. DO and pH stay
 significant after outlier removal; only ammonia slips above 0.05 (Welch 0.066, MWU
-0.077), because dropping outlier ponds cuts it to n = 3 vs 3 — on all ponds it is
-clearly significant (0.018).
+0.077), because dropping outlier ponds cuts it to n = 3 vs 3 (from 5 vs. 4).  
 
 <div align="center">
 <a href="plots/Fig7.oor_improvement.png"><img src="plots/Fig7.oor_improvement.png" width="960" alt="Figure 7 — out-of-range gap closed per pond"></a>
