@@ -377,15 +377,17 @@ across each row: D vs E; down each column: exposed vs unexposed (each cell reads
 | Unexposed | 4 / 17 = 23.5% | 9 / 12 = 75.0% | **0.0095** |
 | p (exposed vs unexposed) | 0.355 | 0.624 | |
 
-**Did the SIAs cause the Day-2 to Day-3 gains?** §5 showed that the Treatment's entire effect resides in the
-one day between the two follow-ups: that is, 16 events were "gained" — i.e., still out of range at Day 2, but
+**Did the SIAs cause the Day-2 to Day-3 gains?** §5 showed that Treatment's entire effect resides in the
+one day between the two follow-ups: 16 events were "gained" — still out of range at Day 2, but
 back in range by Day 3 (§5's "Gained" column). If an SIA caused one of those gains, it had
 to fall in that Day-2-to-Day-3 window. Almost none did: only 2 of these 16 gains had any action
-after Day 2, and the proportion of resolving events barely changed with the action's timing ... (late-action
-column vs. the rest, p = 1.0 in both cohorts). The 6 gains whose only action came earlier were
-still out of range at Day 2, so that action had plainly not fixed them. Only events still out
-of range at Day 2 were eligible to gain (the rest were already resolved), so the table counts
-just those; each cell reads "resolved by Day 3 / still out of range at Day 2 (percent)", e.g.
+after Day 2, and a "late" action — one falling inside that window — produced no more gains than
+the "rest" (events whose only action came earlier, or that had no action at all). That is the
+table's "late vs rest" test: the first column against the other two, p = 1.0 in both cohorts —
+no difference. The 6 gains whose only action came earlier were
+still out of range at Day 2, so that action had not fixed them. Only events still out of range
+at Day 2 were eligible to gain — an event already back in range by Day 2 cannot gain — so the
+table counts just those; each cell reads "resolved by Day 3 / still out of range at Day 2 (percent)", e.g.
 "2 / 3 (66.7%)":
 
 | Group | Action after Day 2 | Action by Day 2 only | No action | p (late vs rest) |
