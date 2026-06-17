@@ -147,7 +147,9 @@ statistic and marked as red-ringed points (with their OOR-event count).*</sub>
 ## 3. Primary outcome — resolution at Day 3
 
 With the groups comparable at baseline, we now turn to the primary outcome: how
-many OOR events were resolved within each group at the Day-3 (primary) follow-up. 
+many OOR events were resolved within eaWould we have reached the same conclusion at Day 2? Here each event is compared against itself at its two follow-ups (1st FU vs 2nd FU), so the tool is McNemar's test (see glossary), which looks only at the events that changed: flipped to resolved (Gained) or back out of range (Lost). It needs both follow-ups recorded, which holds for 57 of 58 events; the missing one is Group D's, so D's Day-3 rate reads 17.2% (5/29) here rather than §3's 16.7% (5/30).
+
+ch group at the Day-3 (primary) follow-up. 
 An event is recorded whenever any one of the water quality parameters goes out of range;
 it counts as "resolved" only if the pond is back in range on every WQ parameter (DO, pH, and
 ammonia), not just the one that triggered it. Most events are driven by DO, 
@@ -297,9 +299,10 @@ individual events; red dots are the baseline-WQ outlier ponds.*</sub>
 ## 5. Secondary — does follow-up timing matter? (Day 2 vs Day 3)
 
 This secondary analysis asks whether we would have reached the same conclusion at
-Day 2. Each event is now compared against itself at its two follow-ups (`1st FU` vs
-`2nd FU`) rather than across groups, so the tool is McNemar's test — the paired
-counterpart to §3's Fisher's exact test (both read a 2×2 count table; McNemar's just
+Day 2 (the first follow-up) relative to the primary measure on Day 3 (the second
+follow-up). Each event is now compared against itself at its two follow-ups (`1st FU` vs
+`2nd FU`) rather than across groups. The relevant tool is then McNemar's test, which is
+the paired counterpart to §3's Fisher's exact test (both read a 2×2 count table; McNemar's just
 uses the same events measured twice in place of two independent groups, see glossary).
 It looks only at the events that changed: flipped to resolved (Gained) or back out of
 range (Lost). It needs both follow-ups recorded, which holds for 57 of 58 events; the
@@ -339,7 +342,7 @@ Group D's 1-gained-2-lost is exactly what chance produces (p = 1.0). Group E's
 16-to-0 would essentially never happen by chance (p = 3.05×10⁻⁵, about 3 in
 100,000). And the groups were indistinguishable at Day 2 itself (20.7% vs 25.0%,
 Fisher's p = 0.76), so the entire Group-E effect appears in the one extra day
-between Day 2 and Day 3. Had the study stopped at Day 2 it would have found
+between Day 2 and Day 3. Hence had the study stopped at Day 2 it would have found
 nothing, and dropping the outlier ponds does not change this.
 
 <br>
