@@ -341,7 +341,7 @@ nothing, and dropping the outlier ponds does not change this.
 
 <br>
 
-## 6. Post-hoc — do farmers' own actions explain the gap?
+## 6. Secondary — do farmers' own actions explain the gap?
 
 > [!NOTE]
 > Post-hoc, added after unblinding; labels here resolve as **Group D = Control,
