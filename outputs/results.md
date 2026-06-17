@@ -351,13 +351,14 @@ nothing, and dropping the outlier ponds does not change this.
 > the reveal that **Group D = Control** and **Group E = Treatment**.
 > Numbers are produced by `python main_sia.py`.
 
-Could the §3 gap be an artifact? Treatment farmers might simply have taken more
-corrective steps on their own — so what looks like an effect of the intervention could
-really be the effect of those self-initiated actions (SIA). This section rules that out.
+Here we ask whether the difference in resolution of OOR events, between Control and
+Treatment, could be an artifact of farmer's taking their own, self-initiated actions (SIA).
+In other words, farmers might simply have taken more corrective steps on their own within one 
+group — so what looks like an effect of the intervention could really be the effect of those SIAs. 
 
 SIA are corrective steps farmers took on their own initiative, recorded only in the
-unblinded workbook (167 records: 93 exact-dated, 74 dated by a range). An OOR event is
-*exposed* if an SIA overlaps its Day-0-to-Day-3 window — i.e. a farmer acted while the
+unblinded workbook. There are ... 167 records: 93 exact-dated, 74 dated by a range (flesh this sentence out). 
+An OOR event is *exposed* if an SIA overlaps its Day-0-to-Day-3 window — i.e. a farmer acted while the
 event was still open. Exposure was common and similar across cohorts (Control 13/30
 events, Treatment 16/28), making it a plausible confounder worth checking.
 
