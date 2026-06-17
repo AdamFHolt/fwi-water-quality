@@ -147,9 +147,7 @@ statistic and marked as red-ringed points (with their OOR-event count).*</sub>
 ## 3. Primary outcome — resolution at Day 3
 
 With the groups comparable at baseline, we now turn to the primary outcome: how
-many OOR events were resolved within eaWould we have reached the same conclusion at Day 2? Here each event is compared against itself at its two follow-ups (1st FU vs 2nd FU), so the tool is McNemar's test (see glossary), which looks only at the events that changed: flipped to resolved (Gained) or back out of range (Lost). It needs both follow-ups recorded, which holds for 57 of 58 events; the missing one is Group D's, so D's Day-3 rate reads 17.2% (5/29) here rather than §3's 16.7% (5/30).
-
-ch group at the Day-3 (primary) follow-up. 
+many OOR events were resolved within each group at the Day-3 (primary) follow-up. 
 An event is recorded whenever any one of the water quality parameters goes out of range;
 it counts as "resolved" only if the pond is back in range on every WQ parameter (DO, pH, and
 ammonia), not just the one that triggered it. Most events are driven by DO, 
