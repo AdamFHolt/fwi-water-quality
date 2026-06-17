@@ -347,9 +347,9 @@ nothing, and dropping the outlier ponds does not change this.
 ## 6. Post-hoc — do farmers' own actions explain the gap?
 
 > [!NOTE]
-> Post-hoc, added after unblinding; labels here resolve as **Group D = Control,
-> Group E = Treatment**. Self-initiated actions are self-selected, so this is
-> descriptive not causal. Numbers are produced by `python main_sia.py`.
+> This is the only part of the analysis conducted added after unblinding; i.e.,
+> the reveal that **Group D = Control** and **Group E = Treatment**.
+> Numbers are produced by `python main_sia.py`.
 
 Could the §3 gap be an artifact? Treatment farmers might simply have taken more
 corrective steps on their own — so what looks like an effect of the intervention could
