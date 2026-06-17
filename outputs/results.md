@@ -377,10 +377,10 @@ across each row: D vs E; down each column: exposed vs unexposed (each cell reads
 | Unexposed | 4 / 17 = 23.5% | 9 / 12 = 75.0% | **0.0095** |
 | p (exposed vs unexposed) | 0.355 | 0.624 | |
 
-**Did the SIAs cause the Day-2 to Day-3 gains?** §5 showed that Treatment's entire effect resides in the
-one day between the two follow-ups: of the 23 events that resolved by Day 3, 16 were "gained"
-(i.e., still out of range at Day 2, but back in range by Day 3; §5's "Gained" column).
-If an SIA caused one of those gains, it had to fall in that Day-2-to-Day-3 window — a "late"
+**Did the SIAs cause the Day-2 to Day-3 gains?** §5 showed that Treatment's effect resides
+mainly in the one day between the two follow-ups: of the 23 events that resolved by Day 3, 
+16 were "gained" (i.e., still out of range at Day 2, but back in range by Day 3; §5's "Gained" column).
+If an SIA caused one of those gains, it had to fall in that Day-2-to-Day-3 window — i.e., be a "late"
 SIA. Almost none did: only 2 of the 16 gains had one. And a late SIA gave no advantage: among
 the events that could still gain (those out of range at Day 2), the ones with a late action
 resolved no more often than the ones without (p = 1.0 in both cohorts). Each cell below reads
@@ -392,11 +392,10 @@ resolved no more often than the ones without (p = 1.0 in both cohorts). Each cel
 | Group E (Treatment) | 2 / 3 (67%) | 14 / 18 (78%) | 1.0 |
 
 **Caveats.** These exposure comparisons are descriptive, not causal: farmers act when a pond
-already looks bad, so a cohort's exposed events are its troubled ones. That is why Control's
-exposed events resolve *worse* than its unexposed (7.7% vs 23.5%) — not because acting hurts.
-So we don't claim SIA has no effect; we claim only what the two tables show — that the
+already looks bad, so a cohort's exposed events are likely its most troubled ones. 
+That is why Control's exposed events resolve *worse* than its unexposed (7.7% vs 23.5%),
+not because acting hurts. So the claim is not that SIA has no effect; it is just that the
 Control-vs-Treatment gap, and its Day-3 timing, are not artifacts of farmers' own actions.
-That holds under a stricter, exact-dated definition of exposure as well.
 
 <br>
 
