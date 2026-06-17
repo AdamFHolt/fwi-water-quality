@@ -358,7 +358,7 @@ effect of the intervention could really be the effect of those SIAs.
 
 SIA are corrective steps farmers took on their own initiative, separate from the study's
 recommendations and recorded only in the unblinded workbook. There are 167 such records,
-each dated by when the action was taken, though with varying precision: 93 carry an exact
+each dated by when the action was taken, though with varying precision in the recording: 93 carry an exact
 day, while the other 74 are dated only relative to the visit (almost all "0–7 days ago"),
 placing the action in a window up to a week wide rather than on a single day. We call an
 OOR event *exposed* if an SIA's window overlaps its Day-0-to-Day-3 span (Day 0 = OOR
