@@ -397,11 +397,10 @@ def plot_oor_improvement(data, filename="Fig7.oor_improvement.png"):
     it clamps at the band edge (no credit for overshoot) and is direction-folded
     so improvement is always positive whichever way the parameter was OOR.
     Each panel is a box + jittered strip per group, titled with the Welch-t and
-    Mann-Whitney p-values three ways: all events, then baseline-WQ outliers
-    removed whole-pond (any param), then per-parameter (drop only ponds extreme
-    on this panel's parameter) — so the figure shows the effect, why the two
-    tests agree (rank separation), and how the result holds under each outlier
-    rule at once. Faint background points are the individual OOR events (the solid
+    Mann-Whitney p-values two ways: all events, then with the baseline-WQ outlier
+    ponds removed (whole-pond) — so the figure shows the effect, why the two
+    tests agree (rank separation), and how the result holds without the outlier
+    ponds. Faint background points are the individual OOR events (the solid
     black-edged dots are their pond means) — context only; the box, n, and tests
     are all pond-level, since events within a pond aren't independent. Outlier
     ponds' means are coloured red. A dashed line at 0 marks "no change". The
@@ -412,17 +411,7 @@ def plot_oor_improvement(data, filename="Fig7.oor_improvement.png"):
     fl = wq_outliers(data)
     flagged_ponds = set(fl["Pond ID"])  # union across parameters (whole-pond removal)
     tests = improvement_tests(data).set_index("parameter")
-    tests_pond = improvement_tests(data, exclude=flagged_ponds).set_index("parameter")  # any-param outlier
-    # Per-parameter removal: for each panel drop only ponds extreme on THAT
-    # parameter's baseline (DO spans both the AM and PM bands).
-    baseline_params = {"DO": ["DO Morning (mg/L)", "DO Evening (mg/L)"],
-                       "pH": ["pH"], "Ammonia": ["Ammonia—NH3 (mg/L)"]}
-    tests_param = {
-        sc: improvement_tests(
-            data, exclude=set(fl.loc[fl["parameter"].isin(ps), "Pond ID"])
-        ).set_index("parameter").loc[sc]
-        for sc, ps in baseline_params.items()
-    }
+    tests_pond = improvement_tests(data, exclude=flagged_ponds).set_index("parameter")  # outlier ponds removed
     groups = ["Group D", "Group E"]
     units = {"DO": "mg/L", "pH": "pH units", "Ammonia": "mg/L"}
     rng = np.random.default_rng(0)
@@ -462,14 +451,13 @@ def plot_oor_improvement(data, filename="Fig7.oor_improvement.png"):
         ax.set_xticklabels([f"{g.split()[-1]}\n(n={len(d)})" for g, d in zip(groups, by_g)])
         ax.set_ylabel(f"out-of-range gap closed ({units[scope]})")
         # Under the title: monospace p-value table, one row per outlier rule.
-        ax.set_title(scope, fontsize=13, fontweight="bold", pad=52)
+        ax.set_title(scope, fontsize=13, fontweight="bold", pad=42)
         rows = [
-            ("",               "Welch", "MWU"),
-            ("all ponds",      _fmt_p(tests.loc[scope, "t_p"]),      _fmt_p(tests.loc[scope, "u_p"])),
-            ("w/o out (any)",  _fmt_p(tests_pond.loc[scope, "t_p"]), _fmt_p(tests_pond.loc[scope, "u_p"])),
-            ("w/o out (this)", _fmt_p(tests_param[scope]["t_p"]),    _fmt_p(tests_param[scope]["u_p"])),
+            ("",                  "Welch", "MWU"),
+            ("all ponds",         _fmt_p(tests.loc[scope, "t_p"]),      _fmt_p(tests.loc[scope, "u_p"])),
+            ("w/o outlier ponds", _fmt_p(tests_pond.loc[scope, "t_p"]), _fmt_p(tests_pond.loc[scope, "u_p"])),
         ]
-        block = "\n".join(f"{lab:<15}{w:>6}{u:>6}" for lab, w, u in rows)
+        block = "\n".join(f"{lab:<18}{w:>6}{u:>6}" for lab, w, u in rows)
         ax.text(0.5, 1.0, block, transform=ax.transAxes, ha="center", va="bottom",
                 family="monospace", fontsize=8, color="#333333", linespacing=1.35)
 

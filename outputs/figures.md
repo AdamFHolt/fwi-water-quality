@@ -173,9 +173,8 @@ Mann-Whitney tests in [`results.md`](results.md) §4.
   behind are the individual OOR events — context only, since events within a pond
   aren't independent, so the box, `n`, and tests are all pond-level.
   Baseline-WQ outlier ponds' means are drawn in red.
-- **Title table** — the Welch-t and Mann-Whitney p-values under three outlier
-  rules: all ponds, then outliers removed whole-pond (any param), then
-  per-parameter (drop only ponds extreme on this panel's parameter).
+- **Title table** — the Welch-t and Mann-Whitney p-values two ways: all ponds,
+  then with the baseline-WQ outlier ponds removed (whole-pond).
 
 ---
 
