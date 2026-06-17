@@ -366,13 +366,14 @@ detected, Day 3 = primary outcome) — i.e. a farmer acted while the event was s
 the action could plausibly have influenced the result. Exposure was common in both cohorts
 (Control 13/30 events, Treatment 16/28), making it a confounder worth checking.
 
-**Does SIA explain the resolution gap?** If it did, two things would follow. First, the
-gap would shrink once we compare like with like — events where *nobody* acted; instead,
-among unexposed events it is as wide as ever (23.5% vs 75.0%, p = 0.0095), and it holds
-among exposed events too. Second, within a cohort, exposed events would resolve more
-often than unexposed ones; neither shows that (Control p = 0.355, Treatment p = 0.624).
-The table gives both readings — across each row, D vs E; down each column, exposed vs
-unexposed (cells are resolved / events; p is Fisher's exact): 
+**Does SIA explain the §3 gap between Control's and Treatment's Day-3 resolution rates?**
+If it did, two things would follow — and neither does. First, the gap should close once we compare like with like: events where *nobody*
+acted. Instead it stays just as wide (unexposed: Control 23.5% vs Treatment 75.0%, p =
+0.0095), and it is just as wide among exposed events. Second, acting should help — within
+a cohort, exposed events should resolve more often than unexposed ones. Neither cohort
+shows that (Control p = 0.355, Treatment p = 0.624). The table gives both readings —
+across each row, D vs E; down each column, exposed vs unexposed (cells are resolved /
+events; p is Fisher's exact): 
 
 | | Group D (Control) | Group E (Treatment) | p (D vs E) |
 |---|--:|--:|--:|
