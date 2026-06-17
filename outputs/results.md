@@ -262,17 +262,15 @@ Group E leads on every parameter, so the overall gap is not a function of any si
 
 ## 4. Comparative test — how much did water quality improve?
 
-Section 3 asked whether a pond resolved; this section asks how far it moved. The measure is the out-of-range gap
-closed: distance outside the in-range band at Day 0 minus distance at Day 3 (positive = moved back toward the band).
-Each pond contributes one value (its mean across events), and each parameter keeps its own units. Since mg/L and pH
-points can't be pooled into one score without an arbitrary conversion, parameters are tested separately; the single
-overall D-vs-E test remains §3's unit-free resolution rate.
+Section 3 asked whether a pond resolved (i.e., a binary outcome); this section asks how far it moved (a continous outcome). 
+The continuous measure is the out-of-range gap closed: this is distance outside the in-range water quality region (or "band"
+as is bound by a minimum and a maximum) at Day 0 minus distance at Day 3 (positive = moved back toward the band).
+Each pond contributes one value (its mean across events), and each WQ parameter keeps its own units. Since mg/L and pH
+points cannot be pooled into one score without an arbitrary conversion, parameters are tested separately.
   
 Means are group averages of the per-pond values; each p compares D vs E by Welch's t. As throughout, that p is the
-chance of a gap at least this large if the groups had really improved equally, so a small p is evidence *against*
-their being alike (glossary). The rank-based Mann-Whitney U
-agrees on every call, valuable reassurance at these small n since ranks can't be dragged by one extreme pond the way a
-mean can. The outlier columns re-run the test with outlier ponds dropped from every parameter (any) or only the
+chance of a mean gap at least this large if the groups had really improved equally, so a small p is evidence *against*
+their being alike (see glossary for more detail). Another diagnostic, the Mann-Whitney .., which measures ... valuable reassurance at these small n since ranks can not be dragged by one extreme pond the way a mean can. The outlier columns re-run the test with outlier ponds dropped from every parameter (any) or only the
 parameter they were extreme on (this). **Bold** = p < 0.05.
 
 | Parameter | n (D / E) | Mean D | Mean E | p (all) | p (−out, any) | p (−out, this) |
