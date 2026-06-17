@@ -333,9 +333,8 @@ missing one is Group D's, so D's Day-3 rate reads 17.2% (5/29) here rather than 
 
 <sub>*Figure 8 (left, all ponds) and Figure 9 (right, the 5 baseline-WQ outlier ponds removed)
 — the same events scored at Day 2 (top) and Day 3 (bottom). At Day 2 both groups sit
-near 20–25% resolved; only by Day 3 does Group E fill in (82%) while Group D stays put.
-Figure 9 is the sensitivity check — dropping the outlier ponds leaves the timing story
-intact (at Day 2 the groups are still level, E even slightly behind D).*</sub>
+near 20–25% resolved; only by Day 3 does Group E fill in (82%) while Group D stays constant.
+Figure 9 shows that this story is consistent even after dropping the outlier ponds.*</sub>
 </div>
 
 Group D's 1-gained-2-lost is exactly what chance produces (p = 1.0). Group E's
