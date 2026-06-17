@@ -296,12 +296,15 @@ individual events; red dots are the baseline-WQ outlier ponds.*</sub>
 
 ## 5. Secondary — does follow-up timing matter? (Day 2 vs Day 3)
 
-Would we have reached the same conclusion at Day 2? Here each event is compared
-against itself at its two follow-ups (`1st FU` vs `2nd FU`), so the tool is
-McNemar's test (see glossary), which looks only at the events that changed:
-flipped to resolved (Gained) or back out of range (Lost). It needs both
-follow-ups recorded, which holds for 57 of 58 events; the missing one is Group
-D's, so D's Day-3 rate reads 17.2% (5/29) here rather than §3's 16.7% (5/30).
+This secondary analysis asks whether we would have reached the same conclusion at
+Day 2. Each event is now compared against itself at its two follow-ups (`1st FU` vs
+`2nd FU`) rather than across groups, so the tool is McNemar's test — the paired
+counterpart to §3's Fisher's exact test (both read a 2×2 count table; McNemar's just
+uses the same events measured twice in place of two independent groups, see glossary).
+It looks only at the events that changed: flipped to resolved (Gained) or back out of
+range (Lost). It needs both follow-ups recorded, which holds for 57 of 58 events; the
+missing one is Group D's, so D's Day-3 rate reads 17.2% (5/29) here rather than §3's
+16.7% (5/30).
 
 | Group | n | Day 2 resolved | Day 3 resolved | Gained (No→Yes) | Lost (Yes→No) | McNemar p |
 |---|--:|--:|--:|--:|--:|--:|
