@@ -360,7 +360,8 @@ SIA are corrective steps farmers took on their own initiative, separate from the
 recommendations and recorded only in the unblinded workbook. There are 167 such records,
 each dated by when the action was taken, though with varying precision in the recording: 93 carry an exact
 day, while the other 74 are dated only relative to the visit (almost all "0–7 days ago"),
-placing the action in a window up to a week wide rather than on a single day. We call an
+placing the action in a window up to a week wide rather than on a single day. Where a record
+gives both an exact date and a range, we use the exact date. We call an
 OOR event *exposed* if an SIA's window overlaps its Day-0-to-Day-3 span (Day 0 = OOR
 detected, Day 3 = primary outcome) — i.e. a farmer acted while the event was still open, so
 the action could plausibly have influenced the result. Exposure was common in both cohorts
@@ -378,10 +379,11 @@ across each row: D vs E; down each column: exposed vs unexposed (each cell reads
 | p (exposed vs unexposed) | 0.355 | 0.624 | |
 
 **Did the SIAs cause the Day-2 to Day-3 gains?** §5 showed that Treatment's effect resides
-mainly in the one day between the two follow-ups: of the 23 events that resolved by Day 3, 
+mainly in the one day between the two follow-ups: of the 23 events that resolved by Day 3,
 16 were "gained" (i.e., still out of range at Day 2, but back in range by Day 3; §5's "Gained" column).
-If an SIA caused one of those gains, it had to fall in that Day-2-to-Day-3 window — i.e., be a "late"
-SIA. Almost none did: only 2 of the 16 gains had one. And a late SIA gave no advantage: among
+If an SIA caused one of those gains, it had to fall in that Day-2-to-Day-3 window — i.e. be a
+"late" SIA, judged (as before) by its exact date or dated range overlapping that span. Almost
+none did: only 2 of the 16 gains had one. And a late SIA gave no advantage: among
 the events that could still gain (those out of range at Day 2), the ones with a late action
 resolved no more often than the ones without (p = 1.0 in both cohorts). Each cell below reads
 "gained / still out of range at Day 2 (percent)", e.g. "2 / 3 (67%)":
