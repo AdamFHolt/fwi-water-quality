@@ -262,19 +262,16 @@ Group E leads on every parameter, so the overall gap is not a function of any si
 
 ## 4. Comparative test — how much did water quality improve?
 
-Section 3 asked whether a pond resolved (i.e., a binary outcome); this section asks how far it moved (a continuous outcome). 
-The continuous measure is the out-of-range gap closed: this is distance outside the in-range water quality region (the "band",
-bound by a minimum and a maximum) at Day 0 minus distance at Day 3 (positive = moved back toward the band).
-Each pond contributes one value (its mean across events), and each WQ parameter keeps its own units. Since mg/L and pH
-points cannot be pooled into one score without an arbitrary conversion, parameters are tested separately.
+Section 3 asked whether a pond resolved after an OOR event (i.e., a binary outcome); this section asks how far it moved (a continuous outcome). The continuous measure is the out-of-range gap closed: this is distance outside the in-range water quality region (the "band", bound by a minimum and a maximum) at the event triggering on Day 0 minus the distance at Day 3 (positive = moved back toward the band). Each pond contributes one value (its mean across events), and each WQ parameter keeps its own units. Since mg/L and pH points cannot be pooled into one score without an arbitrary conversion, parameters are tested separately.
   
 We compare D vs E with two tests (means in the table are group averages of the per-pond values).
-**Welch's t** works on the means: as throughout, its p is the chance of a mean gap at least this
-large if the groups had really improved equally, so a small p is evidence *against* their being
-alike (see glossary for more detail). The rank-based **Mann-Whitney U** is the second check —
-valuable reassurance at these small n, since ranks cannot be dragged by one extreme pond the way a
-mean can. The −out columns re-run each test with outlier ponds dropped from every parameter.
-**Bold** = p < 0.05.
+**Welch's t** works on the difference between the means: as throughout, its p is the chance of 
+a mean gap at least this large if the groups had really improved equally, so a small p is evidence 
+*against* their being alike (see glossary for more detail). The rank-based **Mann-Whitney** U is the 
+second check, and it is based on the ranks of the values rather than their magnitudes — it tests
+whether one group's values tend to rank higher, ignoring how large the gaps are. It provides reassurance
+at these small n, since ranks cannot be dragged by extreme  ponds the way a mean can. The −out columns
+re-run each test with the 5 outlier ponds completely dropped from every parameter. **Bold** = p < 0.05.
 
 | Parameter | n (D / E) | Mean D | Mean E | Welch p (all) | Welch p (−out) | MWU p (all) | MWU p (−out) |
 |---|:--:|--:|--:|--:|--:|--:|--:|
