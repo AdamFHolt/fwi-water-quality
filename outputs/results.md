@@ -46,7 +46,7 @@ The study followed 53 ponds over 998 monitoring visits between February and May
 | OOR events | 30 | 28 | 58 |
 | Ponds with OOR events | 15 | 17 | 32 |
 
-An out-of-range (OOR) event is one pond-day on which a water quality parameter (dissolved oxygen [DO], ammonia, or pH) was out of range; several events can come from the same pond. Follow-up visits are
+An out-of-range (OOR) event is one pond-day on which a water quality parameter (dissolved oxygen [DO], pH, or ammonia) was out of range; several events can come from the same pond. Follow-up visits are
 conditional on an OOR event, so only routine visits, as shown in Figure 1, give an 
 unbiased baseline for the water quality parameters:
 
@@ -121,7 +121,7 @@ outliers with respect to their baseline water quality parameters. Five
 ponds sit more than 2 SD from their group mean on at least one baseline
 parameter, for 9 flags in total. Since some ponds are extreme on more than 
 one parameter, each pond's first appearance in the table is bolded to clearly
-identify these potentially anomalous pools. 
+identify these potentially anomalous ponds. 
 
 | Parameter | Group | Pond | Value | Std. residual |
 |---|---|---|--:|--:|
@@ -262,7 +262,7 @@ Group E leads on every parameter, so the overall gap is not a function of any si
 
 ## 4. Comparative test — how much did water quality improve?
 
-Section 3 asked whether a pond resolved after an OOR event (i.e., a binary outcome); this section asks how far it moved (a continuous outcome). The continuous measure is the out-of-range gap closed: this is distance outside the in-range water quality region (the "band", bound by a minimum and a maximum) at the event triggering on Day 0 minus the distance at Day 3 (positive = moved back toward the band). Each pond contributes one value (its mean across events), and each WQ parameter keeps its own units. Since mg/L and pH points cannot be pooled into one score without an arbitrary conversion, parameters are tested separately.
+Section 3 asked whether a pond resolved after an OOR event (i.e., a binary outcome); this section asks how far it moved (a continuous outcome). The continuous measure is the out-of-range gap closed: this is distance outside the in-range water quality region (the "band", bound by a minimum and/or maximum) at the event triggering on Day 0 minus the distance at Day 3 (positive = moved back toward the band). Each pond contributes one value (its mean across events), and each WQ parameter keeps its own units. Since mg/L and pH points cannot be pooled into one score without an arbitrary conversion, parameters are tested separately.
   
 We compare D vs E with two tests (means in the table are group averages of the per-pond values).
 **Welch's t** works on the difference between the means: as throughout, its p is the chance of 
@@ -383,7 +383,7 @@ mainly in the one day between the two follow-ups: of the 23 events that resolved
 16 were "gained" from Day 2 (i.e., still out of range at Day 2, but back in range by Day 3; [§5](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3)'s "Gained" column).
 If an SIA caused one of those gains, it had to fall in that Day-2-to-Day-3 window — i.e. be a
 "late" SIA, judged (as before) by its exact date or dated range overlapping that span. Almost
-none did: only 2 of the 16 gains had one. And hence a late SIA gave no advantage: among
+none did: only 2 of the 16 gains had one. And a late SIA gave no advantage: among
 the events that could still gain (those out of range at Day 2), the ones with a late action
 resolved no more often than the ones without (p = 1.0 in both cohorts). Each cell below reads
 "gained / still out of range at Day 2 (percent)", e.g. "2 / 3 (67%)":
