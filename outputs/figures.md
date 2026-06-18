@@ -154,18 +154,18 @@ per-pond rates cluster at 0, 50, and 100%.
 ## `Fig7.oor_improvement.png`
 
 The continuous companion to the resolution pies: instead of "did it resolve,"
-how far each pond closed its out-of-range gap between Day 0 and Day 3. One
-panel per OOR parameter (DO, pH, Ammonia). This is the data behind the Welch-t /
+this shows how far each pond closed its out-of-range gap between Day 0 and Day 3. One
+panel per OOR parameter (DO, pH, Ammonia) and this is the data behind the Welch-t /
 Mann-Whitney tests in [`results.md`](results.md) §4.
 
 - **Y-axis — out-of-range gap closed**, in the parameter's native units (mg/L for
   DO/ammonia, pH units for pH): the distance outside the band at Day 0 minus at
-  Day 3, direction-folded so that moving toward the band counts as positive
-  whichever side the reading was out on, and clamped at the band edge (no credit
-  for overshooting into range). The dashed line marks 0 (no change).
+  Day 3, with direction folded in so that moving toward the band counts as positive
+  whichever side the reading was out on, and the change in cut off at the band edge
+  (i.e. no credit for overshooting into range). The dashed line marks 0 (no change).
 - **Box + points per group.** The box summarises the pond means (the
   inferential unit); solid black-edged dots are those pond means, faint dots
-  behind are the individual OOR events (context only), since events within a pond
+  behind are the individual OOR events (for context only), since events within a pond
   aren't independent, so the box, `n`, and tests are all pond-level.
   Baseline-WQ outlier ponds' means are drawn in red.
 - **Title table** — the Welch-t and Mann-Whitney p-values two ways: all ponds,
@@ -183,9 +183,8 @@ Day 3 (`2nd FU`), columns = Group D / E. Each pie is that group's resolved
 and raw count.
 
 At Day 2 both groups are near-identical (~20–25% resolved); only by Day 3
-does Group E fill in (82%) while Group D is unchanged. The entire effect appears
-in that one extra day, which is why the protocol fixes Day 3 as the primary
-measure, and the McNemar test (§5) quantifies it.
+does Group E fill in (82%) while Group D is similar. The entire effect therefore 
+appears in that one extra day.
 
 ---
 
