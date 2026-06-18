@@ -417,15 +417,14 @@ Control-vs-Treatment gap, and its Day-3 timing, are not artifacts of farmers' ow
   The binary resolution tests (Fisher, [§3](#3-primary-outcome--resolution-at-day-3)) and the Day-2/3 test ([§5](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3)) are
   event-level, since a resolved/not-resolved event is the unit the protocol
   defines for the primary outcome.
-- **No within-cohort baseline-vs-follow-up test.** Day-0 readings are picked precisely
-  because they are out of range, so on re-measurement they tend to drift back
-  toward normal on their own; this is regression to the mean. A before/after test
-  against the Day-0 reading within one group would credit that drift to the
-  intervention. The between-cohort comparison sidesteps it: regression to the mean
-  acts on both groups, so it cancels, and any remaining gap is attributable to the
-  treatment. (This is distinct from the Day-2-vs-Day-3 test in
-  [§5](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3), which compares two
-  follow-ups, both already past the extreme Day-0 reading, and so is not affected.)
+- **No within-cohort baseline-vs-follow-up test.** Day-0 readings are picked for
+  being out of range, so they tend to drift back toward normal on their own; this
+  regression to the mean would make a within-group before/after test credit the
+  drift to the intervention. The between-cohort comparison cancels it, since
+  regression acts on both groups equally, leaving any gap attributable to the
+  treatment. (The Day-2-vs-Day-3 test in
+  [§5](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3) is unaffected: both
+  follow-ups are already past the extreme Day-0 reading.)
 
 </details>
 
