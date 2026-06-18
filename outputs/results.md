@@ -443,7 +443,7 @@ Control-vs-Treatment gap, and its Day-3 timing, are not artifacts of farmers' ow
   3–5 mg/L morning, 8–12 evening; pH 6.5–8.5; ammonia < 0.05 mg/L.
 - **Out-of-range gap closed** — the distance a reading sat outside its band at Day
   0 minus the distance at Day 3 (native units). Positive means it moved toward
-  range. It's cut off at the band edge, so a reading that overshoots into the range
+  range. It is cut off at the band edge, so a reading that overshoots into the range
   earns no extra credit.
 - **p-value** — the probability of seeing a difference at least as large as the
   one observed if the groups were truly the same. It is computed assuming no real
