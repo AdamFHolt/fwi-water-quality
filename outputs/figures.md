@@ -208,7 +208,7 @@ the last day, is not an artifact of a few atypical ponds.
 - **Box plot.** The box spans the interquartile range (IQR: 25th–75th
   percentile); the line inside is the median; whiskers extend to the most
   extreme points within 1.5×IQR.
-  
+
 - **Jittered strip.** The individual data points, nudged sideways by a small
   random amount so overlapping values are visible. Jitter is reproducible (fixed
   random seed).
@@ -217,12 +217,11 @@ the last day, is not an artifact of a few atypical ponds.
   simple `value ~ group` model on the per-pond values and flag unusual ponds by
   their internally studentized residual, how many standard deviations a pond
   sits from its group mean, scaled by the model's residual spread. A pond is an
-  outlier if its absolute studentized residual exceeds 2 (i.e. >2 SD from
-  its group mean). These flagged ponds are what gets removed in the
-  `Fig3` / `Fig5` / `Fig9` variants.
+  outlier if its absolute studentized residual exceeds 2. These flagged ponds
+  are the ones removed in the `Fig3` / `Fig5` / `Fig9` variants.
   - *Why not Cook's distance?* It's the usual influence companion to the
     residual, but a two-group factor has constant within-group leverage, so
-    Cook's distance is just a monotone function of the residual (rank correlation
+    Cook's distance is just a monotone function of the residual's magnitude (rank correlation
     0.999 on this data); it flags nothing the residual doesn't, so it's omitted.
 
 (Levene's test, Hedges' g, and pseudoreplication are defined in the
