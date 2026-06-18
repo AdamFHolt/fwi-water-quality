@@ -445,6 +445,10 @@ Control-vs-Treatment gap, and its Day-3 timing, are not artifacts of farmers' ow
   0 minus the distance at Day 3 (native units). Positive means it moved toward
   range. It's cut off at the band edge, so a reading that overshoots into the range
   earns no extra credit.
+- **p-value** — the probability of seeing a difference at least as large as the
+  one observed if the groups were truly the same. It is computed assuming no real
+  difference, so it is not the probability that there is no effect. Smaller =
+  stronger evidence; we use p < 0.05 (a 5% chance).
 - **Hedges' g** — the difference between the two group means, rescaled into
   pooled-standard-deviation units, with a correction for small samples. It is an
   effect size rather than a test: it reports how far apart the means are and
@@ -457,16 +461,18 @@ Control-vs-Treatment gap, and its Day-3 timing, are not artifacts of farmers' ow
 - **Studentized residual** — how many standard deviations a pond's value sits from
   its group mean; we flag a pond as an outlier when its absolute value exceeds 2.
 - **Fisher's exact test** — computes the exact probability of a 2×2 count table
-  (here resolved/not by group). Most tests only approximate this, and that
-  approximation is trustworthy only when every cell holds a fairly large count;
-  with the single-digit counts here it would be unreliable. Fisher's test works the
-  probability out directly, so it stays valid however small the counts.
+  (here resolved/not by group). It works the probability out directly rather than
+  estimating it, so it stays valid even with the small, single-digit counts here.
 - **Odds ratio** — for a 2×2 table, the ratio of one group's odds of resolving to
   the other's (odds = resolved ÷ not-resolved). 1.0 = no difference; the further
   from 1, the larger the gap. It is the effect-size companion to Fisher's p: the p
   says whether the gap is real, the odds ratio says how big.
-- **Welch's t-test** — compares two group means without assuming the groups have
-  equal variance or equal sample size.
+- **Welch's t-test** — compares two group means and returns a p-value for whether
+  they differ, without assuming the groups have equal variance or equal sample size
+  (the safer default over the classic Student's t-test). It works on the means
+  themselves, so it is the magnitude-based companion to the rank-based Mann-Whitney
+  U; [§4](#4-comparative-test--how-much-did-water-quality-improve) runs both so the
+  result does not hinge on one set of assumptions.
 - **Mann-Whitney U** — ranks all the values from both groups together and tests
   whether one group's values tend to rank higher. It uses only order, not the raw
   values, so it assumes no particular distribution and resists skew and outliers.
@@ -474,9 +480,11 @@ Control-vs-Treatment gap, and its Day-3 timing, are not artifacts of farmers' ow
   value with an E value, it counts how often one outranks the other (ties count
   ½), so a U far from its midpoint means one group sits consistently higher. Also
   known as the Wilcoxon rank-sum test.
-- **McNemar's test** — the paired counterpart for binary data. It tests whether a
-  before/after proportion (Day 2 → Day 3) changed, using only the discordant pairs
-  (events that flipped one way or the other) and ignoring those that stayed put.
+- **McNemar's test** — the paired counterpart to Fisher's exact test for binary
+  data: both read a 2×2 table, but McNemar uses the same events measured twice
+  (Day 2 → Day 3) in place of two independent groups. It tests whether that
+  before/after proportion changed, using only the discordant pairs (events that
+  flipped one way or the other) and ignoring those that stayed put.
 - **Pseudoreplication** — treating non-independent measurements (e.g. several
   events from the same pond) as if they were independent, which inflates the
   apparent sample size and overstates significance. Avoided by analysing one value
@@ -486,10 +494,6 @@ Control-vs-Treatment gap, and its Day-3 timing, are not artifacts of farmers' ow
   Because OOR events are selected for being out of range at Day 0, their later
   readings tend to drift back toward range on their own; the between-cohort
   comparison controls for this, since it acts on both groups equally.
-- **p-value** — the probability of seeing a difference at least as large as the
-  one observed if the groups were truly the same. It is computed assuming no real
-  difference, so it is not the probability that there is no effect. Smaller =
-  stronger evidence; we use p < 0.05.
 
 </details>
 
