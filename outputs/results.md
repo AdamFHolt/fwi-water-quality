@@ -150,7 +150,7 @@ With the groups comparable at baseline, we now turn to the primary outcome: how
 many OOR events were resolved within each group at the Day-3 (primary) follow-up. 
 An event is recorded whenever any one of the water quality parameters goes out of range;
 it counts as "resolved" only if the pond is back in range on every WQ parameter (DO, pH, and
-ammonia), not just the one that triggered it. Most events are driven by DO, 
+ammonia), not just the one that triggered it.[^trigger-def] Most events are driven by DO, 
 followed by pH and then ammonia, and a single event can flag several parameters at once 
 (the middle "event drivers" bars below). We conduct this analysis both for all OOR events 
 (below, left) and with the outlier ponds completely removed from the dataset (below, right).
@@ -482,3 +482,13 @@ Control-vs-Treatment gap, and its Day-3 timing, are not artifacts of farmers' ow
   stronger evidence; we use p < 0.05.
 
 </details>
+
+[^trigger-def]: Re-running with resolution defined on only the triggering
+    parameter(s) — rather than requiring all of DO, pH, and ammonia back in
+    range — leaves every count in §3 and §5 unchanged (0 of 58 events
+    reclassify). The two definitions can only disagree when an event's trigger
+    returns to range while some *other* parameter — fine at Day 0 — has drifted
+    out by follow-up; that never happens here, so the strict all-parameters rule
+    is never the binding condition and adds no failures beyond the trigger's. Both the
+    triggering parameters and their in-range status are computed from the raw
+    Data-tab readings against the protocol bands.
