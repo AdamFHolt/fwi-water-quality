@@ -13,7 +13,7 @@ walkthrough of every figure and all methodological details.
 The analysis was run blind to reduce analyst bias: cohorts are labelled Group D
 and Group E (i.e., not Control/Treatment), and all tests are run two-sided as D vs E
 with a significance threshold throughout of p < 0.05. The study has since been
-unblinded; §6 adds a post-hoc analysis on the unblinded data, but §1–5 keep the
+unblinded; [§6](#6-post-hoc--do-farmers-own-actions-explain-the-gap) adds a post-hoc analysis on the unblinded data, but [§1](#1-dataset-overview)–[5](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3) keep the
 blind labels as run.
 
 **Contents:** [Highlights](#highlights) · [1. Dataset overview](#1-dataset-overview) · [2. Baseline comparability](#2-are-the-groups-comparable-at-baseline) · [3. Primary outcome](#3-primary-outcome--resolution-at-day-3) · [4. Comparative test](#4-comparative-test--how-much-did-water-quality-improve) · [5. Day 2 vs Day 3](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3) · [6. Self-initiated actions](#6-post-hoc--do-farmers-own-actions-explain-the-gap) · [7. Notes on test choices](#7-notes-on-test-choices) · [Glossary](#glossary)
@@ -81,14 +81,14 @@ by time of day because morning and evening differ systematically.
 <a href="plots/Fig2.water_quality_per_pond.png"><img src="plots/Fig2.water_quality_per_pond.png" width="920" alt="Figure 2 — per-pond baseline water quality"></a>
 
 <sub>*Figure 2 — per-pond baseline water quality: one point per pond. As in Figure 1, mean ± SD bars (top) and box + strip
-(bottom) for each parameter. Hedges' g and Levene p are also given, and explained below (§2.2).*</sub>
+(bottom) for each parameter. Hedges' g and Levene p are also given, and explained below ([§2.2](#22-baseline-water-quality--do-the-groups-have-the-same-spread-and-average)).*</sub>
 </div>
 
 ### 2.2 Baseline water quality — do the groups have the same spread and average?
 
 We now use two complementary checks — one for differences in spread, one for gap between means — to
 see whether the groups differ on either: see the below table. Both columns use the same per-pond, 
-mean-averaged baseline values as §2.1 (one value per pond), so the comparison is 
+mean-averaged baseline values as [§2.1](#21-baseline-water-quality--mean-sd-per-pond) (one value per pond), so the comparison is 
 between ponds, not the individual visits.
 
 | Parameter | Levene p | Hedges' g |
@@ -138,7 +138,7 @@ identify these potentially anomalous pools.
 <div align="center">
 <a href="plots/Fig3.water_quality_outliers.png"><img src="plots/Fig3.water_quality_outliers.png" width="920" alt="Figure 3 — baseline water quality with outlier ponds highlighted"></a>
 
-<sub>*Figure 3 — the §2.1 per-pond baseline with these 5 outlier ponds excluded from every
+<sub>*Figure 3 — the [§2.1](#21-baseline-water-quality--mean-sd-per-pond) per-pond baseline with these 5 outlier ponds excluded from every
 statistic and marked as red-ringed points (with their OOR-event count).*</sub>
 </div>
 
@@ -208,7 +208,7 @@ the horizontal line marks each group's mean. Inset: how many ponds had each even
 The formal test returns to the event level. Resolved vs not, by group, forms a 2×2 count
 table, which is the input for Fisher's exact test. Left: all ponds (as shown in Figure 4 above). 
 Right: with the 5 outlier ponds removed (as shown in Figure 5). The cells are raw counts, so the
-rates match §3.1's event-level rows, not the pond-level ones.
+rates match [§3.1](#31-resolution-rate)'s event-level rows, not the pond-level ones.
 
 <table>
 <tr><td>
@@ -300,11 +300,11 @@ This secondary analysis asks whether we would have reached the same conclusion a
 Day 2 (the first follow-up) relative to the primary measure on Day 3 (the second
 follow-up). Each event is now compared against itself at its two follow-ups (`1st FU` vs
 `2nd FU`) rather than across groups. The relevant tool is then McNemar's test, which is
-the paired counterpart to §3's Fisher's exact test (both read a 2×2 count table; McNemar's just
+the paired counterpart to [§3](#3-primary-outcome--resolution-at-day-3)'s Fisher's exact test (both read a 2×2 count table; McNemar's just
 uses the same events measured twice in place of two independent groups, see glossary).
 It looks only at the events that changed: flipped to resolved (Gained) or back out of
 range (Lost). It needs both follow-ups recorded, which holds for 57 of 58 events; the
-missing one is Group D's, so D's Day-3 rate reads 17.2% (5/29) here rather than §3's
+missing one is Group D's, so D's Day-3 rate reads 17.2% (5/29) here rather than [§3](#3-primary-outcome--resolution-at-day-3)'s
 16.7% (5/30).
 
 | Group | n | Day 2 resolved | Day 3 resolved | Gained (No→Yes) | Lost (Yes→No) | McNemar p |
@@ -378,9 +378,9 @@ across each row is D vs E; down each column is exposed vs unexposed (each cell r
 | Unexposed | 4 / 17 = 23.5% | 9 / 12 = 75.0% | **0.0095** |
 | p (exposed vs unexposed) | 0.355 | 0.624 | |
 
-**Did the SIAs cause the Day-2 to Day-3 gains?** §5 showed that Treatment's effect resides
+**Did the SIAs cause the Day-2 to Day-3 gains?** [§5](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3) showed that Treatment's effect resides
 mainly in the one day between the two follow-ups: of the 23 events that resolved by Day 3,
-16 were "gained" from Day 2 (i.e., still out of range at Day 2, but back in range by Day 3; §5's "Gained" column).
+16 were "gained" from Day 2 (i.e., still out of range at Day 2, but back in range by Day 3; [§5](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3)'s "Gained" column).
 If an SIA caused one of those gains, it had to fall in that Day-2-to-Day-3 window — i.e. be a
 "late" SIA, judged (as before) by its exact date or dated range overlapping that span. Almost
 none did: only 2 of the 16 gains had one. And hence a late SIA gave no advantage: among
@@ -411,10 +411,10 @@ Control-vs-Treatment gap, and its Day-3 timing, are not artifacts of farmers' ow
   assume in advance which group should do better. Every test is therefore two-sided, which
   is the more conservative choice: it splits the 0.05 significance budget across
   both tails rather than spending it all on one expected direction.
-- **Pond-level vs event-level.** The continuous tests (§4) use one value
+- **Pond-level vs event-level.** The continuous tests ([§4](#4-comparative-test--how-much-did-water-quality-improve)) use one value
   per pond, because repeated events from the same pond are not independent and
   counting each separately would overstate the sample size (pseudoreplication).
-  The binary resolution tests (Fisher, §3) and the Day-2/3 test (§5) are
+  The binary resolution tests (Fisher, [§3](#3-primary-outcome--resolution-at-day-3)) and the Day-2/3 test ([§5](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3)) are
   event-level, since a resolved/not-resolved event is the unit the protocol
   defines for the primary outcome.
 - **No within-cohort before/after test.** Day-0 readings are picked precisely
@@ -485,7 +485,7 @@ Control-vs-Treatment gap, and its Day-3 timing, are not artifacts of farmers' ow
 
 [^trigger-def]: Re-running with resolution defined on only the triggering
     parameter(s) — rather than requiring all of DO, pH, and ammonia back in
-    range — leaves every count in §3 and §5 unchanged (0 of 58 events
+    range — leaves every count in [§3](#3-primary-outcome--resolution-at-day-3) and [§5](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3) unchanged (0 of 58 events
     reclassify). The two definitions can only disagree when an event's trigger
     returns to range while some *other* parameter — fine at Day 0 — has drifted
     out by follow-up; that never happens here, so the strict all-parameters rule
