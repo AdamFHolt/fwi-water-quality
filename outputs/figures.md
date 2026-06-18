@@ -38,13 +38,6 @@ These recur in several figures; defined once here.
     (same pond, farmer, management), so the event-level rate can be dominated by
     a few repeat-event ponds. (See `Fig6.oor_resolution_by_pond.png`.)
 
-- **Denominator / "with follow-up".** Events with no Day-3 follow-up are
-  excluded from the rate (they have no outcome to score). In this dataset every
-  event has a Day-3 follow-up, so the counts match the OOR Events sheet exactly;
-  the cross-check in `analyze_oor_events` asserts this. (One Group-D event lacks
-  the earlier Day-2 reading, so it drops out of the Day-2-vs-Day-3 comparison
-  only; see `Fig8`.)
-
 - **Baseline water quality.** Computed from routine visits only (follow-ups
   are conditional on an OOR event, so a biased subsample), then averaged to one
   value per pond to avoid pseudoreplication. DO is split by time of day
