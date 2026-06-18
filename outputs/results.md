@@ -437,7 +437,8 @@ Control-vs-Treatment gap, and its Day-3 timing, are not artifacts of farmers' ow
 <br>
 
 - **OOR event / resolution** — an out-of-range pond-day (a parameter outside its
-  band on a given day); "resolved" = back inside the band at the Day-3 follow-up.
+  band on a given day); "resolved" = back inside the band on every parameter at the
+  Day-3 follow-up, not only the one that triggered the event.
 - **In-range band** — the acceptable range per parameter (protocol Table 1): DO
   3–5 mg/L morning, 8–12 evening; pH 6.5–8.5; ammonia < 0.05 mg/L.
 - **Out-of-range gap closed** — the distance a reading sat outside its band at Day
