@@ -143,8 +143,7 @@ The pond-level companion to the `Fig4` pies, one point per pond.
 - **Right-hand key panel** does double duty:
   - **Horizontal bars** = how many ponds had 1, 2, 3, 4 events, split by group
     (the events-per-pond distribution).
-  - **Grey dots** down the left edge = the point-size key, each sized like
-    the main scatter and aligned to its event-count row.
+  - **Grey dots** down the left edge = the point-size key.
 
 It shows the D-vs-E gap survives when each pond counts once, and exposes the
 per-pond spread the pies hide. Most ponds have only one or two events, so the
