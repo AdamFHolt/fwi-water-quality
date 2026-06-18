@@ -135,7 +135,7 @@ The pond-level companion to the `Fig4` pies, one point per pond.
 - **Each point is one pond.** Vertical position = that pond's resolution rate
   (% of *its own* OOR events resolved at Day 3). Points are jittered horizontally
   within each group so they don't overlap.
-- **Point size** ∝ number of OOR events the pond had.
+- **Point size** is proportional to the number of OOR events the pond had.
 - **Horizontal bar** per group = the pond-level mean (unweighted mean of the
   per-pond rates; labelled e.g. "mean 15.6%"). This is *not* the same number as
   the event-level pie, because here every pond counts equally regardless of how
