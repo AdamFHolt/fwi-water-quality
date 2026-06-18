@@ -417,12 +417,15 @@ Control-vs-Treatment gap, and its Day-3 timing, are not artifacts of farmers' ow
   The binary resolution tests (Fisher, [§3](#3-primary-outcome--resolution-at-day-3)) and the Day-2/3 test ([§5](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3)) are
   event-level, since a resolved/not-resolved event is the unit the protocol
   defines for the primary outcome.
-- **No within-cohort before/after test.** Day-0 readings are picked precisely
+- **No within-cohort baseline-vs-follow-up test.** Day-0 readings are picked precisely
   because they are out of range, so on re-measurement they tend to drift back
-  toward normal on their own — regression to the mean. A before/after test within
-  one group would credit that drift to the intervention. The between-cohort
-  comparison sidesteps it: regression to the mean acts on both groups, so it
-  cancels, and any remaining gap is attributable to the treatment.
+  toward normal on their own; this is regression to the mean. A before/after test
+  against the Day-0 reading within one group would credit that drift to the
+  intervention. The between-cohort comparison sidesteps it: regression to the mean
+  acts on both groups, so it cancels, and any remaining gap is attributable to the
+  treatment. (This is distinct from the Day-2-vs-Day-3 test in
+  [§5](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3), which compares two
+  follow-ups, both already past the extreme Day-0 reading, and so is not affected.)
 
 </details>
 
@@ -476,6 +479,11 @@ Control-vs-Treatment gap, and its Day-3 timing, are not artifacts of farmers' ow
   events from the same pond) as if they were independent, which inflates the
   apparent sample size and overstates significance. Avoided by analysing one value
   per pond.
+- **Regression to the mean** — the tendency of an extreme measurement to be
+  followed by one closer to average on re-measurement, even with no intervention.
+  Because OOR events are selected for being out of range at Day 0, their later
+  readings tend to drift back toward range on their own; the between-cohort
+  comparison controls for this, since it acts on both groups equally.
 - **p-value** — the probability of seeing a difference at least as large as the
   one observed if the groups were truly the same. It is computed assuming no real
   difference, so it is not the probability that there is no effect. Smaller =
