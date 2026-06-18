@@ -213,16 +213,12 @@ the last day, is not an artifact of a few atypical ponds.
   random amount so overlapping values are visible. Jitter is reproducible (fixed
   random seed).
 
-- **Baseline-WQ outliers (studentized residual).** For each parameter we fit a
-  simple `value ~ group` model on the per-pond values and flag unusual ponds by
-  their internally studentized residual, how many standard deviations a pond
-  sits from its group mean, scaled by the model's residual spread. A pond is an
-  outlier if its absolute studentized residual exceeds 2. These flagged ponds
-  are the ones removed in the `Fig3` / `Fig5` / `Fig9` variants.
-  - *Why not Cook's distance?* It's the usual influence companion to the
-    residual, but a two-group factor has constant within-group leverage, so
-    Cook's distance is just a monotone function of the residual's magnitude (rank correlation
-    0.999 on this data); it flags nothing the residual doesn't, so it's omitted.
+- **Baseline-WQ outliers (studentized residual).** For each parameter we compare
+  each pond's value to its own group's mean and flag unusual ponds by their
+  internally studentized residual: how many standard deviations a pond sits from
+  its group mean, scaled by the spread of the residuals. A pond is an outlier if
+  its absolute studentized residual exceeds 2. These flagged ponds are the ones
+  removed in the `Fig3` / `Fig5` / `Fig9` variants.
 
 (Levene's test, Hedges' g, and pseudoreplication are defined in the
 [`results.md`](results.md) glossary.)
