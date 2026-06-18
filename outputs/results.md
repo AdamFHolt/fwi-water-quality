@@ -380,10 +380,10 @@ across each row is D vs E; down each column is exposed vs unexposed (each cell r
 
 **Did the SIAs cause the Day-2 to Day-3 gains?** §5 showed that Treatment's effect resides
 mainly in the one day between the two follow-ups: of the 23 events that resolved by Day 3,
-16 were "gained" (i.e., still out of range at Day 2, but back in range by Day 3; §5's "Gained" column).
+16 were "gained" from Day 2 (i.e., still out of range at Day 2, but back in range by Day 3; §5's "Gained" column).
 If an SIA caused one of those gains, it had to fall in that Day-2-to-Day-3 window — i.e. be a
 "late" SIA, judged (as before) by its exact date or dated range overlapping that span. Almost
-none did: only 2 of the 16 gains had one. And a late SIA gave no advantage: among
+none did: only 2 of the 16 gains had one. And hence a late SIA gave no advantage: among
 the events that could still gain (those out of range at Day 2), the ones with a late action
 resolved no more often than the ones without (p = 1.0 in both cohorts). Each cell below reads
 "gained / still out of range at Day 2 (percent)", e.g. "2 / 3 (67%)":
