@@ -123,8 +123,8 @@ the figure.
 ## `Fig5.oor_resolution_outliers_removed.png`
 
 Identical to `Fig4`, but with the baseline-WQ outlier ponds removed (see
-"outliers" in the glossary). A sensitivity check: the resolution gap isn't driven
-by a few atypical ponds.
+"outliers" in the glossary). This is a sensitivity check demonstrating that 
+the resolution gap isn't driven by a few atypical ponds.
 
 ---
 
