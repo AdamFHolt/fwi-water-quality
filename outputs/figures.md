@@ -207,9 +207,8 @@ the last day, is not an artifact of a few atypical ponds.
 
 - **Box plot.** The box spans the interquartile range (IQR: 25th–75th
   percentile); the line inside is the median; whiskers extend to the most
-  extreme points within 1.5×IQR. Outlier fliers are hidden here because the raw
-  points are already drawn as a strip.
-
+  extreme points within 1.5×IQR.
+  
 - **Jittered strip.** The individual data points, nudged sideways by a small
   random amount so overlapping values are visible. Jitter is reproducible (fixed
   random seed).
