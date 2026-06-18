@@ -123,7 +123,7 @@ the figure.
 ## `Fig5.oor_resolution_outliers_removed.png`
 
 Identical to `Fig4`, but with the baseline-WQ outlier ponds removed (see
-"outliers" in the glossary). This is a sensitivity check demonstrating that 
+"outliers" in the glossary). This is a sensitivity check demonstrating that
 the resolution gap isn't driven by a few atypical ponds.
 
 ---
@@ -155,13 +155,13 @@ per-pond rates cluster at 0, 50, and 100%.
 
 The continuous companion to the resolution pies: instead of "did it resolve,"
 this shows how far each pond closed its out-of-range gap between Day 0 and Day 3. One
-panel per OOR parameter (DO, pH, Ammonia) and this is the data behind the Welch-t /
+panel per OOR parameter (DO, pH, Ammonia). This is the data behind the Welch-t /
 Mann-Whitney tests in [`results.md`](results.md) §4.
 
 - **Y-axis — out-of-range gap closed**, in the parameter's native units (mg/L for
   DO/ammonia, pH units for pH): the distance outside the band at Day 0 minus at
   Day 3, with direction folded in so that moving toward the band counts as positive
-  whichever side the reading was out on, and the change in cut off at the band edge
+  whichever side the reading was out on, and the change is cut off at the band edge
   (i.e. no credit for overshooting into range). The dashed line marks 0 (no change).
 - **Box + points per group.** The box summarises the pond means (the
   inferential unit); solid black-edged dots are those pond means, faint dots
@@ -183,7 +183,7 @@ Day 3 (`2nd FU`), columns = Group D / E. Each pie is that group's resolved
 and raw count.
 
 At Day 2 both groups are near-identical (~20–25% resolved); only by Day 3
-does Group E fill in (82%) while Group D is similar. The entire effect therefore 
+does Group E fill in (82%) while Group D barely changes. The entire effect therefore
 appears in that one extra day.
 
 ---
@@ -191,8 +191,8 @@ appears in that one extra day.
 ## `Fig9.day2_vs_day3_outliers_removed.png`
 
 Identical to `Fig8`, but with the baseline-WQ outlier ponds removed (the same
-pond set dropped in `Fig5`). At Day 2 the groups are indistinguishable 
-(if anything E sits slightly *behind* D, 18% vs 29%), and the Day-3 divergence 
+pond set dropped in `Fig5`). At Day 2 the groups are indistinguishable
+(if anything E sits slightly *behind* D, 18% vs 29%), and the Day-3 divergence
 still occurs (E 86% vs D 24%). So the pattern, all the separation appearing on
 the last day, is not an artifact of a few atypical ponds.
 
