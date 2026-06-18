@@ -53,8 +53,8 @@ These recur in several figures; defined once here.
 The visit-level view of baseline water quality: one point per routine
 visit (not collapsed to ponds). Four columns (DO Morning, DO Evening, pH,
 Ammonia). Top row: mean ± SD bars (`n` = number of visits). Bottom row: box plot
-with a dense, semi-transparent strip of all visits, and the median and 
-interquartile range plotted as the box.
+(box = median and interquartile range) over a dense, semi-transparent strip of
+all visits.
 
 Contrast with `Fig2.water_quality_per_pond.png`: this one shows the raw
 visit-to-visit spread, whereas the per-pond figure shows the spread *between
@@ -86,7 +86,7 @@ Together the two titles give the standard baseline-balance pair: Hedges' g
 Same layout as `Fig2`, but the WQ-outlier ponds are excluded from all
 statistics (bars, box, `n`, and Levene p all describe the cleaned distribution,
 matching the pond set dropped in `Fig5.oor_resolution_outliers_removed.png`).
-Each excluded outlier is still drawn, as a red-ringed point and labelled
+Each excluded outlier is still drawn as a red-ringed point and labelled
 with its short Pond ID and OOR-event count (e.g. `9252e874 (4 ev)`), in the panel
 for the parameter it is extreme on, showing how far outside the cleaned
 distribution it sat.
