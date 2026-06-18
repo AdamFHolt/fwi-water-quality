@@ -110,10 +110,10 @@ column per group. Rows, top to bottom:
 
 3. **Per-parameter resolution pies** — one row per parameter (DO, pH, Ammonia),
    one pie per group. The share of events *involving* that parameter that
-   resolved at Day 3. **Caveat:** the sheet records only one overall Day-3
-   outcome per event, not a per-parameter outcome, so these pies show the overall
-   resolution of the *events that included* that parameter, not whether that
-   specific parameter came back into range.
+   resolved at Day 3. **Caveat:** this figure is built from the OOR Events sheet,
+   which stores one overall Day-3 outcome per event, so each pie shows whole-event
+   resolution among the events that involved that parameter, not whether that
+   parameter itself came back into range.
 
 A single shared legend (group colour = resolved, grey = not resolved) sits below
 the figure.
