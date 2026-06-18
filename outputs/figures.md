@@ -3,7 +3,7 @@
 What each figure in `plots/` shows, and definitions for the technical terms used
 across them. The analysis was run blind: cohorts are labelled Group D and
 Group E rather than Control/Treatment. Throughout, blue = Group D,
-orange = Group E, and grey = "not resolved".
+orange = Group E, grey = "not resolved", and red = baseline-WQ outlier pond.
 
 Figures are numbered `Fig1`–`Fig9` in reading order (baseline water quality
 first, then the OOR outcomes). They are produced by `main.py` (functions in
@@ -22,10 +22,11 @@ These recur in several figures; defined once here.
   readings on the same pond-day are collapsed into one event.
 
 - **The V7 TRIAD / primary measure.** Each OOR event is followed up on a
-  schedule: Day 0 (detected) → Day 2 (secondary check) → Day 3 (the *primary*
-  outcome). "Resolved" everywhere in these figures means the Day-3 primary
-  measure — i.e. the event's water quality was back in range at the
-  latest follow-up (`2nd FU WQ improvement` = "Yes" in the OOR Events sheet).
+  schedule: Day 0 (detected) → Day 2 (first follow-up) → Day 3 (second follow-up,
+  the *primary* outcome). "Resolved" everywhere in these figures means the Day-3
+  primary measure, i.e. the event's water quality was back in range on every
+  parameter at the latest follow-up (`2nd FU WQ improvement` = "Yes" in the OOR
+  Events sheet).
 
 - **Resolution rate.** The headline outcome: share of OOR events that are
   resolved at Day 3, compared between groups. Computed two ways:
@@ -39,17 +40,19 @@ These recur in several figures; defined once here.
 
 - **Denominator / "with follow-up".** Events with no Day-3 follow-up are
   excluded from the rate (they have no outcome to score). In this dataset every
-  event has a follow-up, so the counts match the OOR Events sheet exactly; the
-  cross-check in `analyze_oor_events` asserts this.
+  event has a Day-3 follow-up, so the counts match the OOR Events sheet exactly;
+  the cross-check in `analyze_oor_events` asserts this. (One Group-D event lacks
+  the earlier Day-2 reading, so it drops out of the Day-2-vs-Day-3 comparison
+  only; see `Fig8`.)
 
 - **Baseline water quality.** Computed from routine visits only (follow-ups
   are conditional on an OOR event, so a biased subsample), then averaged to one
   value per pond to avoid pseudoreplication. DO is split by time of day
   (Morning vs Evening) because dissolved oxygen swings strongly over the day
   (~3 mg/L morning vs ~11 mg/L evening); pooling them would manufacture a huge,
-  meaningless spread. So the per-pond parameters are DO (Morning),
-  DO (Evening), pH, and Ammonia–NH₃ — only DO, pH, and ammonia are
-  populated in the dataset (DO shown as two columns).
+  meaningless spread. The study records three water-quality parameters (DO, pH,
+  and ammonia), so with DO split in two the per-pond parameters are DO (Morning),
+  DO (Evening), pH, and Ammonia–NH₃.
 
 ---
 
@@ -88,11 +91,11 @@ Together the two titles give the standard baseline-balance pair: Hedges' g
 ## `Fig3.water_quality_outliers.png`
 
 Same layout as `Fig2`, but the WQ-outlier ponds are excluded from all
-statistics (bars, box, `n`, and Levene p all describe the cleaned distribution
-— matching the pond set dropped in `Fig5.oor_resolution_outliers_removed.png`).
+statistics (bars, box, `n`, and Levene p all describe the cleaned distribution,
+matching the pond set dropped in `Fig5.oor_resolution_outliers_removed.png`).
 Each excluded outlier is still drawn back in as a red-ringed point, labelled
 with its short Pond ID and OOR-event count (e.g. `9252e874 (4 ev)`), in the panel
-for the parameter it is extreme on — showing how far outside the cleaned
+for the parameter it is extreme on, showing how far outside the cleaned
 distribution it sat.
 
 ---
@@ -109,14 +112,14 @@ column per group. Rows, top to bottom:
 
 2. **OOR event drivers** (grouped bars). How many OOR events flagged each
    parameter (DO, pH, Ammonia), per group. A single event can flag several
-   parameters (e.g. "DO, pH"), so it is counted under each — the bars sum to more
+   parameters (e.g. "DO, pH"), so it is counted under each; the bars sum to more
    than the number of events.
 
 3. **Per-parameter resolution pies** — one row per parameter (DO, pH, Ammonia),
    one pie per group. The share of events *involving* that parameter that
    resolved at Day 3. **Caveat:** the sheet records only one overall Day-3
    outcome per event, not a per-parameter outcome, so these pies show the overall
-   resolution of the *events that included* that parameter — not whether that
+   resolution of the *events that included* that parameter, not whether that
    specific parameter came back into range.
 
 A single shared legend (group colour = resolved, grey = not resolved) sits below
@@ -134,7 +137,7 @@ by a few atypical ponds.
 
 ## `Fig6.oor_resolution_by_pond.png`
 
-The pond-level companion to the `Fig4` pies — one point per pond.
+The pond-level companion to the `Fig4` pies, one point per pond.
 
 - **Each point is one pond.** Vertical position = that pond's resolution rate
   (% of *its own* OOR events resolved at Day 3). Points are jittered horizontally
@@ -170,7 +173,7 @@ Mann-Whitney tests in [`results.md`](results.md) §4.
   for overshooting into range). The dashed line marks 0 (no change).
 - **Box + points per group.** The box summarises the pond means (the
   inferential unit); solid black-edged dots are those pond means, faint dots
-  behind are the individual OOR events — context only, since events within a pond
+  behind are the individual OOR events (context only), since events within a pond
   aren't independent, so the box, `n`, and tests are all pond-level.
   Baseline-WQ outlier ponds' means are drawn in red.
 - **Title table** — the Welch-t and Mann-Whitney p-values two ways: all ponds,
@@ -181,14 +184,15 @@ Mann-Whitney tests in [`results.md`](results.md) §4.
 ## `Fig8.day2_vs_day3.png`
 
 The secondary timing analysis (see [`results.md`](results.md) §5). A 2×2 grid of
-resolution pies on the events with both follow-ups: rows = Day 2 (`1st FU`) /
+resolution pies on the events with both follow-ups recorded (one Group-D event
+has no Day-2 reading, so D shows 29 of its 30 events): rows = Day 2 (`1st FU`) /
 Day 3 (`2nd FU`), columns = Group D / E. Each pie is that group's resolved
 (group colour) vs not resolved (grey) share on the given day, with the percentage
 and raw count.
 
 At Day 2 both groups are near-identical (~20–25% resolved); only by Day 3
 does Group E fill in (82%) while Group D is unchanged. The entire effect appears
-in that one extra day — which is why the protocol fixes Day 3 as the primary
+in that one extra day, which is why the protocol fixes Day 3 as the primary
 measure, and the McNemar test (§5) quantifies it.
 
 ---
@@ -199,7 +203,7 @@ Identical to `Fig8`, but with the baseline-WQ outlier ponds removed (the same
 pond set dropped in `Fig5`). The sensitivity check for the timing story: at
 Day 2 the groups are still indistinguishable (if anything E sits slightly
 *behind* D, 18% vs 29%), and the Day-3 divergence is intact (E 86% vs D 24%). So
-the pattern — all the separation appearing on the last day — isn't an artifact
+the pattern, all the separation appearing on the last day, isn't an artifact
 of a few atypical ponds.
 
 ---
@@ -208,7 +212,7 @@ of a few atypical ponds.
 
 - **mean ± SD.** Standard deviation is a measure of spread around the mean. The
   error bars span one SD either side. (Note: for the *pond-level resolution*
-  figure SD is deliberately *not* used — those rates are bounded [0, 100] and
+  figure SD is deliberately *not* used: those rates are bounded [0, 100] and
   bimodal, so SD would misrepresent them; all points are shown instead.)
 
 - **Box plot.** The box spans the interquartile range (IQR: 25th–75th
@@ -222,7 +226,7 @@ of a few atypical ponds.
 
 - **Baseline-WQ outliers (studentized residual).** For each parameter we fit a
   simple `value ~ group` model on the per-pond values and flag unusual ponds by
-  their internally studentized residual — how many standard deviations a pond
+  their internally studentized residual, how many standard deviations a pond
   sits from its group mean, scaled by the model's residual spread. A pond is an
   outlier if its absolute studentized residual exceeds 2 (i.e. >2 SD from
   its group mean). These flagged ponds are what gets removed in the
@@ -230,7 +234,7 @@ of a few atypical ponds.
   - *Why not Cook's distance?* It's the usual influence companion to the
     residual, but a two-group factor has constant within-group leverage, so
     Cook's distance is just a monotone function of the residual (rank correlation
-    0.999 on this data) — it flags nothing the residual doesn't, so it's omitted.
+    0.999 on this data); it flags nothing the residual doesn't, so it's omitted.
 
 (Levene's test, Hedges' g, and pseudoreplication are defined in the
 [`results.md`](results.md) glossary.)
