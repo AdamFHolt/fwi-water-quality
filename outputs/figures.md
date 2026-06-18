@@ -191,11 +191,10 @@ appears in that one extra day.
 ## `Fig9.day2_vs_day3_outliers_removed.png`
 
 Identical to `Fig8`, but with the baseline-WQ outlier ponds removed (the same
-pond set dropped in `Fig5`). The sensitivity check for the timing story: at
-Day 2 the groups are still indistinguishable (if anything E sits slightly
-*behind* D, 18% vs 29%), and the Day-3 divergence is intact (E 86% vs D 24%). So
-the pattern, all the separation appearing on the last day, isn't an artifact
-of a few atypical ponds.
+pond set dropped in `Fig5`). At Day 2 the groups are indistinguishable 
+(if anything E sits slightly *behind* D, 18% vs 29%), and the Day-3 divergence 
+still occurs (E 86% vs D 24%). So the pattern, all the separation appearing on
+the last day, is not an artifact of a few atypical ponds.
 
 ---
 
