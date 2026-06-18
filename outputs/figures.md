@@ -42,10 +42,9 @@ These recur in several figures; defined once here.
   are conditional on an OOR event, so a biased subsample), then averaged to one
   value per pond to avoid pseudoreplication. DO is split by time of day
   (Morning vs Evening) because dissolved oxygen swings strongly over the day
-  (~3 mg/L morning vs ~11 mg/L evening); pooling them would manufacture a huge,
-  meaningless spread. The study records three water-quality parameters (DO, pH,
-  and ammonia), so with DO split in two the per-pond parameters are DO (Morning),
-  DO (Evening), pH, and Ammonia–NH₃.
+  (~3 mg/L morning vs ~11 mg/L evening). The study records three water-quality
+  parameters (DO, pH, and ammonia), so with DO split in two the per-pond parameters
+  are DO (Morning), DO (Evening), pH, and Ammonia–NH₃.
 
 ---
 
