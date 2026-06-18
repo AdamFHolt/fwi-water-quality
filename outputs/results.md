@@ -368,8 +368,8 @@ the action could plausibly have influenced the result. Exposure was common in bo
 (Control 13/30 events, Treatment 16/28), making it worth checking.
 
 **Does SIA explain the difference between Control's and Treatment's Day-3 resolution rates?**
-If it did, two patterns should show up in the data, but we find neither. First, the difference should shrink once we compare like with like: i.e. only events where *nobody* acted (no SIAs). Instead it stays just as wide (unexposed: Control 23.5% vs Treatment 75.0%, p = 0.0095), and it remains wide when considering only exposed events (i.e., with overlapping SIAs). Second, the SIAs should help: that is, within a cohort, exposed events should resolve more often than unexposed ones. Neither cohort shows that — the exposed-vs-unexposed gap is no bigger than chance would give, which is what these large p-values mean (Control p = 0.355, Treatment p = 0.624). The table below gives both readings —
-across each row: D vs E; down each column: exposed vs unexposed (each cell reads
+If it did, two patterns should show up in the data, but we find neither. First, the difference should shrink once we compare like with like: i.e. only events where *nobody* acted (no SIAs). Instead it stays just as wide (unexposed: Control 23.5% vs Treatment 75.0%, p = 0.0095), and it remains wide when considering only exposed events (i.e., with overlapping SIAs). Second, the SIAs should help: that is, within a cohort, exposed events should resolve more often than unexposed ones. Neither cohort shows that — the exposed-vs-unexposed gap is no bigger than chance would give, which is what these large p-values mean (Control p = 0.355, Treatment p = 0.624). The table below gives both readings:
+across each row is D vs E; down each column is exposed vs unexposed (each cell reads
 "resolved / total events = percent resolved", e.g. "1 / 13 = 7.7%"; p is Fisher's exact): 
 
 | | Group D (Control) | Group E (Treatment) | p (D vs E) |
