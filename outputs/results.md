@@ -353,7 +353,7 @@ nothing, and dropping the outlier ponds does not change this.
 
 Here we ask whether the resolution gap between Control and Treatment could be an artifact
 of farmers taking their own, self-initiated actions (SIA). In other words, one group's
-farmers might simply have taken more corrective steps on their own — so what looks like an
+farmers might simply have taken more corrective steps on their own, so what looks like an
 effect of the intervention could really be the effect of those SIAs.
 
 SIA are corrective steps farmers took on their own initiative, separate from the study's
@@ -365,7 +365,7 @@ gives both an exact date and a range, we use the exact date. We call an
 OOR event *exposed* if an SIA's window overlaps its Day-0-to-Day-3 span (Day 0 = OOR
 detected, Day 3 = primary outcome) — i.e. a farmer acted while the event was still open, so
 the action could plausibly have influenced the result. Exposure was common in both cohorts
-(Control 13/30 events, Treatment 16/28), making it a confounder worth checking.
+(Control 13/30 events, Treatment 16/28), making it worth checking.
 
 **Does SIA explain the difference between Control's and Treatment's Day-3 resolution rates?**
 If it did, two patterns should show up in the data, but we find neither. First, the difference should shrink once we compare like with like: i.e. only events where *nobody* acted (no SIAs). Instead it stays just as wide (unexposed: Control 23.5% vs Treatment 75.0%, p = 0.0095), and it remains wide when considering only exposed events (i.e., with overlapping SIAs). Second, the SIAs should help: that is, within a cohort, exposed events should resolve more often than unexposed ones. Neither cohort shows that — the exposed-vs-unexposed gap is no bigger than chance would give, which is what these large p-values mean (Control p = 0.355, Treatment p = 0.624). The table below gives both readings —
