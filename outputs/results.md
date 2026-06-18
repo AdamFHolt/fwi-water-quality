@@ -443,11 +443,11 @@ Control-vs-Treatment gap, and its Day-3 timing, are not artifacts of farmers' ow
   3–5 mg/L morning, 8–12 evening; pH 6.5–8.5; ammonia < 0.05 mg/L.
 - **Out-of-range gap closed** — the distance a reading sat outside its band at Day
   0 minus the distance at Day 3 (native units). Positive means it moved toward
-  range. It clamps at the band edge, so a reading that overshoots into the range
+  range. It's cut off at the band edge, so a reading that overshoots into the range
   earns no extra credit.
 - **Hedges' g** — the difference between the two group means, rescaled into
   pooled-standard-deviation units, with a correction for small samples. It is an
-  effect size rather than a test: it reports how far apart the averages are and
+  effect size rather than a test: it reports how far apart the means averages are and
   carries no p-value. Rough scale: |g| < 0.1 negligible, 0.2 small, 0.5 medium,
   0.8 large. It is the mean-gap companion to Levene, which instead compares spread.
 - **Levene's test** — tests whether two groups have equal variance (spread),
@@ -455,10 +455,9 @@ Control-vs-Treatment gap, and its Day-3 timing, are not artifacts of farmers' ow
   median-centred Brown–Forsythe variant (robust to non-normal data) on the
   per-pond baseline values.
 - **Studentized residual** — how many standard deviations a pond's value sits from
-  its group mean; an absolute value above 2 flags it as an outlier.
+  its group mean; we set an absolute value above 2 to flags ponds as outliers.
 - **Fisher's exact test** — computes the exact probability of a 2×2 count table
-  (here resolved/not by group) instead of relying on a large-sample approximation,
-  so it stays valid when the cell counts are small.
+  (here resolved/not by group).
 - **Odds ratio** — for a 2×2 table, the ratio of one group's odds of resolving to
   the other's (odds = resolved ÷ not-resolved). 1.0 = no difference; the further
   from 1, the larger the gap. It is the effect-size companion to Fisher's p: the p
