@@ -490,12 +490,9 @@ Control-vs-Treatment gap, and its Day-3 timing, are not artifacts of farmers' ow
 
 </details>
 
-[^trigger-def]: Re-running with resolution defined on only the triggering
-    parameter(s) — rather than requiring all of DO, pH, and ammonia back in
-    range — leaves every count in [§3](#3-primary-outcome--resolution-at-day-3) and [§5](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3) unchanged (0 of 58 events
-    reclassify). The two definitions can only disagree when an event's trigger
-    returns to range while some *other* parameter — fine at Day 0 — has drifted
-    out by follow-up; that never happens here, so the strict all-parameters rule
-    is never the binding condition and adds no failures beyond the trigger's. Both the
-    triggering parameters and their in-range status are computed from the raw
-    Data-tab readings against the protocol bands.
+[^trigger-def]: Scoring resolution on only the triggering parameter(s), rather
+    than requiring all of DO, pH, and ammonia back in range, leaves every count
+    unchanged: all 58 events keep their Day-3 status, as do the
+    [§5](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3) timing results. The
+    two rules can only differ when a trigger returns to range while another parameter
+    that was in range at Day 0 has since gone out, which never happens here.
