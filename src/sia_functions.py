@@ -48,10 +48,11 @@ def sia_actions(data: pd.DataFrame) -> pd.DataFrame:
     """
     sia = data[data["Self-initiated actions taken"].notna()].copy()
     sia["visit"] = pd.to_datetime(sia["Date of data collection"])
-    exact = pd.to_datetime(sia["Self-initiated actions implemented on (exact date)"])
+    sia["exact"] = pd.to_datetime(sia["Self-initiated actions implemented on (exact date)"])
 
     rows = []
-    for (_, r), ex in zip(sia.iterrows(), exact):
+    for _, r in sia.iterrows():
+        ex = r["exact"]
         if pd.notna(ex):
             start = end = ex
             basis = "exact"
@@ -88,10 +89,9 @@ def event_sia_exposure(events: pd.DataFrame, actions: pd.DataFrame) -> pd.DataFr
       sia        — the full [Day 0, Day-3 follow-up] span (the step-2 flag)
       sia_early  — [Day 0, Day 2]
       sia_late   — [Day 2 + 1, Day 3], i.e. strictly after the Day-2 visit date
-    An action dated exactly on Day 2 counts as early only: daily dating can't
-    order it against the Day-2 measure, and "early" is the conservative side
-    for the late-actions-explain-the-gains question. sia_early/sia_late are NA
-    for the one event with no Day-2 follow-up. Returns one row per event:
+    An action dated exactly on Day 2 counts as early only (daily dates can't be
+    ordered against the Day-2 measure). sia_early/sia_late are NA for the one
+    event with no Day-2 follow-up. Returns one row per event:
     Pond ID, group, day0, day2, day3, res2/res3 (the Day-2/Day-3 outcomes as
     booleans), sia, sia_early, sia_late.
     """

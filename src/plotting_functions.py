@@ -108,9 +108,17 @@ def plot_oor_events(events, filename="Fig4.oor_resolution.png"):
         return f"{level}_{g.split()[-1]}"
 
     ncol = 2 * len(OOR_DRIVERS)  # 6
-    overall_row = [k for g in groups for k in [key("Overall", g)] * len(OOR_DRIVERS)]
+    # Each overall pie spans half the row; each per-parameter pie spans two columns.
+    overall_row = []
+    for g in groups:
+        overall_row += [key("Overall", g)] * len(OOR_DRIVERS)
     driver_row = ["drv"] * ncol
-    param_rows = [[k for p in OOR_DRIVERS for k in [key(p, g)] * 2] for g in groups]
+    param_rows = []
+    for g in groups:
+        row = []
+        for p in OOR_DRIVERS:
+            row += [key(p, g)] * 2
+        param_rows.append(row)
     mosaic = [overall_row, driver_row] + param_rows
     heights = [1.4, 0.9] + [1.0] * len(groups)
 
@@ -191,11 +199,8 @@ def plot_oor_resolution_by_pond(data, filename="Fig6.oor_resolution_by_pond.png"
     ax.set_ylabel("pond resolution rate\n(% of its OOR events resolved at Day 3)")
     _ygrid(ax)
 
-    # Combined right-hand panel: the events-per-pond distribution (horizontal
-    # bars, D vs E) that doubles as the point-size key - each row carries a dot
-    # sized like the main scatter, so size <-> #events is read off the same panel.
-    # This is the spread the event-level rate would weight by (motivates the
-    # pond-level view).
+    # Right-hand panel: events-per-pond distribution (horizontal bars, D vs E),
+    # doubling as the point-size key (one dot per row, sized like the scatter).
     ev_counts = sorted(per_pond["events"].unique())
     kax = ax.inset_axes([0.72, 0.30, 0.26, 0.46])
     h = 0.38
@@ -390,22 +395,11 @@ def _fmt_p(v):
 def plot_oor_improvement(data, filename="Fig7.oor_improvement.png"):
     """Per-pond OOR improvement by group (D vs E) — the data behind the t / U tests.
 
-    One panel per OOR parameter (DO, pH, Ammonia): per-pond mean out-of-range gap
-    closed in that parameter's native units (mg/L for DO/ammonia, pH units for
-    pH), +ve = moved toward the in-range band. This is dist0 - dist3 (change in
-    how far outside the band the reading sits), not the raw Day-0->Day-3 change:
-    it clamps at the band edge (no credit for overshoot) and is direction-folded
-    so improvement is always positive whichever way the parameter was OOR.
-    Each panel is a box + jittered strip per group, titled with the Welch-t and
-    Mann-Whitney p-values two ways: all events, then with the baseline-WQ outlier
-    ponds removed (whole-pond) — so the figure shows the effect, why the two
-    tests agree (rank separation), and how the result holds without the outlier
-    ponds. Faint background points are the individual OOR events (the solid
-    black-edged dots are their pond means) — context only; the box, n, and tests
-    are all pond-level, since events within a pond aren't independent. Outlier
-    ponds' means are coloured red. A dashed line at 0 marks "no change". The
-    cross-parameter "overall" story is left to the binary
-    resolution rate (Fisher) — a cleaner pooled summary than a continuous metric.
+    One panel per OOR parameter: per-pond mean out-of-range gap closed (dist0 -
+    dist3) in native units, +ve = moved toward the band. Box + jittered strip per
+    group, titled with the Welch-t and Mann-Whitney p-values both with and without
+    the baseline-WQ outlier ponds. Faint dots are individual events; solid dots are
+    the pond means (the test unit; outlier ponds in red); the dashed line marks 0.
     """
     imp = oor_event_improvements(data)
     fl = wq_outliers(data)
@@ -462,9 +456,11 @@ def plot_oor_improvement(data, filename="Fig7.oor_improvement.png"):
                 family="monospace", fontsize=8, color="#333333", linespacing=1.35)
 
     fig.tight_layout()
-    legend_dot = lambda fc, ec, a, ms, lab: Line2D(
-        [], [], marker="o", markerfacecolor=fc, markeredgecolor=ec,
-        alpha=a, linestyle="none", markersize=ms, label=lab)
+
+    def legend_dot(fc, ec, a, ms, lab):
+        return Line2D([], [], marker="o", markerfacecolor=fc, markeredgecolor=ec,
+                      alpha=a, linestyle="none", markersize=ms, label=lab)
+
     fig.legend(
         handles=[legend_dot("#888888", "black", 1.0, 8, "pond mean (test unit)"),
                  legend_dot("#888888", "none", 0.25, 6, "event"),
