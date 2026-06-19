@@ -31,9 +31,9 @@ outputs/           everything generated
   plots/           Fig1–Fig9
 ```
 
-## Acknowledgements
+## Authorship and AI assistance
 
 Analysis by Adam F. Holt, who directed the work, made all analytical decisions, and
 verified the results by independent recomputation. An AI coding assistant (Anthropic's
-Claude) helped implement code and draft documentation. Full statement in the
-Acknowledgements of [`outputs/results.md`](outputs/results.md).
+Claude) helped implement code and draft documentation. Full statement in
+[`outputs/results.md`](outputs/results.md).

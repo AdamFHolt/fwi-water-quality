@@ -16,7 +16,7 @@ with a significance threshold throughout of p < 0.05. The study has since been
 unblinded; [§6](#6-post-hoc--do-farmers-own-actions-explain-the-gap) adds a post-hoc analysis on the unblinded data, but [§1](#1-dataset-overview)–[5](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3) keep the
 blind labels as run.
 
-**Contents:** [Highlights](#highlights) · [1. Dataset overview](#1-dataset-overview) · [2. Baseline comparability](#2-are-the-groups-comparable-at-baseline) · [3. Primary outcome](#3-primary-outcome--resolution-at-day-3) · [4. Comparative test](#4-comparative-test--how-much-did-water-quality-improve) · [5. Day 2 vs Day 3](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3) · [6. Self-initiated actions](#6-post-hoc--do-farmers-own-actions-explain-the-gap) · [7. Notes on test choices](#7-notes-on-test-choices) · [Glossary](#glossary) · [Acknowledgements](#acknowledgements)
+**Contents:** [Highlights](#highlights) · [1. Dataset overview](#1-dataset-overview) · [2. Baseline comparability](#2-are-the-groups-comparable-at-baseline) · [3. Primary outcome](#3-primary-outcome--resolution-at-day-3) · [4. Comparative test](#4-comparative-test--how-much-did-water-quality-improve) · [5. Day 2 vs Day 3](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3) · [6. Self-initiated actions](#6-post-hoc--do-farmers-own-actions-explain-the-gap) · [7. Notes on test choices](#7-notes-on-test-choices) · [Glossary](#glossary) · [Authorship & AI assistance](#authorship-and-ai-assistance)
 
 <br>
 
@@ -499,7 +499,7 @@ Control-vs-Treatment gap, and its Day-3 timing, are not artifacts of farmers' ow
 
 <br>
 
-## Acknowledgements
+## Authorship and AI assistance
 
 **Analyst:** Adam F. Holt
 
