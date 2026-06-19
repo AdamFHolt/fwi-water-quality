@@ -503,10 +503,10 @@ Control-vs-Treatment gap, and its Day-3 timing, are not artifacts of farmers' ow
 
 **Analyst:** Adam F. Holt
 
-The analyst designed and directed this analysis, made all analytical decisions, and
-verified the results by independent recomputation. An AI coding assistant (Anthropic's
-Claude) was used to help implement the analysis code and draft the documentation. The
-analyst is responsible for the final analysis and conclusions.
+The analyst designed and directed this analysis, made all analytical and plotting
+decisions, and verified all results by independent recomputation. An AI coding assistant
+(Anthropic's Claude) was used to help implement the analysis code and draft the
+documentation. The analyst is responsible for the final analysis and conclusions.
 
 [^trigger-def]: Scoring resolution on only the triggering parameter(s), rather
     than requiring all of DO, pH, and ammonia back in range, leaves every count
