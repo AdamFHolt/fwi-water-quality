@@ -33,6 +33,7 @@ outputs/           everything generated
 
 ## Acknowledgements
 
-Analysis by Adam F. Holt. The code and documentation were developed with the help of
-an AI coding assistant (Anthropic's Claude); all results were independently verified by
-recomputation. See the Acknowledgements in [`outputs/results.md`](outputs/results.md).
+Analysis by Adam F. Holt, who directed the work, made all analytical decisions, and
+verified the results by independent recomputation. An AI coding assistant (Anthropic's
+Claude) helped implement code and draft documentation. Full statement in the
+Acknowledgements of [`outputs/results.md`](outputs/results.md).
