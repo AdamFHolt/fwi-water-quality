@@ -1,22 +1,8 @@
-"""
-Post-hoc (unblinded) analysis: do self-initiated actions (SIA) — corrective
-steps farmers took on their own — affect OOR outcomes?
+"""Post-hoc (unblinded) analysis: do farmers' self-initiated actions (SIA) affect
+OOR outcomes? Run via main_sia.py on the non-anonymized workbook.
 
-Runs on the non-anonymized workbook (Control/Treatment labels; same hashed
-Pond IDs and core schema as the anonymized file, plus the SIA columns), via
-main_sia.py. Unlike the cohort comparison in main.py, SIA exposure is
-self-selected, so everything here is exploratory/descriptive, not causal.
-
-  sia_actions           tidy table of SIA records with implementation windows
-  event_sia_exposure    flag each OOR event with SIA exposure in its
-                        Day-0..Day-3 window (exact / possible / none)
-  describe_sia_exposure print the exposure summary by group
-  resolution_by_exposure        Day-3 resolution, exposed vs unexposed, within group
-  resolution_groups_by_stratum  the D-vs-E comparison within each exposure stratum
-  describe_resolution_by_exposure  print both + the exact-only sensitivity line
-  timing_by_exposure            the §5 gained/lost split by full-window exposure
-  gains_by_action_timing        do late actions (Day 2 -> Day 3) predict the gains?
-  describe_timing_by_exposure   print both timing cuts + exact-only sensitivity
+SIA exposure is self-selected, so everything here is exploratory/descriptive, not
+causal (unlike the cohort comparison in main.py).
 """
 
 import re
@@ -37,14 +23,11 @@ BLIND_LABEL = {"Control": "Group D", "Treatment": "Group E"}
 
 
 def sia_actions(data: pd.DataFrame) -> pd.DataFrame:
-    """One row per visit-recorded self-initiated action, with the window
-    [start, end] in which it was implemented.
+    """One row per recorded SIA, with the window [start, end] it was implemented in.
 
-    An exact implementation date gives a one-day window (start = end). Rows
-    with only a range like "0-7 days ago" (relative to the visit date) get the
-    corresponding interval [visit - 7, visit - 0]. Every SIA row in the dataset
-    has one or the other. Returns columns: Pond ID, group, visit, actions,
-    start, end, basis ("exact"/"range").
+    An exact date gives a one-day window; a range like "0-7 days ago" gives
+    [visit - 7, visit]. Columns: Pond ID, group, visit, actions, start, end,
+    basis ("exact"/"range").
     """
     sia = data[data["Self-initiated actions taken"].notna()].copy()
     sia["visit"] = pd.to_datetime(sia["Date of data collection"])
@@ -150,12 +133,11 @@ EXPOSED = ("exact", "possible")
 
 
 def resolution_by_exposure(ev: pd.DataFrame, exposed: tuple) -> pd.DataFrame:
-    """Day-3 resolution, SIA-exposed vs unexposed events, within each group.
+    """Day-3 resolution, SIA-exposed vs unexposed, within each group (Fisher's exact).
 
-    Fisher's exact per group on the 2x2 [exposure x resolved]. `exposed` names
-    the sia levels counted as exposed; unexposed is always "none", so any level
-    left out (e.g. "possible" in the exact-only split) is excluded entirely.
-    Returns one row per group: n/resolved/% for each arm, odds ratio, p.
+    `exposed` names the sia levels counted as exposed; unexposed is always "none",
+    so any level left out (e.g. "possible") is excluded. One row per group:
+    n/resolved/% per arm, odds ratio, p.
     """
     rows = []
     for g, sub in ev.groupby("group"):
@@ -176,12 +158,11 @@ def resolution_by_exposure(ev: pd.DataFrame, exposed: tuple) -> pd.DataFrame:
 
 
 def resolution_groups_by_stratum(ev: pd.DataFrame, exposed: tuple) -> pd.DataFrame:
-    """The primary D-vs-E Day-3 resolution comparison, within each exposure stratum.
+    """D-vs-E Day-3 resolution within each exposure stratum (Fisher's exact).
 
-    Fisher's exact (Group D vs E) run separately on the SIA-exposed events and
-    the unexposed ones. If the Treatment advantage holds in the unexposed
-    stratum, it isn't explained by farmers' own actions. Returns one row per
-    stratum: per-group n/resolved/%, odds ratio, p.
+    Run separately on exposed and unexposed events: if the Treatment advantage
+    holds among unexposed events, it isn't explained by farmers' own actions. One
+    row per stratum: per-group n/resolved/%, odds ratio, p.
     """
     groups = sorted(ev["group"].unique())            # ["Control", "Treatment"]
     rows = []
@@ -232,12 +213,11 @@ def describe_resolution_by_exposure(events: pd.DataFrame, actions: pd.DataFrame)
 
 
 def timing_by_exposure(ev: pd.DataFrame, exposed: tuple) -> pd.DataFrame:
-    """The §5 Day-2 vs Day-3 gained/lost split, by full-window SIA exposure.
+    """The §5 gained/lost split (Day 2 -> Day 3) by SIA exposure, counts only.
 
-    Events with both follow-ups only (57 of 58). gained = unresolved at Day 2,
-    resolved at Day 3; lost = the reverse. Returns one row per group x stratum:
-    n, day2_res, day3_res, gained, lost. Counts only — the inferential cut is
-    gains_by_action_timing, which conditions on being unresolved at Day 2.
+    Events with both follow-ups. gained = unresolved at Day 2, resolved at Day 3;
+    lost = the reverse. One row per group x stratum: n, day2_res, day3_res,
+    gained, lost. (The inferential cut is gains_by_action_timing.)
     """
     sub = ev.dropna(subset=["day2", "day3"])
     rows = []
@@ -255,16 +235,12 @@ def timing_by_exposure(ev: pd.DataFrame, exposed: tuple) -> pd.DataFrame:
 
 
 def gains_by_action_timing(ev: pd.DataFrame, exposed: tuple) -> pd.DataFrame:
-    """Among events unresolved at Day 2: does a LATE action predict gaining?
+    """Among events unresolved at Day 2: does a late action predict gaining?
 
-    Only events still out of range at Day 2 can gain, so the analysis
-    conditions on them ("at risk"). Each is classed by action timing:
-      late        — an action window overlaps (Day 2, Day 3] (sia_late)
-      early only  — actions overlap [Day 0, Day 2] but none late
-      no action   — neither sub-window hit
-    `exposed` sets which grades count (as in the step-2 splits). Fisher's
-    exact tests gained vs not, late vs the rest. Returns one row per group:
-    at_risk, n/gained per timing class, odds, fisher_p.
+    Conditions on events still out of range at Day 2 ("at risk"), each classed as
+    late (action in (Day 2, Day 3]), early-only, or none. Fisher's exact tests
+    gained vs not, late vs the rest. One row per group: at_risk, n/gained per
+    timing class, odds, fisher_p.
     """
     atrisk = ev.dropna(subset=["day2", "day3"])
     atrisk = atrisk[~atrisk["res2"]]

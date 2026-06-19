@@ -91,11 +91,8 @@ def _resolution_pie(ax, resolved, not_resolved, color, title):
 
 
 def plot_oor_events(events, filename="Fig4.oor_resolution.png"):
-    """OOR-events figure: overall resolution pies, event-driver bars, and a
-    per-parameter resolution pie for each group (Day-3 primary measure).
-
-    One column per group; rows are Overall (pies), drivers (bars), then one pie
-    row per OOR parameter. Built entirely from the OOR Events sheet.
+    """OOR-events figure (Fig4): overall resolution pies, event-driver bars, and
+    per-parameter pies, one column per group. Built from the OOR Events sheet.
     """
     res = oor_resolution_by_parameter(events).set_index(["parameter", "group"])
     # Driver counts are just the per-parameter event totals from `res`.
@@ -163,15 +160,8 @@ def plot_oor_events(events, filename="Fig4.oor_resolution.png"):
 
 
 def plot_oor_resolution_by_pond(data, filename="Fig6.oor_resolution_by_pond.png"):
-    """Pond-level OOR resolution: one point per pond, sized by its event count.
-
-    Each pond's Day-3 resolution rate (resolved events / its events) is a
-    jittered point, one column per group; point area is proportional to how many
-    OOR events the pond had. A horizontal bar marks each group's mean per-pond
-    rate (the `mean_pct` from oor_resolution_by_pond). Companion to the
-    event-level pies in Fig4.oor_resolution.png: it shows the D-vs-E gap survives when
-    every pond counts once (repeat-event ponds aren't driving it) and exposes the
-    per-pond spread the pies hide.
+    """Pond-level OOR resolution (Fig6): one jittered point per pond, sized by its
+    event count, with a horizontal bar at each group's mean per-pond rate.
     """
     per_pond = oor_resolution_per_pond(derive_oor_events(data))
     groups = sorted(per_pond["group"].unique())
@@ -231,16 +221,12 @@ def plot_oor_resolution_by_pond(data, filename="Fig6.oor_resolution_by_pond.png"
 
 
 def plot_water_quality(data, filename="Fig2.water_quality_per_pond.png", highlight_anoms=False):
-    """Pond-properties figure: per group, baseline WQ as mean +/- SD bars (top
-    row) and per-pond distributions as box + jittered-strip plots (bottom row),
-    one column per parameter (routine visits, averaged per pond).
+    """Per-pond baseline WQ (Fig2/Fig3): mean +/- SD bars (top) and box + strip
+    (bottom), one column per parameter.
 
-    With highlight_anoms=True the baseline-WQ outlier ponds (|studentized resid| > 2)
-    are dropped from every panel's statistics - bars, box/IQR, n, and Levene p all
-    describe the cleaned distribution, matching the pond set removed in the
-    Fig5.oor_resolution_outliers_removed figure. Each outlier is still drawn (red ring, short
-    Pond ID + OOR-event count) in the panel for the parameter it is extreme on, so
-    you can see how far outside the cleaned distribution it sat.
+    With highlight_anoms=True the baseline-WQ outlier ponds are dropped from every
+    panel's stats (Fig3), but still drawn as red-ringed points labelled with their
+    Pond ID and OOR-event count in the parameter they're extreme on.
     """
     pond = wq_pond_means(data)
     flagged = wq_outliers(data) if highlight_anoms else None
@@ -327,11 +313,9 @@ def plot_water_quality(data, filename="Fig2.water_quality_per_pond.png", highlig
 
 
 def plot_water_quality_visits(data, filename="Fig1.water_quality_all_visits.png"):
-    """Visit-level WQ figure: routine visits only, one point per visit.
-
-    Columns: DO (Morning), DO (Evening), pH, Ammonia - DO is split by time of
-    day because morning and evening values differ substantially (~3 vs ~11 mg/L).
-    Top row: mean +/- SD bars. Bottom row: box + dense jittered strip.
+    """Visit-level baseline WQ (Fig1): one point per routine visit. Columns DO
+    Morning, DO Evening, pH, Ammonia; top row mean +/- SD bars, bottom row box +
+    jittered strip.
     """
     routine = data[data["Is follow up"] == "No"].copy()
     groups = sorted(routine["Pond status"].unique())
@@ -472,12 +456,8 @@ def plot_oor_improvement(data, filename="Fig7.oor_improvement.png"):
 
 
 def plot_day2_vs_day3(events, filename="Fig8.day2_vs_day3.png"):
-    """Day-2 vs Day-3 resolution pies — the §5 secondary (McNemar) analysis.
-
-    2x2 grid of resolution pies: rows = Day 2 (1st FU) / Day 3 (2nd FU), columns
-    = Group D / E, over the events with both follow-ups. Makes the timing story
-    visual: the groups are near-identical at Day 2 (~20-25% resolved) and diverge
-    only by Day 3 (E jumps to ~82%, D stays put).
+    """Day-2 vs Day-3 resolution pies (Fig8): 2x2 grid, rows = Day 2 / Day 3,
+    columns = Group D / E, over events with both follow-ups (the §5 McNemar story).
     """
     res = resolution_day2_vs_day3(events)
     groups = ["Group D", "Group E"]

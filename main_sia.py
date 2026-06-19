@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
-"""Post-hoc self-initiated-actions (SIA) analysis, on the unblinded workbook.
-
-main.py stays the as-run blind primary analysis; this script is the
-exploratory unblinded follow-up: did farmers' self-initiated actions
-affect the OOR outcomes?
+"""Post-hoc self-initiated-actions (SIA) analysis on the unblinded workbook:
+did farmers' self-initiated actions affect the OOR outcomes?
 """
 from src.functions import load_data, load_events
 from src.sia_functions import (

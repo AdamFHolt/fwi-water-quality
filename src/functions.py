@@ -1,34 +1,7 @@
-"""
-Analysis functions for the FWI water-quality study. main.py calls these in order.
+"""Analysis functions for the FWI water-quality study; main.py calls these in order.
 
-Rough reading order if you're going through this file:
-
-  reorder_by_pond     write a Pond-ID-sorted copy of the workbook
-  load_data/load_events   read the Data and OOR Events sheets
-
-  describe_data       counts: visits, ponds, events, split by group
-  wq_pond_means       one baseline row per pond (DO split AM/PM); most WQ
-                      functions below build on this
-  describe_water_quality   mean/SD per group
-  baseline_balance_by_param   are the groups balanced at baseline? (Levene + Hedges' g)
-  wq_outliers         flag odd ponds (studentized residual > 2)
-
-  derive_oor_events   rebuild the OOR events from the raw visit rows
-  oor_resolution_by_parameter   resolution rate by parameter, from the sheet
-  oor_resolution_per_pond  one resolution proportion per pond (the per-pond unit)
-  oor_resolution_by_pond   that, averaged within group (pond-level rate)
-  analyze_oor_events  resolution rate (event- and pond-level) from the derived
-                      events, plus a sanity check that they match the sheet
-
-  Comparative tests (does the intervention improve WQ?, protocol §4.4):
-  resolution_fisher   Fisher's exact on the binary Day-3 outcome, D vs E
-  oor_event_improvements   distance-to-range closed per event, Day 0 -> Day 3
-  improvement_tests   independent Welch t + Mann-Whitney U on that improvement, D vs E
-  resolution_day2_vs_day3   Day-2 vs Day-3 resolution within events (McNemar)
-
-Two things to keep straight: the group column is "Pond status" in the Data
-sheet but "Group" in the OOR Events sheet, and the resolution number always
-means the Day-3 (primary) measure.
+Two gotchas: the group column is "Pond status" in the Data sheet but "Group" in
+the OOR Events sheet, and "resolution" always means the Day-3 (primary) measure.
 """
 
 import pandas as pd
@@ -91,14 +64,11 @@ POND_PARAMS = ["DO Morning (mg/L)", "DO Evening (mg/L)", "pH", "Ammonia—NH3 (m
 
 
 def wq_pond_means(data: pd.DataFrame) -> pd.DataFrame:
-    """Baseline WQ as one row per pond: routine visits, averaged within pond.
+    """Baseline WQ as one row per pond: routine visits only, averaged within pond.
 
-    Drops follow-up visits (they are conditional on an OOR event, so a biased
-    subsample) and collapses each pond to its mean so repeated visits within a
-    pond aren't counted as independent observations (avoids pseudoreplication).
-    DO is split by time of day (morning and evening differ by ~8 mg/L) and
-    returned as two columns. pH and ammonia are averaged over all routine visits.
-    Returns columns: Pond status, Pond ID, <POND_PARAMS>.
+    Follow-ups are dropped (biased subsample) and each pond collapsed to its mean
+    (avoids pseudoreplication). DO is split into Morning/Evening columns; pH and
+    ammonia are single averages. Columns: Pond status, Pond ID, <POND_PARAMS>.
     """
     routine = data[data["Is follow up"] == "No"]
     do_am = (routine[routine["Type"] == "Morning"]
@@ -126,16 +96,12 @@ def describe_water_quality(data: pd.DataFrame) -> None:
 
 
 def baseline_balance_by_param(data: pd.DataFrame, exclude: set | None = None) -> pd.DataFrame:
-    """Baseline balance (Group D vs E) per WQ parameter: variance + mean difference.
+    """Baseline balance (Group D vs E) per WQ parameter, on per-pond values.
 
-    Per-pond baseline values (see wq_pond_means) so ponds aren't pseudo-replicated.
-    Two complementary, purely descriptive balance metrics:
-      - Levene's W, p: variance homogeneity, median-centred,
-        robust to non-normality. p > 0.05 = no evidence variances differ.
-      - Hedges' g: standardized mean difference (mean_D - mean_E) / pooled SD,
-        with the small-sample correction. |g| < 0.1 = negligible mean gap. 
-    Pass `exclude` (a set of Pond IDs, e.g. the WQ outliers) to run on the
-    outlier-removed set. Returns a DataFrame indexed by parameter, columns W, p, g.
+    Levene's W/p (variance homogeneity, median-centred) and Hedges' g
+    (standardized mean difference, small-sample corrected); both descriptive.
+    `exclude` (a set of Pond IDs) drops those ponds first. Indexed by parameter,
+    columns W, p, g.
     """
     pond = wq_pond_means(data)
     if exclude:
@@ -162,13 +128,10 @@ def describe_baseline_balance(data: pd.DataFrame) -> None:
 
 
 def wq_outliers(data: pd.DataFrame, resid_thresh: float = 2.0) -> pd.DataFrame:
-    """Flag WQ outlier ponds from the group-means model.
+    """Flag baseline-WQ outlier ponds, per parameter, against the group mean.
 
-    For each parameter, fits param ~ group on per-pond values and computes each
-    pond's internally studentized residual. A pond is an *outlier* if
-    |studentized resid| > resid_thresh, i.e. more than resid_thresh SD from its
-    group mean (scaled by the model's residual spread). Returns only the flagged
-    ponds.
+    Computes each pond's internally studentized residual and flags it when the
+    absolute value exceeds `resid_thresh`. Returns only the flagged ponds.
     """
     pond = wq_pond_means(data)
     out = []
@@ -198,17 +161,13 @@ def describe_wq_outliers(data: pd.DataFrame) -> None:
 
 
 def derive_oor_events(data: pd.DataFrame) -> pd.DataFrame:
-    """Reconstruct OOR events and their resolution from the per-visit Data sheet.
+    """Reconstruct OOR events and Day-3 resolution from the per-visit Data sheet.
 
-    - An OOR *event* is a Day-0 detection: a first visit, found out of range.
-    - Morning + Evening rows on the same pond-day are one event, so collapsed on
-      (Pond ID, date). 
-    - Whether resolved uses the V7 TRIAD primary measure (Day 3): the
-      latest follow-up visit for that pond within 5 days of Day 0, counted resolved
-      if `Is WQ in range?` is Yes for every visit on that day. 
-    - This reproduces the `OOR Events` sheet's `2nd FU WQ improvement` exactly
-
-    Returns one row per event with columns: Pond ID, date, group, resolved (bool).
+    An event is a Day-0 detection (first visit out of range), with same-day
+    Morning+Evening rows collapsed to one (Pond ID, date). Resolution is the V7
+    TRIAD Day-3 measure: the latest follow-up within 5 days, resolved if every
+    reading that day is in range. Reproduces the sheet's `2nd FU WQ improvement`.
+    Returns one row per event: Pond ID, date, group, resolved (bool).
     """
     data = data.copy()
     data["date"] = pd.to_datetime(data["Date of data collection"])
@@ -301,12 +260,9 @@ def describe_resolution_by_parameter(events: pd.DataFrame) -> None:
 def oor_resolution_per_pond(derived: pd.DataFrame) -> pd.DataFrame:
     """One row per pond: its events, resolved count, and Day-3 resolution proportion.
 
-    Collapses each pond to its share of OOR events resolved (mean of the 0/1
-    `resolved` flag) — the per-pond unit used to guard against repeat-event ponds
-    dominating the event-level rate (events within a pond aren't independent), the
-    same per-pond move as `wq_pond_means` for baseline WQ. Takes the derived
-    events; no-follow-up events (resolved is None) are dropped first. Returns
-    tidy rows: group, Pond ID, events, resolved, proportion.
+    Collapses each pond to its share of events resolved (the per-pond unit, so
+    repeat-event ponds don't dominate the event-level rate). No-follow-up events
+    are dropped. Returns tidy rows: group, Pond ID, events, resolved, proportion.
     """
     followed = derived.dropna(subset=["resolved"]).copy()
     followed["resolved"] = followed["resolved"].astype(int)
@@ -318,12 +274,11 @@ def oor_resolution_per_pond(derived: pd.DataFrame) -> pd.DataFrame:
 
 
 def oor_resolution_by_pond(derived: pd.DataFrame) -> pd.DataFrame:
-    """Pond-level resolution summary: per-pond proportions averaged within group.
+    """Pond-level resolution: per-pond proportions averaged within group.
 
-    Builds on `oor_resolution_per_pond`, so every pond counts once regardless of
-    how many events it had. `mean_pct` is the unweighted mean of the per-pond
-    percentages (not the same as the overall event rate); `median_pct` is their
-    median. Returns per-group: ponds, events, mean_pct, median_pct.
+    Every pond counts once (builds on `oor_resolution_per_pond`). `mean_pct` is
+    the unweighted mean of per-pond rates, `median_pct` their median. Per group:
+    ponds, events, mean_pct, median_pct.
     """
     g = oor_resolution_per_pond(derived).groupby("group")
     return pd.DataFrame(
@@ -337,13 +292,10 @@ def oor_resolution_by_pond(derived: pd.DataFrame) -> pd.DataFrame:
 
 
 def analyze_oor_events(data: pd.DataFrame, events: pd.DataFrame) -> None:
-    """Count and resolve OOR events reconstructed from the per-visit Data sheet.
+    """Print Day-3 resolution per group, event-level and pond-level.
 
-    Prints the Day-3 resolution rate per group two ways — event-level (each OOR
-    event counts once) and pond-level (each pond counts once, removing the
-    repeat-pond weighting) — then cross-checks the derived counts against the
-    OOR Events sheet (the authoritative source). Raises AssertionError if they
-    disagree.
+    Cross-checks the derived counts against the OOR Events sheet (authoritative)
+    and raises AssertionError if they disagree.
     """
     derived = derive_oor_events(data)
 
@@ -434,15 +386,13 @@ def _pond_day_distances(rows: pd.DataFrame) -> dict:
 
 
 def oor_event_improvements(data: pd.DataFrame) -> pd.DataFrame:
-    """Per-parameter WQ improvement toward the in-range band for each OOR event.
+    """Per-parameter WQ improvement toward the band for each OOR event.
 
-    For every OOR event (Day-0 detection, pond-day) and each parameter out of
-    range that day, computes the distance-to-range at Day 0 and at the Day-3
-    primary follow-up (same window rule as derive_oor_events: the latest
-    follow-up within 5 days). The improvement measure is
-      improvement = dist0 - dist3   native units, +ve = moved toward range
-    One row per (event, OOR parameter) that has a Day-3 follow-up reading.
-    Columns: Pond ID, group, date, parameter, dist0, dist3, improvement.
+    For each event and each parameter out of range at Day 0, takes the
+    distance-to-range at Day 0 minus at the Day-3 follow-up (improvement, native
+    units, +ve = toward range). Same window rule as derive_oor_events. One row per
+    (event, OOR parameter) with a Day-3 reading: Pond ID, group, date, parameter,
+    dist0, dist3, improvement.
     """
     data = data.copy()
     data["date"] = pd.to_datetime(data["Date of data collection"])
@@ -483,19 +433,12 @@ def oor_event_improvements(data: pd.DataFrame) -> pd.DataFrame:
 
 
 def improvement_tests(data: pd.DataFrame, exclude: set | None = None) -> pd.DataFrame:
-    """Independent two-sample tests on OOR improvement, Group D vs E, pond-level.
+    """Welch t + Mann-Whitney U on OOR improvement, Group D vs E, per parameter.
 
-    Each pond contributes one value (the mean over its OOR instances) so ponds
-    aren't pseudo-replicated. Per parameter the value is mean improvement in
-    native units (distance-to-range closed); there is no pooled cross-parameter
-    row — the overall D-vs-E comparison is the binary resolution test
-    (resolution_fisher). Runs two tests so the result can be checked for
-    robustness to the small-n normality assumption: Welch's t (parametric,
-    compares means, unequal-variance) and Mann-Whitney U (nonparametric,
-    rank-based). Pass `exclude` (a set of Pond IDs, e.g. the WQ outliers) to
-    drop those ponds first (sensitivity variant). Returns tidy rows:
-    parameter, n_D, mean_D, n_E, mean_E, t, t_p, U, u_p (the n/mean column
-    suffixes follow the group labels in the data).
+    Pond-level (each pond's mean over its events, so ponds aren't
+    pseudo-replicated); two tests for robustness to the small-n normality
+    assumption. `exclude` drops those Pond IDs first (sensitivity variant).
+    Returns tidy rows: parameter, n_D, mean_D, n_E, mean_E, t, t_p, U, u_p.
     """
     imp = oor_event_improvements(data)
     if exclude:
@@ -540,13 +483,10 @@ def resolution_fisher(events: pd.DataFrame, exclude: set | None = None,
                       col: str = "2nd FU WQ improvement"):
     """Fisher's exact test on Day-3 resolution (resolved vs not), Group D vs E.
 
-    Event-level (pond-per-day OOR events), the protocol's primary-outcome unit
-    and the basis of its sample-size calc. Resolved = `2nd FU WQ improvement` ==
-    "Yes". Pass `exclude` (a set of Pond IDs) to drop those ponds' events first
-    (sensitivity variant), or `col` to test a different follow-up (e.g.
-    `1st FU WQ improvement` for the Day-2 secondary). Returns
-    (table, odds_ratio, p): table is the 2x2 [group x outcome] with columns
-    ordered resolved, unresolved.
+    Event-level (the protocol's primary-outcome unit). `exclude` drops those
+    ponds' events; `col` selects a different follow-up (e.g. `1st FU WQ
+    improvement` for Day 2). Returns (table, odds_ratio, p); table is the 2x2
+    [group x outcome], columns ordered resolved, unresolved.
     """
     e = events.dropna(subset=[col])
     if exclude:
@@ -574,17 +514,12 @@ def describe_resolution_fisher(events: pd.DataFrame, exclude: set | None = None)
 
 
 def resolution_day2_vs_day3(events: pd.DataFrame, exclude: set | None = None) -> pd.DataFrame:
-    """Secondary analysis: does resolution differ between Day 2 and Day 3?
+    """Day-2 vs Day-3 resolution within events (McNemar), protocol §4.4.
 
-    Protocol §4.4 "Day 2 vs Day 3 Comparison". Day 2 (`1st FU WQ improvement`)
-    and Day 3 (`2nd FU WQ improvement`) are the SAME events measured twice, so
-    this is matched/paired binary data -> McNemar's test (the binary analog of
-    the paired/Wilcoxon test). Restricted to events with both follow-ups recorded.
-    Pass `exclude` (a set of Pond IDs) to drop those ponds' events first
-    (sensitivity variant). Per group: resolved counts/% at each day, plus the
-    discordant pairs `gained` (No@Day2 -> Yes@Day3) and `lost` (Yes@Day2 -> No@Day3).
-    `mcnemar_p` is the exact two-sided binomial test on the discordant pairs. One
-    row per group.
+    The same events measured twice (1st/2nd FU), so paired binary data. Restricted
+    to events with both follow-ups; `exclude` drops those Pond IDs first. Per
+    group: resolved counts/% each day, the discordant pairs `gained` (No->Yes) and
+    `lost` (Yes->No), and `mcnemar_p` (exact two-sided binomial on those pairs).
     """
     e = events.dropna(subset=["1st FU WQ improvement", "2nd FU WQ improvement"])
     if exclude:
