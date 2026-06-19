@@ -16,7 +16,7 @@ with a significance threshold throughout of p < 0.05. The study has since been
 unblinded; [§6](#6-post-hoc--do-farmers-own-actions-explain-the-gap) adds a post-hoc analysis on the unblinded data, but [§1](#1-dataset-overview)–[5](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3) keep the
 blind labels as run.
 
-**Contents:** [Highlights](#highlights) · [1. Dataset overview](#1-dataset-overview) · [2. Baseline comparability](#2-are-the-groups-comparable-at-baseline) · [3. Primary outcome](#3-primary-outcome--resolution-at-day-3) · [4. Comparative test](#4-comparative-test--how-much-did-water-quality-improve) · [5. Day 2 vs Day 3](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3) · [6. Self-initiated actions](#6-post-hoc--do-farmers-own-actions-explain-the-gap) · [7. Notes on test choices](#7-notes-on-test-choices) · [Glossary](#glossary)
+**Contents:** [Highlights](#highlights) · [1. Dataset overview](#1-dataset-overview) · [2. Baseline comparability](#2-are-the-groups-comparable-at-baseline) · [3. Primary outcome](#3-primary-outcome--resolution-at-day-3) · [4. Comparative test](#4-comparative-test--how-much-did-water-quality-improve) · [5. Day 2 vs Day 3](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3) · [6. Self-initiated actions](#6-post-hoc--do-farmers-own-actions-explain-the-gap) · [7. Notes on test choices](#7-notes-on-test-choices) · [Glossary](#glossary) · [Acknowledgements](#acknowledgements)
 
 <br>
 
@@ -496,6 +496,17 @@ Control-vs-Treatment gap, and its Day-3 timing, are not artifacts of farmers' ow
   comparison controls for this, since it acts on both groups equally.
 
 </details>
+
+<br>
+
+## Acknowledgements
+
+**Analyst:** Adam F. Holt
+
+The analyst designed and directed this analysis, made all analytical decisions, and
+verified the results by independent recomputation. An AI coding assistant (Anthropic's
+Claude) was used to help implement the analysis code and draft the documentation. The
+analyst is responsible for the final analysis and conclusions.
 
 [^trigger-def]: Scoring resolution on only the triggering parameter(s), rather
     than requiring all of DO, pH, and ammonia back in range, leaves every count

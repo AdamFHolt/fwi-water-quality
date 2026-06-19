@@ -30,3 +30,9 @@ outputs/           everything generated
   figures.md       figure walkthrough
   plots/           Fig1–Fig9
 ```
+
+## Acknowledgements
+
+Analysis by Adam F. Holt. The code and documentation were developed with the help of
+an AI coding assistant (Anthropic's Claude); all results were independently verified by
+recomputation. See the Acknowledgements in [`outputs/results.md`](outputs/results.md).
