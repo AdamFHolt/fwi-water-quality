@@ -13,22 +13,22 @@ python3 -m venv .venv                      # create virtual environment
 .venv/bin/python main_sia.py               # post-hoc SIA analysis
 ```
 
-`main.py` runs the primary (blind) analysis: baseline comparison between groups, the Day-3 OOR resolution rates with Fisher's exact test, the per-parameter improvement tests, the Day-2 vs Day-3 comparison, and regenerates all figures in `outputs/plots/`.
+`main.py` runs the primary analysis: baseline comparison between groups, the Day-3 OOR resolution rates with Fisher's exact test, the per-parameter improvement tests, the Day-2 vs Day-3 comparison, and regenerates all figures in `outputs/plots/`.
 
-`main_sia.py` is the post-hoc analysis of the impact of farmers' self-initiated actions.
+`main_sia.py` is the post-hoc (unblinded) analysis of the impact of farmers' self-initiated actions.
 
 ## Layout
 
 ```
 inputs/            study protocol (PDF) and datasets
-  data/            cleaned Phase 2 workbooks (anonymized and unblinded)
+  data/            cleaned workbooks (anonymized and unblinded)
 src/               analysis, SIA, and plotting modules
 main.py            primary analysis pipeline
 main_sia.py        post-hoc SIA pipeline
 outputs/           everything generated
   results.md       results write-up (start here)
   figures.md       figure walkthrough
-  plots/           Fig1–Fig9
+  plots/           Figures 1–9
 ```
 
 ## Authorship and AI assistance
