@@ -75,7 +75,7 @@ by time of day because morning and evening differ systematically.
 | DO morning (mg/L) | 3–5 | 3.28 (0.21) | 3.28 (0.24) |
 | DO evening (mg/L) | 8–12 | 11.26 (1.01) | 11.40 (0.52) |
 | pH | 6.5–8.5 | 8.30 (0.10) | 8.29 (0.08) |
-| Ammonia, NH₃ (mg/L) | < 0.05 | 0.018 (0.013) | 0.016 (0.010) |
+| Ammonia, NH₃ (mg/L) | < 0.05[^amm] | 0.018 (0.013) | 0.016 (0.010) |
 
 <div align="center">
 <a href="plots/Fig2.water_quality_per_pond.png"><img src="plots/Fig2.water_quality_per_pond.png" width="920" alt="Figure 2 — per-pond baseline water quality"></a>
@@ -503,3 +503,7 @@ Control-vs-Treatment gap, and its Day-3 timing, are not artifacts of farmers' ow
     [§5](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3) timing results. The
     two rules can only differ when a trigger returns to range while another parameter
     that was in range at Day 0 has since gone out, which never happens here.
+
+[^amm]: The workbook's `Is WQ in range?` flag treats a reading of exactly 0.05 as
+    in-range, and this analysis follows that flag. Only 3 routine readings sit at
+    exactly 0.05; none are OOR events, so no statistic is affected.
