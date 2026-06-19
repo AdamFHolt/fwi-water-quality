@@ -191,7 +191,7 @@ def wq_outliers(data: pd.DataFrame, resid_thresh: float = 2.0) -> pd.DataFrame:
 def describe_wq_outliers(data: pd.DataFrame) -> None:
     """Print baseline-WQ outlier ponds (group-means model)."""
     flagged = wq_outliers(data)
-    _section("WATER QUALITY OUTLIERS (per-pond, param ~ group)",
+    _section("WATER QUALITY OUTLIERS (per-pond)",
              "(|studentized residual| > 2 from group mean)")
     print("None flagged." if flagged.empty else flagged.to_string(index=False))
     print()
