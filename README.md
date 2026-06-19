@@ -33,7 +33,5 @@ outputs/           everything generated
 
 ## Authorship and AI assistance
 
-Analysis by Adam F. Holt, who designed and directed the analysis, made all analytical and plotting decisions, and
-verified all results by independent recomputation. An AI coding assistant (Anthropic's
-Claude) helped implement code and draft documentation. Full statement in
-[`outputs/results.md`](outputs/results.md).
+An AI coding assistant (Anthropic's Claude) helped implement some of the code and draft the initial documentation. Adam F Holt 
+designed and directed the analysis, made all analytical and plotting decisions, and verified all results by independent recomputation.
