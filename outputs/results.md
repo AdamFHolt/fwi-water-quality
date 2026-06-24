@@ -4,7 +4,7 @@ This document summarises the primary results, which test the following hypothesi
 
 > **Giving farmers water quality readings plus recommended corrective actions improves pond water quality.**
 
-The outcome is measured as the share of out-of-range (OOR) water quality events resolved 
+The outcome is measured as the share of out-of-range (OOR) water quality events resolved
 at follow-up, compared between a treatment cohort and a control cohort that received
 no corrective-action recommendations. The numbers and figures in this summary are
 produced by `python main.py`; see [`figures.md`](figures.md) for a panel-by-panel
@@ -47,7 +47,7 @@ The study followed 53 ponds over 998 monitoring visits between February and May
 | Ponds with OOR events | 15 | 17 | 32 |
 
 An out-of-range (OOR) event is one pond-day on which a water quality parameter (dissolved oxygen [DO], pH, or ammonia) was out of range; several events can come from the same pond. Follow-up visits are
-conditional on an OOR event, so only routine visits, as shown in Figure 1, give an 
+conditional on an OOR event, so only routine visits, as shown in Figure 1, give an
 unbiased baseline for the water quality parameters:
 
 <div align="center">
@@ -65,9 +65,9 @@ box (median, IQR).*</sub>
 ### 2.1 Baseline water quality — mean (SD) per pond
 
 The first question is whether the two groups started level; if not, any gap in
-outcomes could reflect pre-existing differences rather than anything that happened 
+outcomes could reflect pre-existing differences rather than anything that happened
 during the study. Baseline water quality uses routine (non-follow-up) visits, averaged
-to one value per pond so that ponds visited more often do not count more; DO is split 
+to one value per pond so that ponds visited more often do not count more; DO is split
 by time of day because morning and evening differ systematically.
 
 | Parameter | In-range band | Group D (n = 28) | Group E (n = 25) |
@@ -87,8 +87,8 @@ by time of day because morning and evening differ systematically.
 ### 2.2 Baseline water quality — do the groups have the same spread and average?
 
 We now use two complementary checks — one for differences in spread, one for gap between means — to
-see whether the groups differ on either: see the below table. Both columns use the same per-pond, 
-mean-averaged baseline values as [§2.1](#21-baseline-water-quality--mean-sd-per-pond) (one value per pond), so the comparison is 
+see whether the groups differ on either: see the below table. Both columns use the same per-pond,
+mean-averaged baseline values as [§2.1](#21-baseline-water-quality--mean-sd-per-pond) (one value per pond), so the comparison is
 between ponds, not the individual visits.
 
 | Parameter | Levene p | Hedges' g |
@@ -99,16 +99,16 @@ between ponds, not the individual visits.
 | Ammonia | 0.972 | 0.241 |
 
 
-Two groups can match on their average yet differ in spread, so both are checked 
-(full definitions in the glossary). **Levene's test** compares spread, and p > 0.05 
-means no evidence the spreads differ. It asks: if the two groups truly had equal 
-spread, how often would a spread difference this big appear just by chance? 
-p clears this threshold for every water quality parameter (smallest 0.088, DO evening). 
-**Hedges' g** measures how far apart the two group averages sit, in units of the 
+Two groups can match on their average yet differ in spread, so both are checked
+(full definitions in the glossary). **Levene's test** compares spread, and p > 0.05
+means no evidence the spreads differ. It asks: if the two groups truly had equal
+spread, how often would a spread difference this big appear just by chance?
+p clears this threshold for every water quality parameter (smallest 0.088, DO evening).
+**Hedges' g** measures how far apart the two group averages sit, in units of the
 pond-to-pond spread: the largest value here, ammonia's 0.24, means those group means
-differ by about a quarter of a standard deviation; the other parameters are near zero. 
+differ by about a quarter of a standard deviation; the other parameters are near zero.
 It is an effect size, not a test — no p-value, just a rough scale on which 0.2 is
-generally considered small. 
+generally considered small.
 
 So neither column shows a meaningful difference: the groups start
 out comparable, and the differences in later sections are not a baseline
@@ -116,12 +116,12 @@ artifact.
 
 ### 2.3 Baseline-WQ outlier ponds
 
-Before moving on to the main analysis, we check for any ponds that are 
-outliers with respect to their baseline water quality parameters. Five 
+Before moving on to the main analysis, we check for any ponds that are
+outliers with respect to their baseline water quality parameters. Five
 ponds sit more than 2 SD from their group mean on at least one baseline
-parameter, for 9 flags in total. Since some ponds are extreme on more than 
+parameter, for 9 flags in total. Since some ponds are extreme on more than
 one parameter, each pond's first appearance in the table is bolded to clearly
-identify these potentially anomalous ponds. 
+identify these potentially anomalous ponds.
 
 | Parameter | Group | Pond | Value | Std. residual |
 |---|---|---|--:|--:|
@@ -147,12 +147,12 @@ statistic and marked as red-ringed points (with their OOR-event count).*</sub>
 ## 3. Primary outcome — resolution at Day 3
 
 With the groups comparable at baseline, we now turn to the primary outcome: how
-many OOR events were resolved within each group at the Day-3 (primary) follow-up. 
+many OOR events were resolved within each group at the Day-3 (primary) follow-up.
 An event is recorded whenever any one of the water quality parameters goes out of range;
 it counts as "resolved" only if the pond is back in range on every WQ parameter (DO, pH, and
-ammonia), not just the one that triggered it.[^trigger-def] Most events are driven by DO, 
-followed by pH and then ammonia, and a single event can flag several parameters at once 
-(the middle "event drivers" bars below). We conduct this analysis both for all OOR events 
+ammonia), not just the one that triggered it.[^trigger-def] Most events are driven by DO,
+followed by pH and then ammonia, and a single event can flag several parameters at once
+(the middle "event drivers" bars below). We conduct this analysis both for all OOR events
 (below, left) and with the outlier ponds completely removed from the dataset (below, right).
 
 <table>
@@ -191,22 +191,22 @@ contribute more. The table reports both, with and without the outlier ponds.
 
 The pond-level analysis is consistent with that at the event-level, which rules out a
 few repeat-event ponds driving the gap. Removing the 5 outlier ponds leaves the gap
-intact (it actually widens slightly). Figure 6 makes the same point pond by pond, but shows 
-the distribution itself: one point per pond at its own resolution rate (average over its 
-events) and sized by event count. Most Group D ponds resolved nothing, most Group E ponds resolved 
+intact (it actually widens slightly). Figure 6 makes the same point pond by pond, but shows
+the distribution itself: one point per pond at its own resolution rate (average over its
+events) and sized by event count. Most Group D ponds resolved nothing, most Group E ponds resolved
 everything, and resolution rate shows no correlation with event count.
 
 <div align="center">
 <a href="plots/Fig6.oor_resolution_by_pond.png"><img src="plots/Fig6.oor_resolution_by_pond.png" width="560" alt="Figure 6 — pond-level resolution"></a>
 
-<sub>*Figure 6 — the pond-level view: one point per pond (point size scaled by pond's OOR-event count); 
+<sub>*Figure 6 — the pond-level view: one point per pond (point size scaled by pond's OOR-event count);
 the horizontal line marks each group's mean. Inset: how many ponds had each event count (and point-size key).*</sub>
 </div>
 
 ### 3.2 Fisher's exact test (the formal test)
 
 The formal test returns to the event level. Resolved vs not, by group, forms a 2×2 count
-table, which is the input for Fisher's exact test. Left: all ponds (as shown in Figure 4 above). 
+table, which is the input for Fisher's exact test. Left: all ponds (as shown in Figure 4 above).
 Right: with the 5 outlier ponds removed (as shown in Figure 5). The cells are raw counts, so the
 rates match [§3.1](#31-resolution-rate)'s event-level rows, not the pond-level ones.
 
@@ -237,8 +237,8 @@ rates match [§3.1](#31-resolution-rate)'s event-level rows, not the pond-level 
 | Odds ratio | 0.043 | 0.046 |
 | p-value | **9.4×10⁻⁷** | **4.8×10⁻⁵** |
 
-Group E's odds of resolving are roughly 23× Group D's (odds ratio 0.043: 
-D's odds are about 4% of E's). The p-value, 9.4×10⁻⁷ (approx. 1 in a million), 
+Group E's odds of resolving are roughly 23× Group D's (odds ratio 0.043:
+D's odds are about 4% of E's). The p-value, 9.4×10⁻⁷ (approx. 1 in a million),
 is how often chance alone would produce a gap this large if the groups
 were identical. So the difference is real, not noise. Removing the outlier ponds
 keeps both metrics very small (0.046; 4.8×10⁻⁵).
@@ -248,14 +248,14 @@ We now check whether the overall gap rides on a single parameter — say, Group 
 better at fixing DO — by splitting the Day-3 outcome by which parameter was out
 of range. Rows count the events involving each parameter, so an event flagging two (e.g.
 DO and pH) appears in both rows.
-  
+
 | Parameter | D events | D resolved | D % | E events | E resolved | E % |
 |---|--:|--:|--:|--:|--:|--:|
 | DO | 28 | 5 | 17.9 | 22 | 19 | 86.4 |
 | pH | 13 | 1 | 7.7 | 15 | 10 | 66.7 |
 | Ammonia | 8 | 0 | 0.0 | 4 | 2 | 50.0 |
 
-Group E leads on every parameter, so the overall gap is not a function of any single WQ parameter 
+Group E leads on every parameter, so the overall gap is not a function of any single WQ parameter
 (DO simply dominates the event counts in both groups).
 
 <br>
@@ -263,11 +263,11 @@ Group E leads on every parameter, so the overall gap is not a function of any si
 ## 4. Comparative test — how much did water quality improve?
 
 Section 3 asked whether a pond resolved after an OOR event (i.e., a binary outcome); this section asks how far it moved (a continuous outcome). The continuous measure is the out-of-range gap closed: this is distance outside the in-range water quality region (the "band", bound by a minimum and/or maximum) at the event triggering on Day 0 minus the distance at Day 3 (positive = moved back toward the band). Each pond contributes one value (its mean across events), and each WQ parameter keeps its own units. Since mg/L and pH points cannot be pooled into one score without an arbitrary conversion, parameters are tested separately.
-  
+
 We compare D vs E with two tests (means in the table are group averages of the per-pond values).
-**Welch's t** works on the difference between the means: as throughout, its p is the chance of 
-a mean gap at least this large if the groups had really improved equally, so a small p is evidence 
-*against* their being alike (see glossary for more detail). The rank-based **Mann-Whitney** U is the 
+**Welch's t** works on the difference between the means: as throughout, its p is the chance of
+a mean gap at least this large if the groups had really improved equally, so a small p is evidence
+*against* their being alike (see glossary for more detail). The rank-based **Mann-Whitney** U is the
 second check, and it is based on the ranks of the values rather than their magnitudes — it tests
 whether one group's values tend to rank higher, ignoring how large the gaps are. It provides reassurance
 at these small n, since ranks cannot be dragged by extreme ponds the way a mean can. The −out columns
@@ -279,7 +279,7 @@ re-run each test with the 5 outlier ponds completely dropped from every paramete
 | pH | 8 / 11 | −0.02 | +0.21 | **0.0017** | **0.003** | **0.0034** | **0.008** |
 | Ammonia (mg/L) | 5 / 4 | −0.01 | +0.04 | **0.018** | 0.066 | **0.019** | 0.077 |
 
-The two tests agree for every WQ parameter. Group E improves more on every parameter, 
+The two tests agree for every WQ parameter. Group E improves more on every parameter,
 while Group D's mean pH and ammonia drift slightly further out of range. DO and pH stay
 significant after outlier removal; only ammonia slips above 0.05 (Welch 0.066, MWU
 0.077), because dropping outlier ponds cuts it to n = 3 vs 3 (from 5 vs 4).
@@ -370,7 +370,7 @@ the action could plausibly have influenced the result. Exposure was common in bo
 **Does SIA explain the difference between Control's and Treatment's Day-3 resolution rates?**
 If it did, two patterns should show up in the data, but we find neither. First, the difference should shrink once we compare like with like: i.e. only events where *nobody* acted (no SIAs). Instead it stays just as wide (unexposed: Control 23.5% vs Treatment 75.0%, p = 0.0095), and it remains wide when considering only exposed events (i.e., with overlapping SIAs). Second, the SIAs should help: that is, within a cohort, exposed events should resolve more often than unexposed ones. Neither cohort shows that — the exposed-vs-unexposed gap is no bigger than chance would give, which is what these large p-values mean (Control p = 0.355, Treatment p = 0.624). The table below gives both readings:
 across each row is D vs E; down each column is exposed vs unexposed (each cell reads
-"resolved / total events = percent resolved", e.g. "1 / 13 = 7.7%"; p is Fisher's exact): 
+"resolved / total events = percent resolved", e.g. "1 / 13 = 7.7%"; p is Fisher's exact):
 
 | | Group D (Control) | Group E (Treatment) | p (D vs E) |
 |---|--:|--:|--:|
@@ -394,7 +394,7 @@ resolved no more often than the ones without (p = 1.0 in both cohorts). Each cel
 | Group E (Treatment) | 2 / 3 (67%) | 14 / 18 (78%) | 1.0 |
 
 **Caveats.** These exposure comparisons are descriptive, not causal: farmers act when a pond
-already looks bad, so a cohort's exposed events are likely its most troubled ones. 
+already looks bad, so a cohort's exposed events are likely its most troubled ones.
 That is why Control's exposed events resolve *worse* than its unexposed (7.7% vs 23.5%),
 not because acting hurts. So the claim is not that SIA has no effect; it is just that the
 Control-vs-Treatment gap, and its Day-3 timing, are not artifacts of farmers' own actions.
