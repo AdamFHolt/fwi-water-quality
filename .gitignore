@@ -15,6 +15,10 @@ venv/
 *.swo
 *~
 
+# Editor project dirs
+.vscode/
+.idea/
+
 # OS
 .DS_Store
 Thumbs.db
