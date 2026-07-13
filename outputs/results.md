@@ -10,11 +10,12 @@ no corrective-action recommendations. The numbers and figures in this summary ar
 produced by `python main.py`; see [`figures.md`](figures.md) for a panel-by-panel
 walkthrough of every figure and all methodological details.
 
-The analysis was run blind to reduce analyst bias: cohorts are labelled Group D
-and Group E (i.e., not Control/Treatment), and all tests are run two-sided as D vs E
+The analysis was run blind to reduce analyst bias: cohorts were labelled Group D
+and Group E (i.e., not Control/Treatment), and all tests were run two-sided as D vs E
 with a significance threshold throughout of p < 0.05. The study has since been
-unblinded; [§6](#6-post-hoc--do-farmers-own-actions-explain-the-gap) adds a post-hoc analysis on the unblinded data, but [§1](#1-dataset-overview)–[5](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3) keep the
-blind labels as run.
+unblinded — Group D = Control, Group E = Treatment — and this write-up uses the
+unblinded names. [§6](#6-post-hoc--do-farmers-own-actions-explain-the-gap) adds a
+post-hoc analysis that was run after unblinding.
 
 **Contents:** [Highlights](#highlights) · [1. Dataset overview](#1-dataset-overview) · [2. Baseline comparability](#2-are-the-groups-comparable-at-baseline) · [3. Primary outcome](#3-primary-outcome--resolution-at-day-3) · [4. Comparative test](#4-comparative-test--how-much-did-water-quality-improve) · [5. Day 2 vs Day 3](#5-secondary--does-follow-up-timing-matter-day-2-vs-day-3) · [6. Self-initiated actions](#6-post-hoc--do-farmers-own-actions-explain-the-gap) · [7. Notes on test choices](#7-notes-on-test-choices) · [Glossary](#glossary)
 
@@ -22,12 +23,12 @@ blind labels as run.
 
 ## Highlights
 
-- Two cohorts: treatment (E) got water quality readings plus corrective-action advice; control (D) got neither.
+- Two cohorts: Treatment got water quality readings plus corrective-action advice; Control got neither.
 - The groups are well matched at baseline: same water quality means and spreads.
-- Group E resolves far more OOR events: 82.1% vs 16.7% at Day 3 (Fisher's p = 9.4×10⁻⁷).
-- Group E improves more on every parameter (DO, pH, ammonia), and this holds after dropping outlier ponds.
-- The effect appears only by Day 3: the groups look alike at Day 2 (~20–25% resolution), then E jumps to 82%.
-- Farmers' own actions are unable to explain the difference between groups (D vs. E) or days (Day 2 vs. 3).
+- Treatment resolves far more OOR events: 82.1% vs 16.7% at Day 3 (Fisher's p = 9.4×10⁻⁷).
+- Treatment improves more on every parameter (DO, pH, ammonia), and this holds after dropping outlier ponds.
+- The effect appears only by Day 3: the groups look alike at Day 2 (~20–25% resolution), then Treatment jumps to 82%.
+- Farmers' own actions are unable to explain the difference between groups (Control vs. Treatment) or days (Day 2 vs. 3).
 - **The evidence strongly supports that the interventions (water quality readings plus recommended actions) improve pond water quality.**
 
 <br>
@@ -37,7 +38,7 @@ blind labels as run.
 The study followed 53 ponds over 998 monitoring visits between February and May
 2026, split between the two cohorts:
 
-| | Group D | Group E | Total |
+| | Control | Treatment | Total |
 |---|--:|--:|--:|
 | Monitoring visits | 532 | 466 | 998 |
 | &nbsp;&nbsp;routine (non-follow-up) | 414 | 354 | 768 |
@@ -70,7 +71,7 @@ during the study. Baseline water quality uses routine (non-follow-up) visits, av
 to one value per pond so that ponds visited more often do not count more; DO is split
 by time of day because morning and evening differ systematically.
 
-| Parameter | In-range band | Group D (n = 28) | Group E (n = 25) |
+| Parameter | In-range band | Control (n = 28) | Treatment (n = 25) |
 |---|---|--:|--:|
 | DO morning (mg/L) | 3–5 | 3.28 (0.21) | 3.28 (0.24) |
 | DO evening (mg/L) | 8–12 | 11.26 (1.01) | 11.40 (0.52) |
@@ -125,15 +126,15 @@ identify these potentially anomalous ponds.
 
 | Parameter | Group | Pond | Value | Std. residual |
 |---|---|---|--:|--:|
-| DO morning | E | **44f24b9a** | 2.73 | −2.53 |
-| DO morning | E | **917e0459** | 2.78 | −2.30 |
-| DO evening | D | **87edd7c9** | 13.05 | 2.24 |
-| DO evening | D | **9252e874** | 15.26 | 5.00 |
-| pH | D | **6772b310** | 8.48 | 2.13 |
-| pH | D | 9252e874 | 8.57 | 3.09 |
-| pH | E | 917e0459 | 8.47 | 2.07 |
-| Ammonia | D | 6772b310 | 0.049 | 2.71 |
-| Ammonia | D | 9252e874 | 0.064 | 4.07 |
+| DO morning | Treatment | **44f24b9a** | 2.73 | −2.53 |
+| DO morning | Treatment | **917e0459** | 2.78 | −2.30 |
+| DO evening | Control | **87edd7c9** | 13.05 | 2.24 |
+| DO evening | Control | **9252e874** | 15.26 | 5.00 |
+| pH | Control | **6772b310** | 8.48 | 2.13 |
+| pH | Control | 9252e874 | 8.57 | 3.09 |
+| pH | Treatment | 917e0459 | 8.47 | 2.07 |
+| Ammonia | Control | 6772b310 | 0.049 | 2.71 |
+| Ammonia | Control | 9252e874 | 0.064 | 4.07 |
 
 <div align="center">
 <a href="plots/Fig3.water_quality_outliers.png"><img src="plots/Fig3.water_quality_outliers.png" width="920" alt="Figure 3 — baseline water quality with outlier ponds highlighted"></a>
@@ -180,7 +181,7 @@ The pie charts above counted every OOR event once; here we also add a pond-level
 averages each pond's own resolution rate, so that ponds with more events do not
 contribute more. The table reports both, with and without the outlier ponds.
 
-| Resolution rate | Group D | Group E |
+| Resolution rate | Control | Treatment |
 |---|--:|--:|
 | **All ponds** | | |
 | &nbsp;&nbsp;event-level (each event once) | 5 / 30 = 16.7% | 23 / 28 = 82.1% |
@@ -193,7 +194,7 @@ The pond-level analysis is consistent with that at the event-level, which rules 
 few repeat-event ponds driving the gap. Removing the 5 outlier ponds leaves the gap
 intact (it actually widens slightly). Figure 6 makes the same point pond by pond, but shows
 the distribution itself: one point per pond at its own resolution rate (average over its
-events) and sized by event count. Most Group D ponds resolved nothing, most Group E ponds resolved
+events) and sized by event count. Most Control ponds resolved nothing, most Treatment ponds resolved
 everything, and resolution rate shows no correlation with event count.
 
 <div align="center">
@@ -217,8 +218,8 @@ rates match [§3.1](#31-resolution-rate)'s event-level rows, not the pond-level 
 
 | | Resolved | Not resolved |
 |---|--:|--:|
-| Group D | 5 | 25 |
-| Group E | 23 | 5 |
+| Control | 5 | 25 |
+| Treatment | 23 | 5 |
 
 </td><td>
 
@@ -226,8 +227,8 @@ rates match [§3.1](#31-resolution-rate)'s event-level rows, not the pond-level 
 
 | | Resolved | Not resolved |
 |---|--:|--:|
-| Group D | 5 | 17 |
-| Group E | 19 | 3 |
+| Control | 5 | 17 |
+| Treatment | 19 | 3 |
 
 </td></tr>
 </table>
@@ -237,25 +238,25 @@ rates match [§3.1](#31-resolution-rate)'s event-level rows, not the pond-level 
 | Odds ratio | 0.043 | 0.046 |
 | p-value | **9.4×10⁻⁷** | **4.8×10⁻⁵** |
 
-Group E's odds of resolving are roughly 23× Group D's (odds ratio 0.043:
-D's odds are about 4% of E's). The p-value, 9.4×10⁻⁷ (approx. 1 in a million),
+Treatment's odds of resolving are roughly 23× Control's (odds ratio 0.043:
+Control's odds are about 4% of Treatment's). The p-value, 9.4×10⁻⁷ (approx. 1 in a million),
 is how often chance alone would produce a gap this large if the groups
 were identical. So the difference is real, not noise. Removing the outlier ponds
 keeps both metrics very small (0.046; 4.8×10⁻⁵).
 
 ### 3.3 Resolution by parameter (Day 3)
-We now check whether the overall gap rides on a single parameter — say, Group E only does
+We now check whether the overall gap rides on a single parameter — say, Treatment only does
 better at fixing DO — by splitting the Day-3 outcome by which parameter was out
 of range. Rows count the events involving each parameter, so an event flagging two (e.g.
 DO and pH) appears in both rows.
 
-| Parameter | D events | D resolved | D % | E events | E resolved | E % |
+| Parameter | Control events | Control resolved | Control % | Treatment events | Treatment resolved | Treatment % |
 |---|--:|--:|--:|--:|--:|--:|
 | DO | 28 | 5 | 17.9 | 22 | 19 | 86.4 |
 | pH | 13 | 1 | 7.7 | 15 | 10 | 66.7 |
 | Ammonia | 8 | 0 | 0.0 | 4 | 2 | 50.0 |
 
-Group E leads on every parameter, so the overall gap is not a function of any single WQ parameter
+Treatment leads on every parameter, so the overall gap is not a function of any single WQ parameter
 (DO simply dominates the event counts in both groups).
 
 <br>
@@ -264,7 +265,7 @@ Group E leads on every parameter, so the overall gap is not a function of any si
 
 Section 3 asked whether a pond resolved after an OOR event (i.e., a binary outcome); this section asks how far it moved (a continuous outcome). The continuous measure is the out-of-range gap closed: this is distance outside the in-range water quality region (the "band", bound by a minimum and/or maximum) at the event triggering on Day 0 minus the distance at Day 3 (positive = moved back toward the band). Each pond contributes one value (its mean across events), and each WQ parameter keeps its own units. Since mg/L and pH points cannot be pooled into one score without an arbitrary conversion, parameters are tested separately.
 
-We compare D vs E with two tests (means in the table are group averages of the per-pond values).
+We compare Control vs Treatment with two tests (means in the table are group averages of the per-pond values).
 **Welch's t** works on the difference between the means: as throughout, its p is the chance of
 a mean gap at least this large if the groups had really improved equally, so a small p is evidence
 *against* their being alike (see glossary for more detail). The rank-based **Mann-Whitney** U is the
@@ -273,14 +274,14 @@ whether one group's values tend to rank higher, ignoring how large the gaps are.
 at these small n, since ranks cannot be dragged by extreme ponds the way a mean can. The −out columns
 re-run each test with the 5 outlier ponds completely dropped from every parameter. **Bold** = p < 0.05.
 
-| Parameter | n (D / E) | Mean D | Mean E | Welch p (all) | Welch p (−out) | MWU p (all) | MWU p (−out) |
+| Parameter | n (Control / Treatment) | Mean Control | Mean Treatment | Welch p (all) | Welch p (−out) | MWU p (all) | MWU p (−out) |
 |---|:--:|--:|--:|--:|--:|--:|--:|
 | DO (mg/L) | 14 / 16 | +0.05 | +2.10 | **0.020** | **0.006** | **0.021** | **0.008** |
 | pH | 8 / 11 | −0.02 | +0.21 | **0.0017** | **0.003** | **0.0034** | **0.008** |
 | Ammonia (mg/L) | 5 / 4 | −0.01 | +0.04 | **0.018** | 0.066 | **0.019** | 0.077 |
 
-The two tests agree for every WQ parameter. Group E improves more on every parameter,
-while Group D's mean pH and ammonia drift slightly further out of range. DO and pH stay
+The two tests agree for every WQ parameter. Treatment improves more on every parameter,
+while Control's mean pH and ammonia drift slightly further out of range. DO and pH stay
 significant after outlier removal; only ammonia slips above 0.05 (Welch 0.066, MWU
 0.077), because dropping outlier ponds cuts it to n = 3 vs 3 (from 5 vs 4).
 
@@ -304,17 +305,17 @@ the paired counterpart to [§3](#3-primary-outcome--resolution-at-day-3)'s Fishe
 uses the same events measured twice in place of two independent groups, see glossary).
 It looks only at the events that changed: flipped to resolved (Gained) or back out of
 range (Lost). It needs both follow-ups recorded, which holds for 57 of 58 events; the
-missing one is Group D's, so D's Day-3 rate reads 17.2% (5/29) here rather than [§3](#3-primary-outcome--resolution-at-day-3)'s
+missing one is Control's, so Control's Day-3 rate reads 17.2% (5/29) here rather than [§3](#3-primary-outcome--resolution-at-day-3)'s
 16.7% (5/30).
 
 | Group | n | Day 2 resolved | Day 3 resolved | Gained (No→Yes) | Lost (Yes→No) | McNemar p |
 |---|--:|--:|--:|--:|--:|--:|
 | **All ponds** | | | | | | |
-| &nbsp;&nbsp;D | 29 | 20.7% | 17.2% | 1 | 2 | 1.0 |
-| &nbsp;&nbsp;E | 28 | 25.0% | 82.1% | 16 | 0 | **3.05×10⁻⁵** |
+| &nbsp;&nbsp;Control | 29 | 20.7% | 17.2% | 1 | 2 | 1.0 |
+| &nbsp;&nbsp;Treatment | 28 | 25.0% | 82.1% | 16 | 0 | **3.05×10⁻⁵** |
 | **Outlier ponds removed** | | | | | | |
-| &nbsp;&nbsp;D | 21 | 28.6% | 23.8% | 1 | 2 | 1.0 |
-| &nbsp;&nbsp;E | 22 | 18.2% | 86.4% | 15 | 0 | **6.1×10⁻⁵** |
+| &nbsp;&nbsp;Control | 21 | 28.6% | 23.8% | 1 | 2 | 1.0 |
+| &nbsp;&nbsp;Treatment | 22 | 18.2% | 86.4% | 15 | 0 | **6.1×10⁻⁵** |
 
 <table>
 <tr>
@@ -331,14 +332,14 @@ missing one is Group D's, so D's Day-3 rate reads 17.2% (5/29) here rather than 
 
 <sub>*Figure 8 (left, all ponds) and Figure 9 (right, the 5 baseline-WQ outlier ponds removed)
 — the same events scored at Day 2 (top) and Day 3 (bottom). At Day 2 both groups sit
-near 20–25% resolved; only by Day 3 does Group E fill in (82%) while Group D stays constant.
+near 20–25% resolved; only by Day 3 does Treatment fill in (82%) while Control stays constant.
 Figure 9 shows that this story is consistent even after dropping the outlier ponds.*</sub>
 </div>
 
-Group D's 1-gained-2-lost is exactly what chance produces (p = 1.0). Group E's
+Control's 1-gained-2-lost is exactly what chance produces (p = 1.0). Treatment's
 16-to-0 would essentially never happen by chance (p = 3.05×10⁻⁵, about 3 in
 100,000). And the groups were indistinguishable at Day 2 itself (20.7% vs 25.0%,
-Fisher's p = 0.76), so the entire Group-E effect appears in the one extra day
+Fisher's p = 0.76), so the entire Treatment effect appears in the one extra day
 between Day 2 and Day 3. Hence had the study stopped at Day 2 it would have found
 nothing, and dropping the outlier ponds does not change this.
 
@@ -369,10 +370,10 @@ the action could plausibly have influenced the result. Exposure was common in bo
 
 **Does SIA explain the difference between Control's and Treatment's Day-3 resolution rates?**
 If it did, two patterns should show up in the data, but we find neither. First, the difference should shrink once we compare like with like: i.e. only events where *nobody* acted (no SIAs). Instead it stays just as wide (unexposed: Control 23.5% vs Treatment 75.0%, p = 0.0095), and it remains wide when considering only exposed events (i.e., with overlapping SIAs). Second, the SIAs should help: that is, within a cohort, exposed events should resolve more often than unexposed ones. Neither cohort shows that — the exposed-vs-unexposed gap is no bigger than chance would give, which is what these large p-values mean (Control p = 0.355, Treatment p = 0.624). The table below gives both readings:
-across each row is D vs E; down each column is exposed vs unexposed (each cell reads
+across each row is Control vs Treatment; down each column is exposed vs unexposed (each cell reads
 "resolved / total events = percent resolved", e.g. "1 / 13 = 7.7%"; p is Fisher's exact):
 
-| | Group D (Control) | Group E (Treatment) | p (D vs E) |
+| | Control | Treatment | p (Control vs Treatment) |
 |---|--:|--:|--:|
 | Exposed | 1 / 13 = 7.7% | 14 / 16 = 87.5% | **2.2×10⁻⁵** |
 | Unexposed | 4 / 17 = 23.5% | 9 / 12 = 75.0% | **0.0095** |
@@ -390,8 +391,8 @@ resolved no more often than the ones without (p = 1.0 in both cohorts). Each cel
 
 | Group | Late action (after Day 2) | No late action | p |
 |---|--:|--:|--:|
-| Group D (Control) | 0 / 3 (0%) | 1 / 20 (5%) | 1.0 |
-| Group E (Treatment) | 2 / 3 (67%) | 14 / 18 (78%) | 1.0 |
+| Control | 0 / 3 (0%) | 1 / 20 (5%) | 1.0 |
+| Treatment | 2 / 3 (67%) | 14 / 18 (78%) | 1.0 |
 
 **Caveats.** These exposure comparisons are descriptive, not causal: farmers act when a pond
 already looks bad, so a cohort's exposed events are likely its most troubled ones.
@@ -407,7 +408,7 @@ Control-vs-Treatment gap, and its Day-3 timing, are not artifacts of farmers' ow
 <summary><b>Expand methodology notes</b></summary>
 <br>
 
-- **Two-sided tests.** The analysis was run blind (D vs E), so we couldn't
+- **Two-sided tests.** The analysis was run blind (as Group D vs Group E), so we couldn't
   assume in advance which group should do better. Every test is therefore two-sided, which
   is the more conservative choice: it splits the 0.05 significance budget across
   both tails rather than spending it all on one expected direction.
@@ -476,8 +477,8 @@ Control-vs-Treatment gap, and its Day-3 timing, are not artifacts of farmers' ow
 - **Mann-Whitney U** — ranks all the values from both groups together and tests
   whether one group's values tend to rank higher. It uses only order, not the raw
   values, so it assumes no particular distribution and resists skew and outliers.
-  U is the test statistic (as t is for the t-test): across every pairing of a D
-  value with an E value, it counts how often one outranks the other (ties count
+  U is the test statistic (as t is for the t-test): across every pairing of a Control
+  value with a Treatment value, it counts how often one outranks the other (ties count
   ½), so a U far from its midpoint means one group sits consistently higher. Also
   known as the Wilcoxon rank-sum test.
 - **McNemar's test** — the paired counterpart to Fisher's exact test for binary
