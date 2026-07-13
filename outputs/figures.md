@@ -8,7 +8,8 @@ unblinded names. Throughout, blue = Control, orange = Treatment,
 grey = "not resolved", and red = baseline-WQ outlier pond.
 
 Figures are numbered `Fig1`–`Fig9` in reading order (baseline water quality
-first, then the OOR outcomes). They are produced by `main.py` (functions in
+first, then the OOR outcomes); `Fig7` also has an outliers-removed variant,
+described alongside it. They are produced by `main.py` (functions in
 `src/plotting_functions.py`, which call the analysis functions in
 `src/functions.py`). For the numeric results and statistical tests in table form,
 see [`results.md`](results.md).

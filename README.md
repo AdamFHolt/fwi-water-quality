@@ -28,7 +28,7 @@ main_sia.py        post-hoc SIA pipeline
 outputs/           everything generated
   results.md       results write-up (start here)
   figures.md       figure walkthrough
-  plots/           Figures 1–9
+  plots/           Figures 1–9 (plus an outliers-removed Fig7 variant)
 ```
 
 ## Authorship and AI assistance
