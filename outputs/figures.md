@@ -1,9 +1,11 @@
 # Figures & methods
 
 What each figure in `plots/` shows, and definitions for the technical terms used
-across them. The analysis was run blind: cohorts are labelled Group D and
-Group E rather than Control/Treatment. Throughout, blue = Group D,
-orange = Group E, grey = "not resolved", and red = baseline-WQ outlier pond.
+across them. The analysis was run blind: cohorts were labelled Group D and
+Group E rather than Control/Treatment. The study has since been unblinded
+(Group D = Control, Group E = Treatment), and the figures now use the
+unblinded names. Throughout, blue = Control, orange = Treatment,
+grey = "not resolved", and red = baseline-WQ outlier pond.
 
 Figures are numbered `Fig1`–`Fig9` in reading order (baseline water quality
 first, then the OOR outcomes). They are produced by `main.py` (functions in
@@ -70,7 +72,7 @@ the figure to read for whether the two groups start out comparable.
 
 - **Top row — mean ± SD bars.** Bar height = group mean across ponds; error bar =
   ± 1 standard deviation across ponds. `n` in the x-label is the number of ponds.
-  The subplot title shows Hedges' g, the standardized D-vs-E mean gap (defined
+  The subplot title shows Hedges' g, the standardized Control-vs-Treatment mean gap (defined
   in [`results.md`](results.md)).
 - **Bottom row — box + strip.** A box plot of the per-pond values with every pond
   drawn as a jittered point on top. The subplot title shows Levene p for that
@@ -145,7 +147,7 @@ The pond-level companion to the `Fig4` pies, one point per pond.
     (the events-per-pond distribution).
   - **Grey dots** down the left edge = the point-size key.
 
-It shows the D-vs-E gap survives when each pond counts once, and exposes the
+It shows the Control-vs-Treatment gap survives when each pond counts once, and exposes the
 per-pond spread the pies hide. Most ponds have only one or two events, so the
 per-pond rates cluster at 0, 50, and 100%.
 
@@ -186,15 +188,15 @@ still reports both the all-ponds and outliers-removed p-values.
 ## `Fig8.day2_vs_day3.png`
 
 The secondary timing analysis (see [`results.md`](results.md) §5). A 2×2 grid of
-resolution pies on the events with both follow-ups recorded (one Group-D event
-has no Day-2 reading, so D shows 29 of its 30 events): rows = Day 2 (`1st FU`) /
-Day 3 (`2nd FU`), columns = Group D / E. Each pie is that group's resolved
+resolution pies on the events with both follow-ups recorded (one Control event
+has no Day-2 reading, so Control shows 29 of its 30 events): rows = Day 2 (`1st FU`) /
+Day 3 (`2nd FU`), columns = Control / Treatment. Each pie is that group's resolved
 (group colour) vs not resolved (grey) share on the given day, with the percentage
 and raw count.
 
 At Day 2 both groups are near-identical (~20–25% resolved); only by Day 3
-does Group E fill in (82%) while Group D barely changes. The entire effect therefore
-appears in that one extra day.
+does Treatment fill in (82%) while Control barely changes. The entire effect
+therefore appears in that one extra day.
 
 ---
 
@@ -202,8 +204,9 @@ appears in that one extra day.
 
 Identical to `Fig8`, but with the baseline-WQ outlier ponds removed (the same
 pond set dropped in `Fig5`). At Day 2 the groups are indistinguishable
-(if anything E sits slightly *behind* D, 18% vs 29%), and the Day-3 divergence
-still occurs (E 86% vs D 24%). So the pattern, all the separation appearing on
+(if anything Treatment sits slightly *behind* Control, 18% vs 29%), and the Day-3
+divergence still occurs (Treatment 86% vs Control 24%). So the pattern, all the
+separation appearing on
 the last day, is not an artifact of a few atypical ponds.
 
 ---

@@ -45,6 +45,8 @@ PLOTS_DIR = Path("outputs/plots")
 
 # Each group keeps one identity colour everywhere; grey always means "not resolved".
 GROUP_COLORS = {"Group D": "#4c72b0", "Group E": "#dd8452"}
+# Unblinded display names (visit counts 532/466 pin D=Control, E=Treatment).
+UNBLINDED_LABEL = {"Group D": "Control", "Group E": "Treatment"}
 NOT_RESOLVED = "#cccccc"
 INSET_GREY = "#666666"  # subdued axes for the events-per-pond inset
 OUTLIER_RED = "#d62728"  # baseline-WQ outlier ponds, used in every figure
@@ -132,14 +134,14 @@ def plot_oor_events(events, filename="Fig4.oor_resolution.png"):
                 rv = int(res.loc[(level, g), "resolved"])
             else:
                 ev = rv = 0
-            _resolution_pie(ax, rv, ev - rv, GROUP_COLORS[g], f"{g} – {level} (n={ev})")
+            _resolution_pie(ax, rv, ev - rv, GROUP_COLORS[g], f"{UNBLINDED_LABEL[g]} – {level} (n={ev})")
 
     # --- Grouped bars: how many OOR events flagged each parameter, per group ---
     ax = axd["drv"]
     x, width = range(len(drivers.index)), 0.38
     for i, g in enumerate(groups):
         ax.bar([xi + i * width for xi in x], drivers[g], width,
-               label=g, color=GROUP_COLORS[g], edgecolor="white")
+               label=UNBLINDED_LABEL[g], color=GROUP_COLORS[g], edgecolor="white")
     ax.set_xticks([xi + width * (len(groups) - 1) / 2 for xi in x])
     ax.set_xticklabels(drivers.index)
     ax.set_ylabel("number of OOR events")
@@ -150,8 +152,8 @@ def plot_oor_events(events, filename="Fig4.oor_resolution.png"):
     # One shared key for the whole figure: group colour = resolved slice / bar
     # identity, grey = not resolved.
     fig.legend(
-        handles=[Patch(facecolor=GROUP_COLORS["Group D"], label="Group D"),
-                 Patch(facecolor=GROUP_COLORS["Group E"], label="Group E"),
+        handles=[Patch(facecolor=GROUP_COLORS["Group D"], label=UNBLINDED_LABEL["Group D"]),
+                 Patch(facecolor=GROUP_COLORS["Group E"], label=UNBLINDED_LABEL["Group E"]),
                  Patch(facecolor=NOT_RESOLVED, label="not resolved")],
         loc="lower center", ncol=3, frameon=False, fontsize=10,
         bbox_to_anchor=(0.5, -0.015),
@@ -182,7 +184,7 @@ def plot_oor_resolution_by_pond(data, filename="Fig6.oor_resolution_by_pond.png"
 
     n_ponds = per_pond.groupby("group").size()
     ax.set_xticks(range(len(groups)))
-    ax.set_xticklabels([f"{g}\n(n={n_ponds[g]} ponds)" for g in groups])
+    ax.set_xticklabels([f"{UNBLINDED_LABEL[g]}\n(n={n_ponds[g]} ponds)" for g in groups])
     ax.set_xlim(-0.6, len(groups) - 1 + 1.6)  # right margin reserved for the key panel
     ax.spines["bottom"].set_bounds(-0.6, len(groups) - 1 + 0.4)  # stop the axis before the key panel
     ax.set_ylim(-8, 108)
@@ -200,7 +202,7 @@ def plot_oor_resolution_by_pond(data, filename="Fig6.oor_resolution_by_pond.png"
         vals = [vc.get(e, 0) for e in ev_counts]
         maxn = max(maxn, *vals)
         kax.barh([e + (j - 0.5) * h for e in ev_counts], vals, h,
-                 color=GROUP_COLORS[g], edgecolor="white", label=g)
+                 color=GROUP_COLORS[g], edgecolor="white", label=UNBLINDED_LABEL[g])
     # Size key: one representative dot per row, sized like the scatter, left of 0.
     for e in ev_counts:
         kax.scatter(-maxn * 0.22, e, s=e * 45, color="#999999",
@@ -255,7 +257,7 @@ def plot_water_quality(data, filename="Fig2.water_quality_per_pond.png", highlig
             edgecolor="white",
         )
         ax.set_xticks(range(len(groups)))
-        ax.set_xticklabels([f"{g.split()[-1]}\n(n={n_ponds[g]})" for g in groups])
+        ax.set_xticklabels([f"{UNBLINDED_LABEL[g]}\n(n={n_ponds[g]})" for g in groups])
         ax.set_title(param, pad=24)  # pad leaves room for the stat line below
         ax.text(0.5, 1.0, f"Hedges' g = {bal.loc[param, 'g']}", transform=ax.transAxes,
                 ha="center", va="bottom", fontsize=10, fontweight="normal")  # standardized D-E mean gap
@@ -292,7 +294,7 @@ def plot_water_quality(data, filename="Fig2.water_quality_per_pond.png", highlig
                 ax.annotate(label, (xk, yk), xytext=(dx, 0), textcoords="offset points",
                             fontsize=8, va="center", ha=ha, zorder=6)
         ax.set_xticks(range(1, len(groups) + 1))
-        ax.set_xticklabels([g.split()[-1] for g in groups])
+        ax.set_xticklabels([UNBLINDED_LABEL[g] for g in groups])
         ax.set_title("per-pond distribution", pad=24)
         ax.text(0.5, 1.0, f"Levene p = {bal.loc[param, 'p']}", transform=ax.transAxes,
                 ha="center", va="bottom", fontsize=10, fontweight="normal")
@@ -346,7 +348,7 @@ def plot_water_quality_visits(data, filename="Fig1.water_quality_all_visits.png"
             edgecolor="white",
         )
         ax.set_xticks(range(len(groups)))
-        ax.set_xticklabels([f"{g.split()[-1]}\n(n={n_visits[g]})" for g in groups])
+        ax.set_xticklabels([f"{UNBLINDED_LABEL[g]}\n(n={n_visits[g]})" for g in groups])
         ax.set_title(title)
         ax.margins(y=0.15)
         _ygrid(ax)
@@ -363,7 +365,7 @@ def plot_water_quality_visits(data, filename="Fig1.water_quality_all_visits.png"
             ax.scatter(xj, s.values, color=GROUP_COLORS[g], s=8, alpha=0.35,
                        edgecolor="none", zorder=3)
         ax.set_xticks(range(1, len(groups) + 1))
-        ax.set_xticklabels([g.split()[-1] for g in groups])
+        ax.set_xticklabels([UNBLINDED_LABEL[g] for g in groups])
         ax.set_title("per-visit distribution")
         _ygrid(ax)
 
@@ -441,7 +443,7 @@ def plot_oor_improvement(data, filename="Fig7.oor_improvement.png", exclude=None
         _ygrid(ax)
         ax.set_ylim(ylims[scope])
         ax.set_xticks([1, 2])
-        ax.set_xticklabels([f"{g.split()[-1]}\n(n={len(d)})" for g, d in zip(groups, by_g)])
+        ax.set_xticklabels([f"{UNBLINDED_LABEL[g]}\n(n={len(d)})" for g, d in zip(groups, by_g)])
         ax.set_ylabel(f"out-of-range gap closed ({units[scope]})")
         # Under the title: monospace p-value table, one row per outlier rule.
         ax.set_title(scope, fontsize=13, fontweight="bold", pad=42)
@@ -485,12 +487,12 @@ def plot_day2_vs_day3(events, filename="Fig8.day2_vs_day3.png"):
         for row, (day, rescol) in enumerate(days):
             rv = int(res.loc[g, rescol])
             _resolution_pie(axes[row, col], rv, n - rv, GROUP_COLORS[g],
-                            f"{g} – {day} (n={n})")
+                            f"{UNBLINDED_LABEL[g]} – {day} (n={n})")
 
     fig.tight_layout()
     fig.legend(
-        handles=[Patch(facecolor=GROUP_COLORS["Group D"], label="Group D"),
-                 Patch(facecolor=GROUP_COLORS["Group E"], label="Group E"),
+        handles=[Patch(facecolor=GROUP_COLORS["Group D"], label=UNBLINDED_LABEL["Group D"]),
+                 Patch(facecolor=GROUP_COLORS["Group E"], label=UNBLINDED_LABEL["Group E"]),
                  Patch(facecolor=NOT_RESOLVED, label="not resolved")],
         loc="lower center", ncol=3, frameon=False, fontsize=10,
         bbox_to_anchor=(0.5, -0.02),
