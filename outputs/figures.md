@@ -173,6 +173,16 @@ Mann-Whitney tests in [`results.md`](results.md) §4.
 
 ---
 
+## `Fig7.oor_improvement.outliers_removed.png`
+
+Identical to `Fig7`, but with the baseline-WQ outlier ponds dropped from the boxes,
+dots, and `n` counts (see "outliers" in the glossary) — the sensitivity companion to
+`Fig7`. The y-axis per parameter is held to the same range as `Fig7`, so the two
+compare panel-for-panel and the empty space shows what was removed; the title table
+still reports both the all-ponds and outliers-removed p-values.
+
+---
+
 ## `Fig8.day2_vs_day3.png`
 
 The secondary timing analysis (see [`results.md`](results.md) §5). A 2×2 grid of

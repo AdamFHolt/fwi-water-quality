@@ -376,7 +376,7 @@ def _fmt_p(v):
     return "<0.001" if v < 0.001 else f"{v:.3f}"
 
 
-def plot_oor_improvement(data, filename="Fig7.oor_improvement.png"):
+def plot_oor_improvement(data, filename="Fig7.oor_improvement.png", exclude=None):
     """Per-pond OOR improvement by group (D vs E) — the data behind the t / U tests.
 
     One panel per OOR parameter: per-pond mean out-of-range gap closed (dist0 -
@@ -384,10 +384,24 @@ def plot_oor_improvement(data, filename="Fig7.oor_improvement.png"):
     group, titled with the Welch-t and Mann-Whitney p-values both with and without
     the baseline-WQ outlier ponds. Faint dots are individual events; solid dots are
     the pond means (the test unit; outlier ponds in red); the dashed line marks 0.
+
+    `exclude` (a set of Pond IDs) drops those ponds from the boxes, dots and counts
+    for the outliers-removed variant. The p-value table always shows both the
+    all-ponds and outliers-removed stats, and the y-axis per parameter is fixed to
+    the full-data range so the two variants line up panel-for-panel.
     """
     imp = oor_event_improvements(data)
     fl = wq_outliers(data)
     flagged_ponds = set(fl["Pond ID"])  # union across parameters (whole-pond removal)
+    # Y-limits from the full (pre-exclusion) data so the all-ponds and
+    # outliers-removed variants share an axis per parameter and compare directly.
+    ylims = {}
+    for scope in OOR_DRIVERS:
+        v = imp.loc[imp["parameter"] == scope, "improvement"]
+        pad = 0.08 * (v.max() - v.min())
+        ylims[scope] = (v.min() - pad, v.max() + pad)
+    if exclude:
+        imp = imp[~imp["Pond ID"].isin(exclude)]
     tests = improvement_tests(data).set_index("parameter")
     tests_pond = improvement_tests(data, exclude=flagged_ponds).set_index("parameter")  # outlier ponds removed
     groups = ["Group D", "Group E"]
@@ -425,15 +439,16 @@ def plot_oor_improvement(data, filename="Fig7.oor_improvement.png"):
 
         ax.axhline(0, color="#999999", lw=1, ls="--", zorder=1)  # no change
         _ygrid(ax)
+        ax.set_ylim(ylims[scope])
         ax.set_xticks([1, 2])
         ax.set_xticklabels([f"{g.split()[-1]}\n(n={len(d)})" for g, d in zip(groups, by_g)])
         ax.set_ylabel(f"out-of-range gap closed ({units[scope]})")
         # Under the title: monospace p-value table, one row per outlier rule.
         ax.set_title(scope, fontsize=13, fontweight="bold", pad=42)
         rows = [
-            ("",                  "Welch", "MWU"),
-            ("all ponds",         _fmt_p(tests.loc[scope, "t_p"]),      _fmt_p(tests.loc[scope, "u_p"])),
-            ("w/o outlier ponds", _fmt_p(tests_pond.loc[scope, "t_p"]), _fmt_p(tests_pond.loc[scope, "u_p"])),
+            ("",                "Welch", "MWU"),
+            ("all ponds",       _fmt_p(tests.loc[scope, "t_p"]),      _fmt_p(tests.loc[scope, "u_p"])),
+            ("outliers removed", _fmt_p(tests_pond.loc[scope, "t_p"]), _fmt_p(tests_pond.loc[scope, "u_p"])),
         ]
         block = "\n".join(f"{lab:<18}{w:>6}{u:>6}" for lab, w, u in rows)
         ax.text(0.5, 1.0, block, transform=ax.transAxes, ha="center", va="bottom",
@@ -445,12 +460,13 @@ def plot_oor_improvement(data, filename="Fig7.oor_improvement.png"):
         return Line2D([], [], marker="o", markerfacecolor=fc, markeredgecolor=ec,
                       alpha=a, linestyle="none", markersize=ms, label=lab)
 
+    handles = [legend_dot("#888888", "black", 1.0, 8, "pond mean"),
+               legend_dot("#888888", "none", 0.25, 6, "event")]
+    if not exclude:
+        handles.append(legend_dot(OUTLIER_RED, "black", 1.0, 8, OUTLIER_LABEL))
     fig.legend(
-        handles=[legend_dot("#888888", "black", 1.0, 8, "pond mean (test unit)"),
-                 legend_dot("#888888", "none", 0.25, 6, "event"),
-                 legend_dot(OUTLIER_RED, "black", 1.0, 8, OUTLIER_LABEL)],
-        loc="lower center", ncol=3, fontsize=8, frameon=False,
-        bbox_to_anchor=(0.5, -0.04),
+        handles=handles, loc="lower center", ncol=len(handles), fontsize=8,
+        frameon=False, bbox_to_anchor=(0.5, -0.04),
     )
     return _save(fig, filename)
 

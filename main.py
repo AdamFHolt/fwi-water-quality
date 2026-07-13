@@ -72,6 +72,7 @@ def main():
     print(f"  {plot_oor_events(events_clean, 'Fig5.oor_resolution_outliers_removed.png')}")  # Fig5: same, outlier ponds removed
     print(f"  {plot_oor_resolution_by_pond(data)}")                              # Fig6: pond-level resolution (one point per pond)
     print(f"  {plot_oor_improvement(data)}")                                     # Fig7: per-pond improvement (the t / U test inputs)
+    print(f"  {plot_oor_improvement(data, 'Fig7.oor_improvement.outliers_removed.png', exclude=flagged_ponds)}")  # Fig7: same, outlier ponds removed
     print(f"  {plot_day2_vs_day3(events)}")                                      # Fig8: Day-2 vs Day-3 resolution pies
     print(f"  {plot_day2_vs_day3(events_clean, 'Fig9.day2_vs_day3_outliers_removed.png')}")  # Fig9: same, outlier ponds removed
 
