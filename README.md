@@ -33,5 +33,5 @@ outputs/           everything generated
 
 ## Authorship and AI assistance
 
-An AI coding assistant (Anthropic's Claude) helped implement some of the code and draft the initial documentation. Adam F Holt 
+An AI coding assistant (Anthropic's Claude) helped implement some of the code and draft the initial documentation. Adam Holt 
 designed and directed the analysis, checked and edited all text, made all analytical and plotting decisions, and verified all results.
